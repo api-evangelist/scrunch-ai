@@ -1,0 +1,364 @@
+openapi: 3.1.0
+info:
+  title: Scrunch Data agent-traffic ai-referrals API
+  version: 0.1.0
+servers:
+- url: https://api.scrunchai.com/v1
+tags:
+- name: ai-referrals
+paths:
+  /{brand_id}/ai-referrals/connections/{connection_id}:
+    delete:
+      tags:
+      - ai-referrals
+      summary: Disable AI Referrals Connection
+      description: Soft-disable a connection. Previously pushed events are retained but further pushes are rejected with `410 Gone` and the dashboard stops reading from this connection.
+      operationId: disableAiReferralsConnection
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+        description: The unique identifier for the brand.
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Connection Id
+        description: The ULID of the AI Referrals connection.
+      responses:
+        '200':
+          description: Connection disabled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiReferralsConnection'
+        '404':
+          description: Connection not found for this brand.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - configure
+  /{brand_id}/ai-referrals/connections:
+    get:
+      tags:
+      - ai-referrals
+      summary: List AI Referrals Connections
+      description: List AI Referrals push connections registered for this brand. Scope is limited to push connections only — Google Analytics integrations live in a separate system and are not returned here, even though they can block a register call with `409`.
+      operationId: listAiReferralsConnections
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+        description: The unique identifier for the brand.
+      responses:
+        '200':
+          description: List of connections.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AiReferralsConnection'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - query
+    post:
+      tags:
+      - ai-referrals
+      summary: Register AI Referrals Connection
+      description: 'Register an AI Referrals push connection for a (brand, website, provider) tuple. Events can only be pushed once a connection exists.
+
+
+        A brand cannot have both a Google Analytics integration and an active AI Referrals push connection for the same website — the conflicting integration must be disabled first.
+
+
+        MVP provider allow-list: `adobe_analytics`.'
+      operationId: registerAiReferralsConnection
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+        description: The unique identifier for the brand.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiReferralsConnectionCreate'
+      responses:
+        '201':
+          description: Connection registered.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiReferralsConnection'
+        '400':
+          description: Invalid provider or payload.
+        '409':
+          description: A connection or conflicting integration already exists for this (brand, website).
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - configure
+  /{brand_id}/ai-referrals/connections/{connection_id}/events:
+    post:
+      tags:
+      - ai-referrals
+      summary: Push AI Referrals Events
+      description: 'Push a batch of pre-aggregated daily AI-referral events for a registered connection.
+
+
+        Accepts `application/json` (a JSON array of events) or `application/x-ndjson` (one event per line). The upsert key is `(date, raw_referrer_value, raw_page_value)` — re-sending the same tuple replaces the prior values, so backfills and corrections are safe to retry.
+
+
+        Limits:
+
+        - Maximum 10,000 events per batch.
+
+        - Maximum 5 MB request body.'
+      operationId: pushAiReferralsEvents
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+        description: The unique identifier for the brand.
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Connection Id
+        description: The ULID of the AI Referrals connection.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AiReferralsEvent'
+          application/x-ndjson:
+            schema:
+              type: string
+              description: Newline-delimited JSON, one event object per line.
+      responses:
+        '200':
+          description: Batch accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiReferralsSaveResult'
+        '400':
+          description: Malformed payload (invalid JSON, empty body, unexpected shape).
+        '404':
+          description: Connection not found for this brand.
+        '410':
+          description: Connection is disabled; re-register before retrying.
+        '413':
+          description: Payload too large (over 10,000 events or 5 MB).
+        '422':
+          description: One or more events failed validation.
+      security:
+      - HTTPBearer:
+        - configure
+components:
+  schemas:
+    AiReferralsSaveResult:
+      type: object
+      description: Outcome of a push batch submission.
+      required:
+      - accepted
+      - rejected
+      properties:
+        accepted:
+          type: integer
+          description: Number of events accepted into the unified referrals store.
+        rejected:
+          type: integer
+          description: Number of events dropped (e.g. referrer not on the AI platform allow-list).
+        errors:
+          type: array
+          items:
+            type: string
+          description: Per-row diagnostic messages, truncated.
+    AiReferralsConnection:
+      type: object
+      description: A registered AI Referrals push connection.
+      properties:
+        id:
+          type: string
+          description: ULID identifier for the connection.
+        brand_id:
+          type: integer
+        website:
+          type: string
+          description: Hostname or URL of the website whose referrals are pushed against this connection.
+        provider:
+          type: string
+          description: 'Source analytics provider. MVP allow-list: ''adobe_analytics''.'
+          example: adobe_analytics
+        status:
+          type: string
+          enum:
+          - active
+          - disabled
+        created_at:
+          type: string
+          format: date-time
+        last_pushed_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        last_push_error:
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - brand_id
+      - website
+      - provider
+      - status
+      - created_at
+    AiReferralsConnectionCreate:
+      type: object
+      description: Payload to register a new AI Referrals connection.
+      required:
+      - website
+      - provider
+      properties:
+        website:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: Hostname or URL of the website whose referrals will be pushed.
+          example: example.com
+        provider:
+          type: string
+          minLength: 1
+          maxLength: 64
+          description: 'Source analytics provider. MVP allow-list: ''adobe_analytics''.'
+          example: adobe_analytics
+    AiReferralsEvent:
+      type: object
+      description: One pre-aggregated daily referral row.
+      required:
+      - date
+      - raw_referrer_value
+      - raw_page_value
+      properties:
+        date:
+          type: string
+          format: date
+          description: UTC calendar day the metrics cover.
+          example: '2026-05-20'
+        raw_referrer_value:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: Raw referrer value as emitted by the source analytics tool (e.g. 'chatgpt.com'). Normalized server-side against the AI platform allow-list.
+          example: chatgpt.com
+        raw_page_value:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: Raw page identifier from the source tool (URL path for GA4-shape tools; page name for Adobe unless a URL eVar is configured).
+          example: /blog/launch-notes
+        pageviews:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        sessions:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        transactions:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        purchase_revenue:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        batch_id:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+          description: Optional client-supplied batch identifier for traceability.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

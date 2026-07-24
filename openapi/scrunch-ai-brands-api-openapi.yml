@@ -1,0 +1,1246 @@
+openapi: 3.1.0
+info:
+  title: Scrunch Data agent-traffic Brands API
+  version: 0.1.0
+servers:
+- url: https://api.scrunchai.com/v1
+tags:
+- name: Brands
+paths:
+  /brands/{brand_id}/competitors/{competitor_id}:
+    delete:
+      summary: Archive Competitor
+      description: Archive a competitor
+      operationId: archiveCompetitor
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      - name: competitor_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Competitor Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - configure
+      tags:
+      - Brands
+    get:
+      summary: Get Competitor
+      description: Get a competitor by ID
+      operationId: getCompetitor
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      - name: competitor_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Competitor Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APICompetitorListing'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - query
+      tags:
+      - Brands
+    put:
+      summary: Update Competitor
+      description: Update a competitor
+      operationId: updateCompetitor
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      - name: competitor_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Competitor Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APICompetitorUpdateInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APICompetitorListing'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - configure
+      tags:
+      - Brands
+  /brands/{brand_id}/personas/{persona_id}:
+    delete:
+      summary: Archive Persona
+      description: Archive a persona
+      operationId: archivePersona
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      - name: persona_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Persona Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - configure
+      tags:
+      - Brands
+    get:
+      summary: Get Persona
+      description: Get a persona by ID
+      operationId: getPersona
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      - name: persona_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Persona Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIPersonaListing'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - query
+      tags:
+      - Brands
+    put:
+      summary: Update Persona
+      description: Update a persona
+      operationId: updatePersona
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      - name: persona_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Persona Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APIPersonaUpdateInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIPersonaListing'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - configure
+      tags:
+      - Brands
+  /brands:
+    post:
+      summary: Create Brand
+      description: Create a new brand
+      operationId: createBrand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APICreateBrandInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APICreateBrandResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - create-brand
+      tags:
+      - Brands
+    get:
+      summary: List Brands
+      description: List available brands
+      operationId: listBrands
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionResponse_BrandListing_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - query
+      tags:
+      - Brands
+  /brands/{brand_id}/competitors:
+    post:
+      summary: Create Competitor
+      description: Create a new competitor
+      operationId: createCompetitor
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APICompetitorCreateInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APICompetitorListing'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - configure
+      tags:
+      - Brands
+    get:
+      summary: List Competitors
+      description: List competitors for a brand
+      operationId: listCompetitors
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionResponse_APICompetitorListing_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - query
+      tags:
+      - Brands
+  /brands/{brand_id}/personas:
+    post:
+      summary: Create Persona
+      description: Create a new persona
+      operationId: createPersona
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APIPersonaCreateInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIPersonaListing'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - configure
+      tags:
+      - Brands
+    get:
+      summary: List Personas
+      description: List personas for a brand
+      operationId: listPersonas
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 100
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionResponse_APIPersonaListing_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - query
+      tags:
+      - Brands
+  /brands/{brand_id}:
+    patch:
+      summary: Update Brand
+      description: 'Partially update a brand. Only fields included in the request body are modified. For competitors and personas, the provided list represents the full desired state: include an `id` to update an existing record, omit `id` to create a new one, and any existing records not in the list are archived.
+
+
+        If you submit a persona without an `id` and its `name` matches a previously archived persona on the same brand, the archived persona is reactivated (its `status` returns to `active` and its `description` is updated) instead of creating a duplicate. This avoids unique-name conflicts when reusing a name that was previously archived.'
+      operationId: patchBrand
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APIBrandPatchInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIBrandListing'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - configure
+      tags:
+      - Brands
+components:
+  schemas:
+    BrandListing:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        website:
+          type: string
+          title: Website
+      type: object
+      required:
+      - id
+      - name
+      - website
+      title: BrandListing
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    APICreateBrandInput:
+      properties:
+        name:
+          type: string
+          title: Name
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          default: []
+        website:
+          type: string
+          title: Website
+        alternative_websites:
+          items:
+            type: string
+          type: array
+          title: Alternative Websites
+          default: []
+        description:
+          type: string
+          title: Description
+        competitors:
+          items:
+            $ref: '#/components/schemas/APICompetitorInput'
+          type: array
+          title: Competitors
+          default: []
+        personas:
+          items:
+            $ref: '#/components/schemas/APIPersonaInput'
+          type: array
+          title: Personas
+          default: []
+        key_topics:
+          items:
+            type: string
+          type: array
+          title: Key Topics
+          default: []
+        status:
+          type: string
+          enum:
+          - lead
+          - prospect
+          - customer
+          title: Status
+          default: customer
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          default: false
+          description: When true, the brand name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
+      type: object
+      required:
+      - name
+      - website
+      - description
+      title: APICreateBrandInput
+    APIPersonaListing:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+      - id
+      - name
+      - description
+      title: APIPersonaListing
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SegmentTotal:
+      properties:
+        name:
+          type: string
+          title: Name
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - name
+      - observation_count
+      title: SegmentTotal
+      description: Observation count for a citation segment, computed server-side.
+    APICompetitorListing:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          default: []
+        websites:
+          items:
+            type: string
+          type: array
+          title: Websites
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          default: false
+      type: object
+      required:
+      - id
+      - name
+      title: APICompetitorListing
+    AggregationGranularity:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
+    APIBrandPatchInput:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Brand display name.
+        alternative_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Alternative Names
+          description: Alternative names or aliases for the brand.
+        website:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Website
+          description: Primary website URL.
+        alternative_websites:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Alternative Websites
+          description: Additional website URLs for the brand.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Short description of the brand.
+        competitors:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/APICompetitorPatchInput'
+            type: array
+          - type: 'null'
+          title: Competitors
+          description: Full desired list of competitors. Existing competitors not in this list are archived.
+        personas:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/APIPersonaPatchInput'
+            type: array
+          - type: 'null'
+          title: Personas
+          description: Full desired list of personas. Existing personas not in this list are archived.
+        key_topics:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Key Topics
+          description: Key topics associated with the brand.
+        status:
+          anyOf:
+          - type: string
+            enum:
+            - lead
+            - prospect
+            - customer
+          - type: 'null'
+          title: Status
+          description: 'Brand status. Allowed values: lead, customer.'
+        case_sensitive:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Case Sensitive
+          default: null
+          description: When true, the brand name and alternative_names are matched against AI responses with exact case. When false, matching is case-insensitive.
+      additionalProperties: true
+      type: object
+      title: APIBrandPatchInput
+      description: 'Partial update payload for a brand.
+
+
+        Only fields present in the request body are updated. Omitted fields are left unchanged.
+
+        For competitors and personas, the provided list replaces the current state:
+
+        existing records not included in the list are archived.
+
+
+        When you submit a persona without an `id` and its `name` matches a previously archived persona on the same brand, the archived persona is reactivated (its `status` returns to `active` and its `description` is updated) rather than creating a duplicate.'
+    OwnerTimeSeriesPoint:
+      properties:
+        time_bucket:
+          type: string
+          title: Time Bucket
+          description: Date string for the time bucket (YYYY-MM-DD)
+        brand:
+          type: integer
+          title: Brand
+          description: Observation count for brand-owned domains
+        competitor:
+          type: integer
+          title: Competitor
+          description: Observation count for competitor-owned domains
+        other:
+          type: integer
+          title: Other
+          description: Observation count for third-party domains
+      type: object
+      required:
+      - time_bucket
+      - brand
+      - competitor
+      - other
+      title: OwnerTimeSeriesPoint
+      description: A single time bucket with observation counts by owner type.
+    CollectionResponse_BrandListing_:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/BrandListing'
+          type: array
+          title: Items
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/TimeSeriesMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - total
+      - items
+      title: CollectionResponse[BrandListing]
+    APICompetitorInput:
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Name
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          default: []
+        websites:
+          items:
+            type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          type: array
+          title: Websites
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          default: false
+          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
+      type: object
+      required:
+      - name
+      title: APICompetitorInput
+    TopDomainSummary:
+      properties:
+        domain:
+          type: string
+          title: Domain
+        domain_owner:
+          type: string
+          title: Domain Owner
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - domain
+      - domain_owner
+      - observation_count
+      title: TopDomainSummary
+    CollectionResponse_APICompetitorListing_:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/APICompetitorListing'
+          type: array
+          title: Items
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/TimeSeriesMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - total
+      - items
+      title: CollectionResponse[APICompetitorListing]
+    APICompetitorUpdateInput:
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Name
+          description: Display name of the competitor.
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          description: Alternative names or aliases for the competitor.
+          default: []
+        websites:
+          items:
+            type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          type: array
+          title: Websites
+          description: Website URLs associated with the competitor.
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          default: false
+          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
+      type: object
+      required:
+      - name
+      title: APICompetitorUpdateInput
+      description: Input model for updating a competitor (full replace).
+    APIBrandListing:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        website:
+          type: string
+          title: Website
+        status:
+          type: string
+          title: Status
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          description: Alternative names or aliases for the brand.
+          default: []
+        alternative_websites:
+          items:
+            type: string
+          type: array
+          title: Alternative Websites
+          default: []
+        competitors:
+          items:
+            $ref: '#/components/schemas/APICompetitorListing'
+          type: array
+          title: Competitors
+          default: []
+        personas:
+          items:
+            $ref: '#/components/schemas/APIPersonaListing'
+          type: array
+          title: Personas
+          default: []
+        key_topics:
+          items:
+            type: string
+          type: array
+          title: Key Topics
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          default: false
+      type: object
+      required:
+      - id
+      - name
+      - description
+      - website
+      - status
+      title: APIBrandListing
+    APIPersonaUpdateInput:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Display name of the persona.
+        description:
+          type: string
+          title: Description
+          description: Description of the persona.
+      type: object
+      required:
+      - name
+      - description
+      title: APIPersonaUpdateInput
+      description: Input model for updating a persona (full replace).
+    TimeSeriesMetadata:
+      properties:
+        aggregation_granularity:
+          $ref: '#/components/schemas/AggregationGranularity'
+          description: 'The aggregation granularity: daily, weekly, or monthly'
+        period_count:
+          type: integer
+          title: Period Count
+          description: The number of periods in the time series
+        start_date:
+          type: string
+          format: date-time
+          title: Start Date
+          description: The start date of the time series
+        end_date:
+          type: string
+          format: date-time
+          title: End Date
+          description: The end date of the time series
+        top_domains:
+          anyOf:
+          - $ref: '#/components/schemas/TopDomainsMetadata'
+          - type: 'null'
+          description: Top domains metadata (only populated by sources/domains endpoints)
+      type: object
+      required:
+      - aggregation_granularity
+      - period_count
+      - start_date
+      - end_date
+      title: TimeSeriesMetadata
+    TopDomainsMetadata:
+      properties:
+        domains:
+          items:
+            $ref: '#/components/schemas/TopDomainSummary'
+          type: array
+          title: Domains
+          description: Top domains by observation count (always domain-level aggregated)
+        grand_total:
+          type: integer
+          title: Grand Total
+          description: Total observation count across all domains (for calculating 'Other')
+        owner_totals:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Owner Totals
+          description: Observation counts by owner type (brand, competitor, other)
+        owner_time_series:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/OwnerTimeSeriesPoint'
+            type: array
+          - type: 'null'
+          title: Owner Time Series
+          description: Time series data by owner type for trend visualization
+        segment_totals:
+          items:
+            $ref: '#/components/schemas/SegmentTotal'
+          type: array
+          title: Segment Totals
+          description: Server-side observation counts per citation segment (covers all domains, not just top-N)
+      type: object
+      required:
+      - domains
+      - grand_total
+      - owner_totals
+      title: TopDomainsMetadata
+      description: Metadata about top domains, used by sources/domains endpoints.
+    APICompetitorPatchInput:
+      properties:
+        id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Id
+          description: ID of an existing competitor to update. Omit to create a new competitor.
+        name:
+          type: string
+          minLength: 1
+          title: Name
+          description: Display name of the competitor.
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          description: Alternative names or aliases for the competitor.
+          default: []
+        websites:
+          items:
+            type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          type: array
+          title: Websites
+          description: Website URLs associated with the competitor.
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          default: false
+          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
+      type: object
+      required:
+      - name
+      title: APICompetitorPatchInput
+      description: A competitor to create or update within a brand patch request.
+    APIPersonaPatchInput:
+      properties:
+        id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Id
+          description: ID of an existing persona to update. Omit to create a new persona.
+        name:
+          type: string
+          title: Name
+          description: Display name of the persona.
+        description:
+          type: string
+          title: Description
+          description: Description of the persona.
+      type: object
+      required:
+      - name
+      - description
+      title: APIPersonaPatchInput
+      description: A persona to create or update within a brand patch request.
+    CollectionResponse_APIPersonaListing_:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/APIPersonaListing'
+          type: array
+          title: Items
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/TimeSeriesMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - total
+      - items
+      title: CollectionResponse[APIPersonaListing]
+    APICompetitorCreateInput:
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Name
+          description: Display name of the competitor.
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          description: Alternative names or aliases for the competitor.
+          default: []
+        websites:
+          items:
+            type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          type: array
+          title: Websites
+          description: Website URLs associated with the competitor.
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          default: false
+          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
+      type: object
+      required:
+      - name
+      title: APICompetitorCreateInput
+      description: Input model for creating a competitor.
+    APIPersonaCreateInput:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Display name of the persona.
+        description:
+          type: string
+          title: Description
+          description: Description of the persona.
+      type: object
+      required:
+      - name
+      - description
+      title: APIPersonaCreateInput
+      description: Input model for creating a persona.
+    APICreateBrandResponse:
+      properties:
+        id:
+          type: integer
+          title: Id
+      type: object
+      required:
+      - id
+      title: APICreateBrandResponse
+    APIPersonaInput:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+      - name
+      - description
+      title: APIPersonaInput
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

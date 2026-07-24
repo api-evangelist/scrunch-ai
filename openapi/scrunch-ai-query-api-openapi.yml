@@ -1,0 +1,340 @@
+openapi: 3.1.0
+info:
+  title: Scrunch Data agent-traffic Query API
+  version: 0.1.0
+servers:
+- url: https://api.scrunchai.com/v1
+tags:
+- name: Query
+paths:
+  /{brand_id}/query:
+    get:
+      summary: Query
+      description: 'Query the data API to retrieve aggregated observation data across multiple dimensions and metrics. This endpoint dynamically generates SQL queries based on the requested fields, allowing flexible aggregation for analytics and reporting workflows.
+
+
+        The query endpoint returns pre-aggregated metrics grouped by the specified dimensions. Results are optimized for BI tools, reporting pipelines, and dashboards.'
+      operationId: query
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Start date for the query range (inclusive). Format: YYYY-MM-DD. Defaults to 30 days ago. Empty or whitespace-only values are treated as missing and the default is applied. Malformed values (e.g. `2024-02-30`) return HTTP 400.'
+          title: Start Date
+        description: 'Start date for the query range (inclusive). Format: YYYY-MM-DD. Defaults to 30 days ago. Empty or whitespace-only values are treated as missing and the default is applied. Malformed values (e.g. `2024-02-30`) return HTTP 400.'
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'End date for the query range (inclusive). Format: YYYY-MM-DD. Defaults to today. Empty or whitespace-only values are treated as missing and the default is applied. Malformed values (e.g. `2024-02-30`) return HTTP 400.'
+          title: End Date
+        description: 'End date for the query range (inclusive). Format: YYYY-MM-DD. Defaults to today. Empty or whitespace-only values are treated as missing and the default is applied. Malformed values (e.g. `2024-02-30`) return HTTP 400.'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 90000
+          minimum: 1
+          description: Maximum number of rows to return. Use with offset for pagination.
+          default: 50000
+          title: Limit
+        description: Maximum number of rows to return. Use with offset for pagination.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Number of rows to skip for pagination.
+          default: 0
+          title: Offset
+        description: Number of rows to skip for pagination.
+      - name: fields
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Comma-separated list of dimensions and/or metrics to include in the query results. If omitted, all dimensions are returned.
+
+
+            **Supported Dimensions:**
+
+            - `date` - Daily timestamp (YYYYMMDD)
+
+            - `date_week` - ISO week (YYYYWW)
+
+            - `date_month` - Month (YYYYMM)
+
+            - `date_quarter` - Quarter (YYYYQ#)
+
+            - `date_year` - Year (YYYY)
+
+            - `prompt_id` - Prompt ID (Integer)
+
+            - `prompt` - Prompt text (String)
+
+            - `persona_id` - Persona ID (Integer)
+
+            - `persona_name` - Persona name (String)
+
+            - `ai_platform` - AI platform name (String, mapped)
+
+            - `ai_platform_search_enabled` - Search mode enabled (Boolean)
+
+            - `tag` - Prompt tag (String)
+
+            - `source_url` - Citation URL (String)
+
+            - `source_type` - Citation type (brand, competitor, other)
+
+            - `source_domain` - Citation host (String, www-stripped)
+
+            - `competitor_id` - Competitor ID (Integer)
+
+            - `competitor_name` - Competitor name (String)
+
+            - `branded` - Branded prompt (Boolean)
+
+            - `stage` - Journey stage (Display name)
+
+            - `prompt_topic` - Topic name (String)
+
+            - `country` - Geography (Country code)
+
+            - `position_bucket` - Brand position bucket (top/middle/bottom)
+
+            - `sentiment_band` - Brand sentiment band (positive/mixed/negative/none)
+
+
+            **Supported Metrics:**
+
+            - `responses` - Total responses (COUNT of distinct observations)
+
+            - `brand_presence_percentage` - Brand mention rate (0-1 scale)
+
+            - `brand_position_score` - Brand positioning (0-100 scale: top=100, middle=50, bottom=0)
+
+            - `brand_sentiment_score` - Brand sentiment (0-100 scale: positive=100, mixed=50, negative=0)
+
+            - `competitor_presence_percentage` - Competitor mention rate (0-1 scale)
+
+            - `competitor_position_score` - Competitor positioning (0-100 scale)
+
+            - `competitor_sentiment_score` - Competitor sentiment (0-100 scale)
+
+            - `brand_citation_rate` / `competitor_citation_rate` - Share of responses citing an entity-owned source (0-1)
+
+            - `brand_citation_share_of_voice` / `competitor_citation_share_of_voice` - Of responses that cite anything, share that cite an entity-owned source (0-1)
+
+            - `citation_count` - Total citation occurrences across responses
+
+            - `citation_unique_responses` - Distinct responses with at least one citation
+
+            - `citation_unique_domains` - Distinct citation hosts (www-stripped)
+
+
+            **Example:** `fields=date,ai_platform,brand_presence_percentage`'
+          title: Fields
+        description: 'Comma-separated list of dimensions and/or metrics to include in the query results. If omitted, all dimensions are returned.
+
+
+          **Supported Dimensions:**
+
+          - `date` - Daily timestamp (YYYYMMDD)
+
+          - `date_week` - ISO week (YYYYWW)
+
+          - `date_month` - Month (YYYYMM)
+
+          - `date_quarter` - Quarter (YYYYQ#)
+
+          - `date_year` - Year (YYYY)
+
+          - `prompt_id` - Prompt ID (Integer)
+
+          - `prompt` - Prompt text (String)
+
+          - `persona_id` - Persona ID (Integer)
+
+          - `persona_name` - Persona name (String)
+
+          - `ai_platform` - AI platform name (String, mapped)
+
+          - `ai_platform_search_enabled` - Search mode enabled (Boolean)
+
+          - `tag` - Prompt tag (String)
+
+          - `source_url` - Citation URL (String)
+
+          - `source_type` - Citation type (brand, competitor, other)
+
+          - `source_domain` - Citation host (String, www-stripped)
+
+          - `competitor_id` - Competitor ID (Integer)
+
+          - `competitor_name` - Competitor name (String)
+
+          - `branded` - Branded prompt (Boolean)
+
+          - `stage` - Journey stage (Display name)
+
+          - `prompt_topic` - Topic name (String)
+
+          - `country` - Geography (Country code)
+
+          - `position_bucket` - Brand position bucket (top/middle/bottom)
+
+          - `sentiment_band` - Brand sentiment band (positive/mixed/negative/none)
+
+
+          **Supported Metrics:**
+
+          - `responses` - Total responses (COUNT of distinct observations)
+
+          - `brand_presence_percentage` - Brand mention rate (0-1 scale)
+
+          - `brand_position_score` - Brand positioning (0-100 scale: top=100, middle=50, bottom=0)
+
+          - `brand_sentiment_score` - Brand sentiment (0-100 scale: positive=100, mixed=50, negative=0)
+
+          - `competitor_presence_percentage` - Competitor mention rate (0-1 scale)
+
+          - `competitor_position_score` - Competitor positioning (0-100 scale)
+
+          - `competitor_sentiment_score` - Competitor sentiment (0-100 scale)
+
+          - `brand_citation_rate` / `competitor_citation_rate` - Share of responses citing an entity-owned source (0-1)
+
+          - `brand_citation_share_of_voice` / `competitor_citation_share_of_voice` - Of responses that cite anything, share that cite an entity-owned source (0-1)
+
+          - `citation_count` - Total citation occurrences across responses
+
+          - `citation_unique_responses` - Distinct responses with at least one citation
+
+          - `citation_unique_domains` - Distinct citation hosts (www-stripped)
+
+
+          **Example:** `fields=date,ai_platform,brand_presence_percentage`'
+      - name: filters
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          description: 'Filter rows by dimension values **before** aggregation. Each filter uses the format `field:value`. Multiple values are joined with `|` for an IN match (e.g. `ai_platform:ChatGPT|Claude`). Prefix the value with `!` for negation (e.g. `branded:!true`). The `filters` parameter can be repeated to apply multiple filters; they are combined with AND.
+
+
+            Filterable dimensions: `prompt_id`, `persona_id`, `persona_name`, `ai_platform`, `ai_platform_search_enabled`, `tag`, `competitor_id`, `competitor_name`, `branded`, `stage`, `prompt_topic`, `country`, `position_bucket`, `sentiment_band`, `date`, `date_week`, `date_month`, `date_quarter`, `date_year`.
+
+
+            **Example:** `filters=ai_platform:ChatGPT&filters=branded:true`'
+          title: Filters
+        description: 'Filter rows by dimension values **before** aggregation. Each filter uses the format `field:value`. Multiple values are joined with `|` for an IN match (e.g. `ai_platform:ChatGPT|Claude`). Prefix the value with `!` for negation (e.g. `branded:!true`). The `filters` parameter can be repeated to apply multiple filters; they are combined with AND.
+
+
+          Filterable dimensions: `prompt_id`, `persona_id`, `persona_name`, `ai_platform`, `ai_platform_search_enabled`, `tag`, `competitor_id`, `competitor_name`, `branded`, `stage`, `prompt_topic`, `country`, `position_bucket`, `sentiment_band`, `date`, `date_week`, `date_month`, `date_quarter`, `date_year`.
+
+
+          **Example:** `filters=ai_platform:ChatGPT&filters=branded:true`'
+      - name: having
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          description: 'Filter **aggregated** metric values after GROUP BY. Each entry uses `metric:operator:value` format.
+
+
+            **Operators:** `gt`, `gte`, `lt`, `lte`, `eq`, `neq`.
+
+
+            **Example:** `having=brand_presence_percentage:gt:0&having=responses:gte:10`'
+          title: Having
+        description: 'Filter **aggregated** metric values after GROUP BY. Each entry uses `metric:operator:value` format.
+
+
+          **Operators:** `gt`, `gte`, `lt`, `lte`, `eq`, `neq`.
+
+
+          **Example:** `having=brand_presence_percentage:gt:0&having=responses:gte:10`'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Bad Request — `start_date` or `end_date` is not a valid `YYYY-MM-DD` calendar date. The response body's `detail` includes the offending value.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Query
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

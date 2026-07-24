@@ -1,0 +1,535 @@
+openapi: 3.1.0
+info:
+  title: Scrunch Data agent-traffic Prompts API
+  version: 0.1.0
+servers:
+- url: https://api.scrunchai.com/v1
+tags:
+- name: Prompts
+paths:
+  /{brand_id}/prompts/{prompt_id}:
+    delete:
+      summary: Archive Prompt
+      description: Archives a prompt (soft delete). The prompt will no longer be tracked but historical data is preserved. Requires the `configure` scope.
+      operationId: archivePrompt
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          description: The unique identifier for the brand
+          title: Brand Id
+        description: The unique identifier for the brand
+      - name: prompt_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          description: The unique identifier for the prompt to archive
+          title: Prompt Id
+        description: The unique identifier for the prompt to archive
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - configure
+      tags:
+      - Prompts
+  /{brand_id}/prompts:
+    post:
+      summary: Create Prompt
+      description: 'Creates a new prompt with variants for the specified platforms. Requires the `configure` scope.
+
+
+        **Behavior:**
+
+        - `stage` is optional. If omitted, the journey stage is auto-classified against your brand''s active stages using an LLM.
+
+        - If `stage` is provided, it must match one of your brand''s active stages (case-sensitive display name). An unknown value returns `400`. An explicit stage is treated as a manual assertion and won''t be overwritten by later re-classification.
+
+        - Creates variants for each specified platform.
+
+        - Reactivates an archived prompt if a duplicate exists.
+
+        - Dispatches collection events to begin tracking.'
+      operationId: createPrompt
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          description: The unique identifier for the brand
+          title: Brand Id
+        description: The unique identifier for the brand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/APIPromptInputModel'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptListing'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - configure
+      tags:
+      - Prompts
+    get:
+      summary: List Prompts
+      description: Returns a paginated list of active prompts for the specified brand, including their variants, tags, and topics. Use this endpoint to retrieve all prompts configured for AI visibility tracking.
+      operationId: listPrompts
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          description: The unique identifier for the brand
+          title: Brand Id
+        description: The unique identifier for the brand
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Maximum number of prompts to return per page.
+          default: 100
+          title: Limit
+        description: Maximum number of prompts to return per page.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Number of prompts to skip for pagination.
+          default: 0
+          title: Offset
+        description: Number of prompts to skip for pagination.
+      - name: stage
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Filter prompts by journey stage. Values are resolved from your brand''s configured stages, so they vary per brand.
+
+
+            **Default stage sets:**
+
+            - **Intent (v1)** — `Advice`, `Awareness`, `Evaluation`, `Comparison`, `Other`
+
+            - **Funnel (v2)** — `Awareness`, `Consideration`, `Conversion`, `Loyalty`, `Other`
+
+
+            Brands that rename or add stages accept those custom names too. A value that doesn''t match any of the brand''s active stages matches zero rows rather than erroring.'
+          title: Stage
+        description: 'Filter prompts by journey stage. Values are resolved from your brand''s configured stages, so they vary per brand.
+
+
+          **Default stage sets:**
+
+          - **Intent (v1)** — `Advice`, `Awareness`, `Evaluation`, `Comparison`, `Other`
+
+          - **Funnel (v2)** — `Awareness`, `Consideration`, `Conversion`, `Loyalty`, `Other`
+
+
+          Brands that rename or add stages accept those custom names too. A value that doesn''t match any of the brand''s active stages matches zero rows rather than erroring.'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionResponse_PromptListing_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer: []
+      tags:
+      - Prompts
+components:
+  schemas:
+    AggregationGranularity:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
+    TopDomainSummary:
+      properties:
+        domain:
+          type: string
+          title: Domain
+        domain_owner:
+          type: string
+          title: Domain Owner
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - domain
+      - domain_owner
+      - observation_count
+      title: TopDomainSummary
+    OwnerTimeSeriesPoint:
+      properties:
+        time_bucket:
+          type: string
+          title: Time Bucket
+          description: Date string for the time bucket (YYYY-MM-DD)
+        brand:
+          type: integer
+          title: Brand
+          description: Observation count for brand-owned domains
+        competitor:
+          type: integer
+          title: Competitor
+          description: Observation count for competitor-owned domains
+        other:
+          type: integer
+          title: Other
+          description: Observation count for third-party domains
+      type: object
+      required:
+      - time_bucket
+      - brand
+      - competitor
+      - other
+      title: OwnerTimeSeriesPoint
+      description: A single time bucket with observation counts by owner type.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    APIPromptInputModel:
+      properties:
+        text:
+          type: string
+          title: Text
+          description: The prompt text to track across AI platforms
+        persona_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Persona Id
+          description: Optional persona ID to associate with this prompt for segmented analysis
+        stage:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stage
+          description: 'The customer journey stage this prompt represents. Must match one of your brand''s active stages (case-sensitive display name); custom stage names are accepted. Omit to auto-classify against the brand''s stage definitions.
+
+
+            **Default stage sets:**
+
+            - **Intent (v1)** — `Advice`, `Awareness`, `Evaluation`, `Comparison`, `Other`
+
+            - **Funnel (v2)** — `Awareness`, `Consideration`, `Conversion`, `Loyalty`, `Other`
+
+
+            Unknown stage names return `400 Bad Request`. An explicit stage is treated as a manual selection and won''t be reclassified later.'
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          description: Custom tags for categorizing and filtering prompts
+          default: []
+        key_topics:
+          items:
+            type: string
+          type: array
+          title: Key Topics
+          description: Key topics to associate with this prompt from the brand's topic list
+          default: []
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+          description: Lowercase ISO 639-1 code of the language the prompt text is written in (e.g. `pt`, `ja`, `es`). Case-insensitive; uppercase input is normalized. Invalid codes return `422 Unprocessable Entity`. If omitted, the language is auto-detected from the prompt text, falling back to the brand's default language.
+        platforms:
+          items:
+            type: string
+            enum:
+            - chatgpt
+            - claude
+            - google_ai_overviews
+            - perplexity
+            - meta
+            - google_ai_mode
+            - google_gemini
+            - copilot
+            - grok
+          type: array
+          title: Platforms
+          description: 'AI platforms to track this prompt on. If empty, defaults to all supported platforms.
+
+
+            **Supported platforms:**
+
+            - `chatgpt` - OpenAI ChatGPT
+
+            - `claude` - Anthropic Claude
+
+            - `google_ai_overviews` - Google AI Overviews (Search)
+
+            - `perplexity` - Perplexity AI
+
+            - `meta` - Meta AI
+
+            - `google_ai_mode` - Google AI Mode
+
+            - `google_gemini` - Google Gemini
+
+            - `copilot` - Microsoft Copilot'
+          default: []
+      type: object
+      required:
+      - text
+      title: APIPromptInputModel
+      description: Input model for creating a new prompt to track AI visibility.
+    TimeSeriesMetadata:
+      properties:
+        aggregation_granularity:
+          $ref: '#/components/schemas/AggregationGranularity'
+          description: 'The aggregation granularity: daily, weekly, or monthly'
+        period_count:
+          type: integer
+          title: Period Count
+          description: The number of periods in the time series
+        start_date:
+          type: string
+          format: date-time
+          title: Start Date
+          description: The start date of the time series
+        end_date:
+          type: string
+          format: date-time
+          title: End Date
+          description: The end date of the time series
+        top_domains:
+          anyOf:
+          - $ref: '#/components/schemas/TopDomainsMetadata'
+          - type: 'null'
+          description: Top domains metadata (only populated by sources/domains endpoints)
+      type: object
+      required:
+      - aggregation_granularity
+      - period_count
+      - start_date
+      - end_date
+      title: TimeSeriesMetadata
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CollectionResponse_PromptListing_:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/PromptListing'
+          type: array
+          title: Items
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/TimeSeriesMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - total
+      - items
+      title: CollectionResponse[PromptListing]
+    SegmentTotal:
+      properties:
+        name:
+          type: string
+          title: Name
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - name
+      - observation_count
+      title: SegmentTotal
+      description: Observation count for a citation segment, computed server-side.
+    TopDomainsMetadata:
+      properties:
+        domains:
+          items:
+            $ref: '#/components/schemas/TopDomainSummary'
+          type: array
+          title: Domains
+          description: Top domains by observation count (always domain-level aggregated)
+        grand_total:
+          type: integer
+          title: Grand Total
+          description: Total observation count across all domains (for calculating 'Other')
+        owner_totals:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Owner Totals
+          description: Observation counts by owner type (brand, competitor, other)
+        owner_time_series:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/OwnerTimeSeriesPoint'
+            type: array
+          - type: 'null'
+          title: Owner Time Series
+          description: Time series data by owner type for trend visualization
+        segment_totals:
+          items:
+            $ref: '#/components/schemas/SegmentTotal'
+          type: array
+          title: Segment Totals
+          description: Server-side observation counts per citation segment (covers all domains, not just top-N)
+      type: object
+      required:
+      - domains
+      - grand_total
+      - owner_totals
+      title: TopDomainsMetadata
+      description: Metadata about top domains, used by sources/domains endpoints.
+    PromptListing:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Unique identifier for the prompt
+        text:
+          type: string
+          title: Text
+          description: The prompt text being tracked
+        stage:
+          type: string
+          title: Stage
+          description: The customer journey stage this prompt represents. Returned as the display name of the brand's active stage — one of the brand's default set (`Advice`, `Awareness`, `Evaluation`, `Comparison`, `Other` for intent brands; `Awareness`, `Consideration`, `Conversion`, `Loyalty`, `Other` for funnel brands) or a custom stage name.
+        persona_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Persona Id
+          description: ID of the associated persona, if any
+        platforms:
+          items:
+            type: string
+            enum:
+            - chatgpt
+            - claude
+            - google_ai_overviews
+            - perplexity
+            - meta
+            - google_ai_mode
+            - google_gemini
+            - copilot
+            - grok
+          type: array
+          title: Platforms
+          description: AI platforms this prompt is tracked on
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          description: Custom tags assigned to this prompt
+        topics:
+          items:
+            type: string
+          type: array
+          title: Topics
+          description: Auto-detected or assigned topics for this prompt
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp when the prompt was created
+      type: object
+      required:
+      - id
+      - text
+      - stage
+      - persona_id
+      - platforms
+      - tags
+      - topics
+      - created_at
+      title: PromptListing
+      description: Represents a prompt being tracked for AI visibility, including its configuration and metadata.
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

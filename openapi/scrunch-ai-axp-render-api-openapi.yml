@@ -1,0 +1,152 @@
+openapi: 3.1.0
+info:
+  title: Scrunch Data agent-traffic axp-render API
+  version: 0.1.0
+servers:
+- url: https://api.scrunchai.com/v1
+tags:
+- name: axp-render
+paths:
+  /orchestration/render-bulk/{brand_id}/sites/{site_id}:
+    post:
+      tags:
+      - axp-render
+      summary: Bulk Render Optimized Pages
+      description: 'Queue render jobs for a list of paths on a registered AXP site. Each path is fetched, sanitized, and persisted as an AXP optimized page asynchronously, so the endpoint returns immediately with one job entry per input path.
+
+
+        Paths are normalized (trimmed and given a leading slash) and deduplicated before queueing. A path that already has an in-flight job on the same site coalesces onto that job, so the same batch can be retried safely. Inputs are capped at 100 paths per call.'
+      operationId: bulkRenderOptimizedPages
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+          description: The unique identifier for the brand that owns the site.
+        description: The unique identifier for the brand that owns the site.
+      - name: site_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Site Id
+          description: The ULID of the registered AXP site to render pages on.
+        description: The ULID of the registered AXP site to render pages on.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AXPBulkRenderRequest'
+      responses:
+        '200':
+          description: One item per unique path with the queued job id and current status.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AXPBulkRenderItem'
+                title: AXPBulkRenderResponse
+        '400':
+          description: Site is not active for AXP or has no domain configured.
+        '404':
+          description: Site not found for the supplied brand.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '502':
+          description: Render jobs were queued but at least one Inngest dispatch failed. Pending jobs are marked failed; retry the affected paths.
+      security:
+      - HTTPBearer:
+        - configure
+      servers:
+      - url: https://api.scrunchai.com/v2
+components:
+  schemas:
+    AXPBulkRenderRequest:
+      properties:
+        paths:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          minItems: 1
+          maxItems: 100
+          title: Paths
+          description: Paths on the site to render. Each entry is trimmed and given a leading slash if missing. Duplicates are removed; in-flight jobs for the same path are reused.
+      type: object
+      required:
+      - paths
+      title: AXPBulkRenderRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AXPBulkRenderItem:
+      properties:
+        path:
+          type: string
+          title: Path
+          description: The normalized path that was queued, echoed back from the request.
+        job_id:
+          type: integer
+          title: Job Id
+          description: The render job identifier. Use it when correlating with logs or webhooks.
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - succeeded
+          - failed
+          - cancelled
+          title: Status
+          description: Status of the job at response time. `pending` means a fresh job was queued; `running` means the call coalesced onto an in-flight job for the same path.
+      type: object
+      required:
+      - path
+      - job_id
+      - status
+      title: AXPBulkRenderItem
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

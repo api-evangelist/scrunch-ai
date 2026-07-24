@@ -1,0 +1,285 @@
+openapi: 3.1.0
+info:
+  title: Scrunch Data agent-traffic API
+  version: 0.1.0
+servers:
+- url: https://api.scrunchai.com/v1
+tags:
+- name: agent-traffic
+paths:
+  /{brand_id}/sites/{site_id}/agent-traffic:
+    get:
+      tags:
+      - agent-traffic
+      summary: Get Agent Traffic
+      description: 'Retrieve aggregated bot and AI agent traffic data for a specific site.
+
+
+        This endpoint provides visibility into how AI agents and bots are accessing your web properties. Use it to analyze traffic patterns, identify top agents, and understand crawl behavior over time.
+
+
+        ## Available Dimensions
+
+
+        The following dimensions can be included in the `fields` parameter to group results:
+
+
+        | Field | Description |
+
+        |-------|-------------|
+
+        | `date` | Daily timestamp for the traffic record |
+
+        | `site` | The site domain being analyzed |
+
+        | `path` | URL path on the site |
+
+        | `agent_source` | The source/origin of the agent (e.g., OpenAI, Google, Anthropic) |
+
+        | `agent_type` | Classification of the agent type |
+
+
+        ## Metrics
+
+
+        Traffic counts are automatically included in the response based on the selected dimensions.'
+      operationId: getAgentTraffic
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      - name: site_id
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+            minLength: 26
+            maxLength: 26
+            pattern: '[0-7][0123456789ABCDEFGHJKMNPQRSTVWXYZ]{25}'
+          - type: string
+            format: binary
+            minLength: 16
+            maxLength: 16
+          description: The unique identifier of the site to retrieve agent traffic for.
+          title: Site Id
+        description: The unique identifier of the site to retrieve agent traffic for.
+      - name: start_date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          description: 'Start date for the query range (inclusive). Format: YYYY-MM-DD.'
+          title: Start Date
+        description: 'Start date for the query range (inclusive). Format: YYYY-MM-DD.'
+      - name: end_date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          description: 'End date for the query range (inclusive). Format: YYYY-MM-DD.'
+          title: End Date
+        description: 'End date for the query range (inclusive). Format: YYYY-MM-DD.'
+      - name: fields
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Comma-separated list of dimensions to include in the response. Available dimensions: `date`, `site`, `path`, `agent_source`, `agent_type`. If not specified, returns aggregated totals.'
+          title: Fields
+        description: 'Comma-separated list of dimensions to include in the response. Available dimensions: `date`, `site`, `path`, `agent_source`, `agent_type`. If not specified, returns aggregated totals.'
+      - name: time_bucket
+        in: query
+        required: false
+        schema:
+          enum:
+          - day
+          - week
+          type: string
+          description: 'Time aggregation bucket for grouping results. Options: `day`, `week`, `month`. Defaults to `day`.'
+          default: day
+          title: Time Bucket
+        description: 'Time aggregation bucket for grouping results. Options: `day`, `week`, `month`. Defaults to `day`.'
+      - name: path
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter results to a specific URL path or path prefix.
+          title: Path
+        description: Filter results to a specific URL path or path prefix.
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100000
+          minimum: 1
+          description: Maximum number of rows to return. Use with offset for pagination.
+          default: 10000
+          title: Limit
+        description: Maximum number of rows to return. Use with offset for pagination.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Number of rows to skip before returning results. Use with limit for pagination.
+          default: 0
+          title: Offset
+        description: Number of rows to skip before returning results. Use with limit for pagination.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentTrafficResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - query
+components:
+  schemas:
+    AgentTrafficMeta:
+      properties:
+        start_date:
+          type: string
+          format: date
+          title: Start Date
+          description: Start date of the query range.
+        end_date:
+          type: string
+          format: date
+          title: End Date
+          description: End date of the query range.
+        time_bucket:
+          type: string
+          enum:
+          - day
+          - week
+          title: Time Bucket
+          description: Time aggregation bucket used for grouping results.
+      type: object
+      required:
+      - start_date
+      - end_date
+      - time_bucket
+      title: AgentTrafficMeta
+      description: Metadata about the agent traffic query results.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AgentTrafficResponse:
+      properties:
+        meta:
+          $ref: '#/components/schemas/AgentTrafficMeta'
+          description: Query metadata including fields and date range.
+        data:
+          items:
+            $ref: '#/components/schemas/AgentTrafficRow'
+          type: array
+          title: Data
+          description: Array of agent traffic records matching the query criteria.
+      type: object
+      required:
+      - meta
+      - data
+      title: AgentTrafficResponse
+      description: Response containing agent traffic data with metadata and aggregated traffic records.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AgentTrafficRow:
+      properties:
+        requests:
+          type: integer
+          title: Requests
+          description: Number of requests/hits for this combination of dimensions.
+        date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Date
+          description: Date of the traffic record in YYYY-MM-DD format.
+        site:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Site
+          description: The site domain being analyzed.
+        path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Path
+          description: URL path on the site.
+        agent_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Agent Source
+          description: The source/origin of the agent (e.g., OpenAI, Google, Anthropic, Microsoft).
+        agent_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Agent Type
+          description: Classification of the agent type (e.g., GPTBot, ClaudeBot, Google-Extended, Googlebot).
+      additionalProperties: true
+      type: object
+      required:
+      - requests
+      title: AgentTrafficRow
+      description: 'A single row of agent traffic data.
+
+
+        Fields present depend on the dimensions requested in the query.'
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

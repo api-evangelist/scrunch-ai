@@ -1,0 +1,384 @@
+openapi: 3.1.0
+info:
+  title: Scrunch Data agent-traffic orchestration API
+  version: 0.1.0
+servers:
+- url: https://api.scrunchai.com/v1
+tags:
+- name: orchestration
+paths:
+  /orchestration/optimize-and-deploy/{brand_id}:
+    post:
+      tags:
+      - orchestration
+      summary: Create Optimize And Deploy Pipeline
+      description: 'Create an orchestrated pipeline: audit pages, optimize content, and deploy to AXP'
+      operationId: createOptimizeAndDeployPipeline
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrchestrationCreateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrchestrationCreateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - configure
+      servers:
+      - url: https://api.scrunchai.com/v2
+  /orchestration/optimize-and-deploy/{brand_id}/{token}:
+    get:
+      tags:
+      - orchestration
+      summary: Get Pipeline Status
+      description: Get the status of an optimize-and-deploy pipeline by token
+      operationId: getOptimizeAndDeployStatus
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+      - name: token
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrchestrationStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - query
+      servers:
+      - url: https://api.scrunchai.com/v2
+components:
+  schemas:
+    PersonaTargetInput:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      type: object
+      required:
+      - name
+      title: PersonaTargetInput
+      description: Persona target for optimization.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    OrchestrationCreateRequest:
+      properties:
+        urls:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Urls
+          description: Simple list of URLs to audit (use this OR requests, not both)
+        requests:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/URLRequest'
+            type: array
+          - type: 'null'
+          title: Requests
+          description: URL requests with per-URL optimization params (use this OR urls, not both)
+        optimize:
+          type: boolean
+          title: Optimize
+          description: Run content optimization after audit
+          default: false
+        deploy_axp:
+          type: boolean
+          title: Deploy Axp
+          description: Deploy optimized content to AXP (requires optimize=true and site_id)
+          default: false
+        stage_axp:
+          type: boolean
+          title: Stage Axp
+          description: Audit + optimize + stage content without deploying live (requires optimize=true and site_id; mutually exclusive with deploy_axp)
+          default: false
+        site_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Site Id
+          description: RegisteredSite ID for AXP staging/deployment (required if deploy_axp or stage_axp)
+        target_prompts:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Target Prompts
+          description: Prompts for optimization (optional - if omitted, we infer from page content)
+        target_personas:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PersonaTargetInput'
+            type: array
+          - type: 'null'
+          title: Target Personas
+          description: Personas for optimization (optional - if omitted, we use defaults)
+        target_sources:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Target Sources
+          description: Source URLs for optimization (optional)
+        override_suggestions:
+          type: boolean
+          title: Override Suggestions
+          description: Skip AI suggestions, use only provided prompts/sources
+          default: false
+        webhook_url_override:
+          anyOf:
+          - type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          - type: 'null'
+          title: Webhook Url Override
+          description: Webhook URL override for this pipeline (uses brand default if not set)
+      type: object
+      title: OrchestrationCreateRequest
+      description: Request to create an orchestrated site audit pipeline.
+    OrchestrationRecord:
+      properties:
+        token:
+          type: string
+          title: Token
+        url:
+          type: string
+          title: Url
+        status:
+          type: string
+          title: Status
+        orchestration_status:
+          anyOf:
+          - type: string
+            enum:
+            - audit
+            - optimizing
+            - deploying
+            - completed
+            - failed
+          - type: 'null'
+          title: Orchestration Status
+      type: object
+      required:
+      - token
+      - url
+      - status
+      title: OrchestrationRecord
+      description: A single orchestration record.
+    OrchestrationStatusResponse:
+      properties:
+        token:
+          type: string
+          title: Token
+        url:
+          type: string
+          title: Url
+        status:
+          type: string
+          title: Status
+        orchestration_status:
+          anyOf:
+          - type: string
+            enum:
+            - audit
+            - optimizing
+            - deploying
+            - completed
+            - failed
+          - type: 'null'
+          title: Orchestration Status
+        optimization_run_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Optimization Run Id
+        axp_version_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Axp Version Id
+        result:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Result
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - token
+      - url
+      - status
+      - created_at
+      - updated_at
+      title: OrchestrationStatusResponse
+      description: Response for orchestration status check.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    URLRequest:
+      properties:
+        url:
+          type: string
+          title: Url
+          description: URL to audit
+        target_prompts:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Target Prompts
+          description: Prompts for optimization (overrides batch-level prompts)
+        target_personas:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PersonaTargetInput'
+            type: array
+          - type: 'null'
+          title: Target Personas
+          description: Personas for optimization (overrides batch-level personas)
+        target_sources:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Target Sources
+          description: Source URLs for optimization (overrides batch-level sources)
+        custom_instructions:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Custom Instructions
+          description: Custom instructions for this optimization. Stored as-is and treated as no custom instructions if empty/None at execute time. Callers wanting brand-default fallback must resolve it at submit time.
+        override_suggestions:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Override Suggestions
+          description: Skip AI suggestions (overrides batch-level setting)
+        retain_schema_types:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Retain Schema Types
+          description: JSON-LD schema types to retain. None = retain all (default); [] = retain none.
+      type: object
+      required:
+      - url
+      title: URLRequest
+      description: A single URL request with optional per-URL optimization params.
+    OrchestrationCreateResponse:
+      properties:
+        pipeline_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pipeline Id
+          description: Pipeline ID for batched AXP deployment (only set if deploy_axp=true)
+        tokens:
+          items:
+            $ref: '#/components/schemas/OrchestrationRecord'
+          type: array
+          title: Tokens
+          description: Individual audit tokens
+        status:
+          type: string
+          title: Status
+          description: Pipeline status
+          default: pending
+      type: object
+      required:
+      - tokens
+      title: OrchestrationCreateResponse
+      description: Response when creating an orchestration pipeline.
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

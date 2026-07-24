@@ -1,0 +1,671 @@
+openapi: 3.1.0
+info:
+  title: Scrunch Data agent-traffic sitemap API
+  version: 0.1.0
+servers:
+- url: https://api.scrunchai.com/v1
+tags:
+- name: sitemap
+paths:
+  /{brand_id}/sitemap/export:
+    get:
+      tags:
+      - sitemap
+      summary: Export Sitemap Pages
+      description: 'Download every page matching the supplied filters as CSV or XLSX. Uses the same filters as the list endpoint but skips pagination.
+
+
+        With `include_metrics=true` (the default), each row also includes totals over the selected date range for `agent_traffic`, `citations`, and `ai_referrals`, plus a percent-change column comparing the first and last buckets of the range — matching the totals and trend percentages shown in the sitemap UI.
+
+
+        Limits:
+
+        - Maximum 10,000 rows per export.
+
+        - Maximum 366-day window for `start_date`/`end_date`.
+
+
+        The response sets `Content-Disposition` with a `sitemap-{brand_id}-{YYYY-MM-DD}.{csv|xlsx}` filename.'
+      operationId: exportSitemapPages
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+          description: The unique identifier for the brand.
+        description: The unique identifier for the brand.
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - csv
+          - xlsx
+          default: csv
+          description: Output format. `csv` returns a UTF-8 (BOM) CSV stream. `xlsx` returns a binary Excel workbook.
+          title: Format
+        description: Output format. `csv` returns a UTF-8 (BOM) CSV stream. `xlsx` returns a binary Excel workbook.
+      - name: mapped_site_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Explicit sitemap (mapped site) identifier to export. Defaults to the latest finished crawl for the brand and optional `domain`.
+          title: Mapped Site Id
+        description: Explicit sitemap (mapped site) identifier to export. Defaults to the latest finished crawl for the brand and optional `domain`.
+      - name: domain
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter to a specific domain when the brand has multiple registered sites.
+          title: Domain
+        description: Filter to a specific domain when the brand has multiple registered sites.
+      - name: max_depth
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            minimum: 0
+          - type: 'null'
+          description: Maximum URL path depth to include. `0` returns root pages only.
+          title: Max Depth
+        description: Maximum URL path depth to include. `0` returns root pages only.
+      - name: path_prefix
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by segment-aligned URL path prefix.
+          title: Path Prefix
+        description: Filter by segment-aligned URL path prefix.
+      - name: is_priority
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter to (or exclude) priority pages.
+          title: Is Priority
+        description: Filter to (or exclude) priority pages.
+      - name: has_optimized_content
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter to (or exclude) pages with active AXP optimized content.
+          title: Has Optimized Content
+        description: Filter to (or exclude) pages with active AXP optimized content.
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Case-insensitive substring match against the page URL or title.
+          title: Search
+        description: Case-insensitive substring match against the page URL or title.
+      - name: include_metrics
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+          description: Include per-page totals and percent-change columns for `agent_traffic`, `citations`, and `ai_referrals` over the selected date range.
+          title: Include Metrics
+        description: Include per-page totals and percent-change columns for `agent_traffic`, `citations`, and `ai_referrals` over the selected date range.
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          description: Metrics start date (YYYY-MM-DD). Defaults to 30 days ago.
+          title: Start Date
+        description: Metrics start date (YYYY-MM-DD). Defaults to 30 days ago.
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          description: Metrics end date (YYYY-MM-DD). Defaults to today.
+          title: End Date
+        description: Metrics end date (YYYY-MM-DD). Defaults to today.
+      responses:
+        '200':
+          description: Streamed export file.
+          content:
+            text/csv:
+              schema:
+                type: string
+                description: UTF-8 (BOM) CSV. First row is the column header.
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+                description: XLSX workbook.
+        '400':
+          description: Invalid date range, or export would exceed the 10,000-row cap.
+        '404':
+          description: No matching sitemap crawl found for this brand.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - query
+  /{brand_id}/sitemap/pages/{page_id}/metrics:
+    get:
+      tags:
+      - sitemap
+      summary: Get Sitemap Page Metrics
+      description: 'Return time-series performance metrics for a single page: citations, AI referrals, and AI agent traffic. Each metric is reported as a list of buckets keyed by date, with counts broken down by AI platform.
+
+
+        Granularity is chosen automatically based on the requested date range — short ranges return daily buckets, longer ranges return weekly buckets. Date ranges are capped at 366 days.'
+      operationId: getSitemapPageMetrics
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+          description: The unique identifier for the brand.
+        description: The unique identifier for the brand.
+      - name: page_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Page Id
+          description: The unique identifier for the page.
+        description: The unique identifier for the page.
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          description: Start date (YYYY-MM-DD). Defaults to 30 days ago.
+          title: Start Date
+        description: Start date (YYYY-MM-DD). Defaults to 30 days ago.
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          description: End date (YYYY-MM-DD). Defaults to today.
+          title: End Date
+        description: End date (YYYY-MM-DD). Defaults to today.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SitemapPageMetricsResponse'
+        '400':
+          description: Invalid or out-of-range date parameters.
+        '404':
+          description: Page not found.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - query
+  /{brand_id}/sitemap/pages/{page_id}:
+    get:
+      tags:
+      - sitemap
+      summary: Get Sitemap Page
+      description: Get detailed information about a single page in the brand's sitemap, including title, description, depth, audit score, canonical URL, last-indexed timestamp, priority flag, and optimized-content flag.
+      operationId: getSitemapPage
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+          description: The unique identifier for the brand.
+        description: The unique identifier for the brand.
+      - name: page_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Page Id
+          description: The unique identifier for the page.
+        description: The unique identifier for the page.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SitemapPageDetail'
+        '404':
+          description: Page not found.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - query
+  /{brand_id}/sitemap/pages:
+    get:
+      tags:
+      - sitemap
+      summary: List Sitemap Pages
+      description: 'List pages discovered in the brand''s sitemap with their title, description, depth, audit score, priority flag, and optimized-content flag.
+
+
+        Results come from the most recent completed crawl for the brand. Supports filtering by domain, URL depth, path prefix, priority flag, optimized-content flag, and a case-insensitive substring search across the page URL and title.
+
+
+        Results are paginated and ordered by depth then URL.'
+      operationId: listSitemapPages
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Brand Id
+          description: The unique identifier for the brand.
+        description: The unique identifier for the brand.
+      - name: domain
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter to a specific domain when the brand has multiple registered sites.
+          title: Domain
+        description: Filter to a specific domain when the brand has multiple registered sites.
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+          description: Maximum number of pages to return. Defaults to 100.
+          title: Limit
+        description: Maximum number of pages to return. Defaults to 100.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          description: Number of pages to skip. Use with `limit` for pagination.
+          title: Offset
+        description: Number of pages to skip. Use with `limit` for pagination.
+      - name: max_depth
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            minimum: 0
+          - type: 'null'
+          description: Maximum URL path depth to include. `0` returns root pages only.
+          title: Max Depth
+        description: Maximum URL path depth to include. `0` returns root pages only.
+      - name: path_prefix
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by segment-aligned URL path prefix. For example `/blog` matches `/blog` and `/blog/post` but not `/blogger`.
+          title: Path Prefix
+        description: Filter by segment-aligned URL path prefix. For example `/blog` matches `/blog` and `/blog/post` but not `/blogger`.
+      - name: is_priority
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter to (or exclude) pages flagged as priority for the brand.
+          title: Is Priority
+        description: Filter to (or exclude) pages flagged as priority for the brand.
+      - name: has_optimized_content
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter to (or exclude) pages with active AXP optimized content deployed.
+          title: Has Optimized Content
+        description: Filter to (or exclude) pages with active AXP optimized content deployed.
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Case-insensitive substring match against the page URL or title.
+          title: Search
+        description: Case-insensitive substring match against the page URL or title.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SitemapPagesResponse'
+        '404':
+          description: No completed sitemap crawl found for this brand.
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - query
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SitemapPageMetricsResponse:
+      properties:
+        granularity:
+          type: string
+          enum:
+          - daily
+          - weekly
+          title: Granularity
+          description: 'Time-series granularity: `daily` or `weekly`.'
+        metrics:
+          $ref: '#/components/schemas/SitemapUrlMetrics'
+      type: object
+      required:
+      - granularity
+      - metrics
+      title: SitemapPageMetricsResponse
+    SitemapUrlMetrics:
+      properties:
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitemapMetricRow'
+          title: Citations
+          description: Citation counts over time by AI platform.
+        ai_referrals:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitemapMetricRow'
+          title: AI Referrals
+          description: AI referral counts over time by AI platform.
+        agent_traffic:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitemapMetricRow'
+          title: Agent Traffic
+          description: AI agent traffic counts over time by AI platform.
+      type: object
+      required:
+      - citations
+      - ai_referrals
+      - agent_traffic
+      title: SitemapUrlMetrics
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SitemapPagesResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/SitemapPageListing'
+          type: array
+          title: Items
+        domain:
+          type: string
+          title: Domain
+          description: The domain these pages belong to.
+        last_crawl_completed:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Crawl Completed
+          description: When the most recent completed crawl finished.
+      type: object
+      required:
+      - total
+      - items
+      - domain
+      - last_crawl_completed
+      title: SitemapPagesResponse
+    SitemapPageListing:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Unique page identifier.
+        url:
+          type: string
+          title: Url
+          description: Full URL of the page.
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+          description: HTML title of the page.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Meta description of the page.
+        depth:
+          type: integer
+          title: Depth
+          description: URL path depth (`0` = root).
+        audit_score:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Audit Score
+          description: AI search readiness score (0-100).
+        canonical_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Canonical Url
+          description: Canonical URL if different from the page's URL.
+        is_priority:
+          type: boolean
+          title: Is Priority
+          description: Whether this page matches a priority page or priority path override for the brand.
+        has_optimized_content:
+          type: boolean
+          title: Has Optimized Content
+          description: Whether this page has active AXP optimized content deployed.
+      type: object
+      required:
+      - id
+      - url
+      - title
+      - description
+      - depth
+      - audit_score
+      - canonical_url
+      - is_priority
+      - has_optimized_content
+      title: SitemapPageListing
+    SitemapPageDetail:
+      properties:
+        id:
+          type: integer
+          title: Id
+        url:
+          type: string
+          title: Url
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        depth:
+          type: integer
+          title: Depth
+        audit_score:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Audit Score
+        canonical_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Canonical Url
+        is_priority:
+          type: boolean
+          title: Is Priority
+        has_optimized_content:
+          type: boolean
+          title: Has Optimized Content
+        last_indexed:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Indexed
+          description: When the page content was last indexed.
+        content_updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Content Updated At
+          description: When the cached page content was last updated.
+      type: object
+      required:
+      - id
+      - url
+      - title
+      - description
+      - depth
+      - audit_score
+      - canonical_url
+      - is_priority
+      - has_optimized_content
+      - last_indexed
+      - content_updated_at
+      title: SitemapPageDetail
+    SitemapMetricRow:
+      properties:
+        date:
+          type: string
+          title: Date
+          description: Date in ISO 8601 format (YYYY-MM-DD).
+        count_by_platform:
+          type: object
+          title: Count By Platform
+          additionalProperties:
+            type: integer
+          description: Counts keyed by AI platform name (for example `OpenAI`, `Perplexity`, `Gemini`).
+      type: object
+      required:
+      - date
+      - count_by_platform
+      title: SitemapMetricRow
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

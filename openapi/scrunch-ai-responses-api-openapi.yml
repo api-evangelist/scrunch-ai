@@ -1,0 +1,745 @@
+openapi: 3.1.0
+info:
+  title: Scrunch Data agent-traffic Responses API
+  version: 0.1.0
+servers:
+- url: https://api.scrunchai.com/v1
+tags:
+- name: Responses
+paths:
+  /{brand_id}/responses:
+    get:
+      summary: List Responses
+      description: 'Returns AI responses (observations) with full evaluation data, citations, and competitor analysis. Each response represents a single AI-generated answer to a tracked prompt.
+
+
+        This endpoint provides the raw response data needed for deep analysis, audits, and research. For aggregated metrics, use the Query API instead.
+
+
+        **Response data includes:**
+
+        - Full response text from the AI platform
+
+        - Brand evaluation (presence, sentiment, position)
+
+        - Competitor evaluations with individual metrics
+
+        - Citations with source classification (brand/competitor/other)
+
+        - Prompt and persona context'
+      operationId: listResponses
+      parameters:
+      - name: brand_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          description: The unique identifier for the brand
+          title: Brand Id
+        description: The unique identifier for the brand
+      - name: platform
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            enum:
+            - chatgpt
+            - claude
+            - google_ai_overviews
+            - perplexity
+            - meta
+            - google_ai_mode
+            - google_gemini
+            - copilot
+            - grok
+          - type: 'null'
+          description: 'Filter responses by AI platform.
+
+
+            **Supported platforms:**
+
+            - `chatgpt` - OpenAI ChatGPT
+
+            - `claude` - Anthropic Claude
+
+            - `google_ai_overviews` - Google AI Overviews (Search)
+
+            - `perplexity` - Perplexity AI
+
+            - `meta` - Meta AI
+
+            - `google_ai_mode` - Google AI Mode
+
+            - `google_gemini` - Google Gemini
+
+            - `copilot` - Microsoft Copilot'
+          title: Platform
+        description: 'Filter responses by AI platform.
+
+
+          **Supported platforms:**
+
+          - `chatgpt` - OpenAI ChatGPT
+
+          - `claude` - Anthropic Claude
+
+          - `google_ai_overviews` - Google AI Overviews (Search)
+
+          - `perplexity` - Perplexity AI
+
+          - `meta` - Meta AI
+
+          - `google_ai_mode` - Google AI Mode
+
+          - `google_gemini` - Google Gemini
+
+          - `copilot` - Microsoft Copilot'
+      - name: prompt_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Filter responses to a specific prompt by its ID
+          title: Prompt Id
+        description: Filter responses to a specific prompt by its ID
+      - name: persona_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Filter responses to a specific persona by its ID
+          title: Persona Id
+        description: Filter responses to a specific persona by its ID
+      - name: stage
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Filter responses by customer journey stage. Values are resolved from your brand''s configured stages, so they vary per brand.
+
+
+            **Default stage sets:**
+
+            - **Intent (v1)** — `Advice`, `Awareness`, `Evaluation`, `Comparison`, `Other`
+
+            - **Funnel (v2)** — `Awareness`, `Consideration`, `Conversion`, `Loyalty`, `Other`
+
+
+            Brands that rename or add stages accept those custom names too.'
+          title: Stage
+        description: 'Filter responses by customer journey stage. Values are resolved from your brand''s configured stages, so they vary per brand.
+
+
+          **Default stage sets:**
+
+          - **Intent (v1)** — `Advice`, `Awareness`, `Evaluation`, `Comparison`, `Other`
+
+          - **Funnel (v2)** — `Awareness`, `Consideration`, `Conversion`, `Loyalty`, `Other`
+
+
+          Brands that rename or add stages accept those custom names too.'
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Only return responses collected on or after this date (inclusive). Format: YYYY-MM-DD'
+          title: Start Date
+        description: 'Only return responses collected on or after this date (inclusive). Format: YYYY-MM-DD'
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Only return responses collected before this date (exclusive). Format: YYYY-MM-DD'
+          title: End Date
+        description: 'Only return responses collected before this date (exclusive). Format: YYYY-MM-DD'
+      - name: has_shopping_data
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Filter responses by shopping data presence. True returns only responses with shopping results, False returns only responses without.
+          title: Has Shopping Data
+        description: Filter responses by shopping data presence. True returns only responses with shopping results, False returns only responses without.
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Maximum number of responses to return per page
+          default: 100
+          title: Limit
+        description: Maximum number of responses to return per page
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Number of responses to skip for pagination
+          default: 0
+          title: Offset
+        description: Number of responses to skip for pagination
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionResponse_ResponseListing_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - HTTPBearer:
+        - query
+      tags:
+      - Responses
+components:
+  schemas:
+    AggregationGranularity:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
+    TopDomainSummary:
+      properties:
+        domain:
+          type: string
+          title: Domain
+        domain_owner:
+          type: string
+          title: Domain Owner
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - domain
+      - domain_owner
+      - observation_count
+      title: TopDomainSummary
+    OwnerTimeSeriesPoint:
+      properties:
+        time_bucket:
+          type: string
+          title: Time Bucket
+          description: Date string for the time bucket (YYYY-MM-DD)
+        brand:
+          type: integer
+          title: Brand
+          description: Observation count for brand-owned domains
+        competitor:
+          type: integer
+          title: Competitor
+          description: Observation count for competitor-owned domains
+        other:
+          type: integer
+          title: Other
+          description: Observation count for third-party domains
+      type: object
+      required:
+      - time_bucket
+      - brand
+      - competitor
+      - other
+      title: OwnerTimeSeriesPoint
+      description: A single time bucket with observation counts by owner type.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ResponseListing:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Unique identifier for this response
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp when the response was collected
+        prompt_id:
+          type: integer
+          title: Prompt Id
+          description: ID of the prompt that generated this response
+        prompt:
+          type: string
+          title: Prompt
+          description: The prompt text that was sent to the AI platform
+        persona_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Persona Id
+          description: ID of the persona used for this response, if any
+        persona_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Persona Name
+          description: Display name of the persona, if any
+        country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country
+          description: Country code for the geographic context of this response
+        stage:
+          type: string
+          title: Stage
+          description: 'Customer journey stage of the prompt. Returned as the display name of the brand''s active stage (default sets: intent — `Advice`, `Awareness`, `Evaluation`, `Comparison`, `Other`; funnel — `Awareness`, `Consideration`, `Conversion`, `Loyalty`, `Other`) or a custom stage name.'
+        branded:
+          type: boolean
+          title: Branded
+          description: Whether the prompt explicitly mentions the brand
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          description: Custom tags associated with the prompt
+          default: []
+        key_topics:
+          items:
+            type: string
+          type: array
+          title: Key Topics
+          description: Topics associated with the prompt
+          default: []
+        platform:
+          type: string
+          title: Platform
+          description: The AI platform that generated this response (e.g., chatgpt, claude, perplexity)
+        brand_present:
+          type: boolean
+          title: Brand Present
+          description: Whether the brand was mentioned in the AI response
+        brand_sentiment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Brand Sentiment
+          description: 'Sentiment of the brand mention:
+
+            - `positive` - Favorable or recommending tone
+
+            - `mixed` - Neutral or balanced tone
+
+            - `negative` - Unfavorable or critical tone
+
+            - `none` - Mentioned without sentiment'
+        brand_position:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Brand Position
+          description: 'Where the brand appeared in the response:
+
+            - `top` - Mentioned in the first third
+
+            - `middle` - Mentioned in the middle third
+
+            - `bottom` - Mentioned in the last third'
+        competitors_present:
+          items:
+            type: string
+          type: array
+          title: Competitors Present
+          description: List of competitor names mentioned in the response
+          default: []
+        response_text:
+          type: string
+          title: Response Text
+          description: The full text of the AI-generated response
+        citations:
+          items:
+            $ref: '#/components/schemas/ResponseCitation'
+          type: array
+          title: Citations
+          description: URLs cited by the AI platform in this response, with source classification
+          default: []
+        competitors:
+          items:
+            $ref: '#/components/schemas/ResponseCompetitorListing'
+          type: array
+          title: Competitors
+          description: Detailed evaluation data for each configured competitor
+          default: []
+        query_fanout:
+          anyOf:
+          - $ref: '#/components/schemas/QueryFanout'
+          - type: 'null'
+          description: Search queries generated by the AI platform during query fan-out turns
+        shopping_results:
+          items:
+            $ref: '#/components/schemas/ShoppingResult'
+          type: array
+          title: Shopping Results
+          description: Shopping product listings surfaced by the AI platform in this response, if any
+          default: []
+      type: object
+      required:
+      - id
+      - created_at
+      - prompt_id
+      - prompt
+      - persona_id
+      - stage
+      - branded
+      - platform
+      - brand_present
+      - response_text
+      title: ResponseListing
+      description: 'A complete AI response (observation) with evaluation data, citations, and competitor analysis.
+
+
+        Represents a single answer from an AI platform to a tracked prompt.'
+    ResponseCompetitorListing:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Unique identifier for the competitor
+        name:
+          type: string
+          title: Name
+          description: Display name of the competitor
+        present:
+          type: boolean
+          title: Present
+          description: Whether the competitor was mentioned in this response
+        position:
+          anyOf:
+          - type: string
+            enum:
+            - top
+            - middle
+            - bottom
+          - type: 'null'
+          title: Position
+          description: 'Where the competitor appeared in the response:
+
+            - `top` - Mentioned in the first third of the response
+
+            - `middle` - Mentioned in the middle third
+
+            - `bottom` - Mentioned in the last third'
+        sentiment:
+          anyOf:
+          - type: string
+            enum:
+            - positive
+            - mixed
+            - negative
+            - none
+          - type: 'null'
+          title: Sentiment
+          description: 'The sentiment of how the competitor was described:
+
+            - `positive` - Favorable or recommending tone
+
+            - `mixed` - Neutral or balanced tone
+
+            - `negative` - Unfavorable or critical tone
+
+            - `none` - Mentioned without sentiment'
+      type: object
+      required:
+      - id
+      - name
+      - present
+      title: ResponseCompetitorListing
+      description: Evaluation data for a competitor mentioned in an AI response.
+    ResponseCitation:
+      properties:
+        url:
+          type: string
+          title: Url
+          description: The full URL of the cited source
+        domain:
+          type: string
+          title: Domain
+          description: The extracted registered domain from the URL
+        source_type:
+          type: string
+          title: Source Type
+          description: 'Classification of the citation source based on domain ownership:
+
+            - `brand` - URL belongs to the tracked brand
+
+            - `competitor` - URL belongs to a configured competitor
+
+            - `other` - URL belongs to neither brand nor competitor'
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+          description: The page title from the citation, when available
+        snippet:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Snippet
+          description: A text snippet or description from the citation, when available
+      type: object
+      required:
+      - url
+      - domain
+      - source_type
+      title: ResponseCitation
+      description: A citation (source URL) referenced in an AI response, with automatic source classification.
+    ShoppingPurchasingOption:
+      properties:
+        price:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Price
+        currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Currency
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
+      type: object
+      title: ShoppingPurchasingOption
+    CollectionResponse_ResponseListing_:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/ResponseListing'
+          type: array
+          title: Items
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/TimeSeriesMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - total
+      - items
+      title: CollectionResponse[ResponseListing]
+    TimeSeriesMetadata:
+      properties:
+        aggregation_granularity:
+          $ref: '#/components/schemas/AggregationGranularity'
+          description: 'The aggregation granularity: daily, weekly, or monthly'
+        period_count:
+          type: integer
+          title: Period Count
+          description: The number of periods in the time series
+        start_date:
+          type: string
+          format: date-time
+          title: Start Date
+          description: The start date of the time series
+        end_date:
+          type: string
+          format: date-time
+          title: End Date
+          description: The end date of the time series
+        top_domains:
+          anyOf:
+          - $ref: '#/components/schemas/TopDomainsMetadata'
+          - type: 'null'
+          description: Top domains metadata (only populated by sources/domains endpoints)
+      type: object
+      required:
+      - aggregation_granularity
+      - period_count
+      - start_date
+      - end_date
+      title: TimeSeriesMetadata
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    QueryFanout:
+      properties:
+        queries:
+          items:
+            type: string
+          type: array
+          title: Queries
+        engine_metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Engine Metadata
+      type: object
+      required:
+      - queries
+      title: QueryFanout
+      description: 'Query fan-out data: search queries an AI engine used internally.'
+    ShoppingResult:
+      properties:
+        url:
+          type: string
+          title: URL
+          description: The URL of the shopping result
+        title:
+          type: string
+          title: Title
+          description: The title of the shopping result
+        image:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Image
+        all_images:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: All Images
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        rating:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Rating
+        reviews:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Reviews
+        purchasing_options:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ShoppingPurchasingOption'
+            type: array
+          - type: 'null'
+          title: Purchasing Options
+      type: object
+      required:
+      - url
+      - title
+      title: ShoppingResult
+    TopDomainsMetadata:
+      properties:
+        domains:
+          items:
+            $ref: '#/components/schemas/TopDomainSummary'
+          type: array
+          title: Domains
+          description: Top domains by observation count (always domain-level aggregated)
+        grand_total:
+          type: integer
+          title: Grand Total
+          description: Total observation count across all domains (for calculating 'Other')
+        owner_totals:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Owner Totals
+          description: Observation counts by owner type (brand, competitor, other)
+        owner_time_series:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/OwnerTimeSeriesPoint'
+            type: array
+          - type: 'null'
+          title: Owner Time Series
+          description: Time series data by owner type for trend visualization
+        segment_totals:
+          items:
+            $ref: '#/components/schemas/SegmentTotal'
+          type: array
+          title: Segment Totals
+          description: Server-side observation counts per citation segment (covers all domains, not just top-N)
+      type: object
+      required:
+      - domains
+      - grand_total
+      - owner_totals
+      title: TopDomainsMetadata
+      description: Metadata about top domains, used by sources/domains endpoints.
+    SegmentTotal:
+      properties:
+        name:
+          type: string
+          title: Name
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - name
+      - observation_count
+      title: SegmentTotal
+      description: Observation count for a citation segment, computed server-side.
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
