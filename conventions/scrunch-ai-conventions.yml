@@ -1,0 +1,45 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/scrunch-ai-data-api-openapi.yml
+docs: https://developers.scrunch.com/api-reference/introduction
+authentication:
+  style: bearer-token
+  header: Authorization
+  format: 'Bearer <SCRUNCH_API_TOKEN>'
+  scopes: [query, configure, create-brand]
+  ref: authentication/scrunch-ai-authentication.yml
+base_url: https://api.scrunchai.com/v1
+versioning:
+  scheme: uri-path
+  current: v1
+  ref: lifecycle/scrunch-ai-lifecycle.yml
+pagination:
+  style: limit-offset
+  params:
+    limit: {in: query, default: 100, minimum: 1}
+    offset: {in: query, default: 0, minimum: 0}
+  applies_to: [listBrands, listCompetitors, listPersonas, listPrompts, listResponses,
+    listPageAudits, listSitemapPages, listAiReferralsConnections]
+idempotency:
+  supported: false
+  notes: >
+    No Idempotency-Key header or parameter is documented in the OpenAPI or the docs.
+    Ingestion endpoints (AI Referrals, custom agent traffic) are additive batch POSTs
+    keyed on a registered connection; the async orchestration/render pipelines are polled
+    or resolved via webhooks rather than retried idempotently.
+async_patterns:
+  description: >
+    Long-running work (Optimize-and-Deploy pipeline, bulk AXP renders, AI referral event
+    ingestion) is queued and returns immediately with a job/token; callers poll a status
+    endpoint or subscribe to webhook callbacks.
+  poll: [getOptimizeAndDeployStatus]
+  webhooks_ref: asyncapi/scrunch-ai-webhooks.yml
+error_envelope:
+  media_type: application/json
+  validation_schema: HTTPValidationError
+  ref: errors/scrunch-ai-problem-types.yml
+rate_limiting:
+  documented: false
+content_negotiation:
+  exports: [text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet]
+  notes: Sitemap export (exportSitemapPages) returns CSV or XLSX; all other responses are JSON.

@@ -1,0 +1,51 @@
+generated: '2026-07-21'
+method: searched
+status: published
+source: https://developers.scrunch.com/mcp/overview
+docs: https://developers.scrunch.com/mcp/setup
+server:
+  name: scrunch
+  display_name: Scrunchie
+  transport: streamable-http
+  url: https://app.scrunchai.com/api/mcp
+  authentication: oauth
+  auth_notes: |
+    Connects via Scrunch's standard OAuth sign-in flow using your Scrunch account
+    credentials - no API key or shared secret required. Leave OAuth Client ID / Secret
+    blank unless self-hosting an OAuth provider. Some clients require removing `openid`
+    from the requested OAuth scopes during setup.
+  clients:
+  - Claude
+  - ChatGPT
+  - Microsoft Copilot Studio
+  - Cursor
+  - VS Code
+  - Windsurf
+tool_count: 33
+tool_categories:
+- reporting
+- responses
+- prompts
+- brand configuration
+- agent traffic
+- help docs
+tools_verified:
+- name: get_response
+  description: Retrieve a single raw AI response.
+- name: list_responses
+  description: List raw AI responses with citations and evaluation data.
+- name: generate_explorer_chart
+  description: Turn a metric question into a Scrunch Explorer chart.
+- name: create_explorer_dashboard
+  description: Save a Scrunch Explorer dashboard.
+- name: get_scrunch_help_article
+  description: Fetch a Scrunch help-doc article.
+- name: list_scrunch_help_collections
+  description: List Scrunch help-doc collections.
+notes: |
+  Hosted, first-party remote MCP server ("Scrunchie"). The docs advertise 33 MCP tools
+  covering reporting, responses, prompts, brand configuration, agent traffic, and help
+  docs, plus a large library of guided MCP prompts and workflows
+  (see llms/scrunch-ai-llms.txt). Only the tool names explicitly named in the public
+  docs are listed under tools_verified; the full 33-tool list is not enumerated verbatim
+  in the public reference and is not fabricated here.

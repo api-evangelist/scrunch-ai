@@ -1,0 +1,30 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/scrunch-ai-data-api-openapi.yml
+docs: https://developers.scrunch.com/api-reference/introduction
+versioning:
+  scheme: uri-path
+  current: v1
+  base_url: https://api.scrunchai.com/v1
+  spec_version: '0.1.0'
+status_page: https://status.scrunchai.com
+deprecation:
+  policy_documented: false
+  sunset_header: false
+  soft_delete_pattern: >
+    Resources are archived (soft-deleted) rather than hard-deleted - archiveCompetitor,
+    archivePersona, archivePrompt, and PATCH brand semantics retain historical data while
+    stopping tracking. AI Referrals connections are soft-disabled (410 Gone on further
+    pushes) rather than removed.
+deprecated_operations: []
+sla:
+  documented: false
+changelog:
+  url: https://developers.scrunch.com/changelog
+  access: gated
+  notes: A changelog page exists in the developer docs but is gated behind an access code;
+    structured entries were not publicly retrievable.
+notes: >
+  Scrunch versions the Data API by URI path (/v1). A public status page is published at
+  status.scrunchai.com. No formal deprecation policy, Sunset/Deprecation header support,
+  or SLA is documented publicly.

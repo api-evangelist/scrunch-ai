@@ -1,28 +1,386 @@
 aid: scrunch-ai
 name: Scrunch AI
-description: 'Scrunch AI is a company surfaced as a portfolio company of homebrew, mayfield and added
-  to the API Evangelist network as a stub for enrichment. Sector: ai. This profile is a lead awaiting
-  the enrichment pipeline.'
+description: >-
+  Scrunch AI (scrunch.com) is an AI customer experience platform for AI search visibility
+  and optimization - often called Answer Engine Optimization (AEO/GEO). It monitors and
+  optimizes how a brand shows up across AI assistants and answer engines (ChatGPT,
+  Perplexity, Claude, Gemini, Google AI Overviews, Copilot): tracking brand presence,
+  position, sentiment, citations, and competitor share of voice; measuring AI bot and
+  agent crawl traffic; auditing pages for AI search readiness; and running an
+  Optimize-and-Deploy pipeline that audits, optimizes, and publishes machine-readable
+  page versions through its Agent Experience Platform (AXP). Scrunch exposes a REST Data
+  API (api.scrunchai.com/v1, Bearer API keys with query/configure/create-brand scopes), a
+  hosted MCP server ("Scrunchie") for Claude, ChatGPT, Cursor and other clients, and Looker
+  Studio / Data Studio connectors. Backed by Homebrew and Mayfield.
 url: https://raw.githubusercontent.com/api-evangelist/scrunch-ai/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - homebrew
 - mayfield
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profiled
+x-tier-reason: enriched-from-developer-docs
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
+image: https://cdn.sanity.io/images/3lyosn52/production/3846d0bcd45fb4d64491c6d548d181d696aaa339-1200x753.png?rect=0,62,1200,630&w=1200&h=630&q=75&fit=crop&auto=format
 tags:
 - Company
-- Ai
-apis: []
+- AI
+- AI Search
+- Answer Engine Optimization
+- Generative Engine Optimization
+- Brand Visibility
+- Analytics
+- SEO
+- Agent Experience
+- MCP
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: scrunch-ai:scrunch-ai-agent-traffic-api
+  name: Scrunch AI agent-traffic API
+  description: The agent-traffic API from Scrunch AI — 1 operation(s) for agent-traffic.
+  humanURL: https://developers.scrunch.com/api-reference/introduction
+  baseURL: https://api.scrunchai.com/v1
+  tags:
+  - agent-traffic
+  properties:
+  - type: OpenAPI
+    url: openapi/scrunch-ai-agent-traffic-api-openapi.yml
+  - type: Authentication
+    url: authentication/scrunch-ai-authentication.yml
+  - type: OAuthScopes
+    url: scopes/scrunch-ai-scopes.yml
+  - type: ErrorCatalog
+    url: errors/scrunch-ai-problem-types.yml
+  - type: Conventions
+    url: conventions/scrunch-ai-conventions.yml
+  - type: DataModel
+    url: data-model/scrunch-ai-data-model.yml
+  - type: Conformance
+    url: conformance/scrunch-ai-conformance.yml
+  - type: Webhooks
+    url: asyncapi/scrunch-ai-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/scrunch-ai-agentic-access.yml
+- aid: scrunch-ai:scrunch-ai-ai-referrals-api
+  name: Scrunch AI ai-referrals API
+  description: The ai-referrals API from Scrunch AI — 3 operation(s) for ai-referrals.
+  humanURL: https://developers.scrunch.com/api-reference/introduction
+  baseURL: https://api.scrunchai.com/v1
+  tags:
+  - ai-referrals
+  properties:
+  - type: OpenAPI
+    url: openapi/scrunch-ai-ai-referrals-api-openapi.yml
+  - type: Authentication
+    url: authentication/scrunch-ai-authentication.yml
+  - type: OAuthScopes
+    url: scopes/scrunch-ai-scopes.yml
+  - type: ErrorCatalog
+    url: errors/scrunch-ai-problem-types.yml
+  - type: Conventions
+    url: conventions/scrunch-ai-conventions.yml
+  - type: DataModel
+    url: data-model/scrunch-ai-data-model.yml
+  - type: Conformance
+    url: conformance/scrunch-ai-conformance.yml
+  - type: Webhooks
+    url: asyncapi/scrunch-ai-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/scrunch-ai-agentic-access.yml
+- aid: scrunch-ai:scrunch-ai-axp-render-api
+  name: Scrunch AI axp-render API
+  description: The axp-render API from Scrunch AI — 1 operation(s) for axp-render.
+  humanURL: https://developers.scrunch.com/api-reference/introduction
+  baseURL: https://api.scrunchai.com/v1
+  tags:
+  - axp-render
+  properties:
+  - type: OpenAPI
+    url: openapi/scrunch-ai-axp-render-api-openapi.yml
+  - type: Authentication
+    url: authentication/scrunch-ai-authentication.yml
+  - type: OAuthScopes
+    url: scopes/scrunch-ai-scopes.yml
+  - type: ErrorCatalog
+    url: errors/scrunch-ai-problem-types.yml
+  - type: Conventions
+    url: conventions/scrunch-ai-conventions.yml
+  - type: DataModel
+    url: data-model/scrunch-ai-data-model.yml
+  - type: Conformance
+    url: conformance/scrunch-ai-conformance.yml
+  - type: Webhooks
+    url: asyncapi/scrunch-ai-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/scrunch-ai-agentic-access.yml
+- aid: scrunch-ai:scrunch-ai-brands-api
+  name: Scrunch AI Brands API
+  description: The Brands API from Scrunch AI — 6 operation(s) for brands.
+  humanURL: https://developers.scrunch.com/api-reference/introduction
+  baseURL: https://api.scrunchai.com/v1
+  tags:
+  - Brands
+  properties:
+  - type: OpenAPI
+    url: openapi/scrunch-ai-brands-api-openapi.yml
+  - type: Authentication
+    url: authentication/scrunch-ai-authentication.yml
+  - type: OAuthScopes
+    url: scopes/scrunch-ai-scopes.yml
+  - type: ErrorCatalog
+    url: errors/scrunch-ai-problem-types.yml
+  - type: Conventions
+    url: conventions/scrunch-ai-conventions.yml
+  - type: DataModel
+    url: data-model/scrunch-ai-data-model.yml
+  - type: Conformance
+    url: conformance/scrunch-ai-conformance.yml
+  - type: Webhooks
+    url: asyncapi/scrunch-ai-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/scrunch-ai-agentic-access.yml
+- aid: scrunch-ai:scrunch-ai-orchestration-api
+  name: Scrunch AI orchestration API
+  description: The orchestration API from Scrunch AI — 2 operation(s) for orchestration.
+  humanURL: https://developers.scrunch.com/api-reference/introduction
+  baseURL: https://api.scrunchai.com/v1
+  tags:
+  - orchestration
+  properties:
+  - type: OpenAPI
+    url: openapi/scrunch-ai-orchestration-api-openapi.yml
+  - type: Authentication
+    url: authentication/scrunch-ai-authentication.yml
+  - type: OAuthScopes
+    url: scopes/scrunch-ai-scopes.yml
+  - type: ErrorCatalog
+    url: errors/scrunch-ai-problem-types.yml
+  - type: Conventions
+    url: conventions/scrunch-ai-conventions.yml
+  - type: DataModel
+    url: data-model/scrunch-ai-data-model.yml
+  - type: Conformance
+    url: conformance/scrunch-ai-conformance.yml
+  - type: Webhooks
+    url: asyncapi/scrunch-ai-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/scrunch-ai-agentic-access.yml
+- aid: scrunch-ai:scrunch-ai-page-audits-api
+  name: Scrunch AI Page Audits API
+  description: The Page Audits API from Scrunch AI — 2 operation(s) for page audits.
+  humanURL: https://developers.scrunch.com/api-reference/introduction
+  baseURL: https://api.scrunchai.com/v1
+  tags:
+  - Page Audits
+  properties:
+  - type: OpenAPI
+    url: openapi/scrunch-ai-page-audits-api-openapi.yml
+  - type: Authentication
+    url: authentication/scrunch-ai-authentication.yml
+  - type: OAuthScopes
+    url: scopes/scrunch-ai-scopes.yml
+  - type: ErrorCatalog
+    url: errors/scrunch-ai-problem-types.yml
+  - type: Conventions
+    url: conventions/scrunch-ai-conventions.yml
+  - type: DataModel
+    url: data-model/scrunch-ai-data-model.yml
+  - type: Conformance
+    url: conformance/scrunch-ai-conformance.yml
+  - type: Webhooks
+    url: asyncapi/scrunch-ai-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/scrunch-ai-agentic-access.yml
+- aid: scrunch-ai:scrunch-ai-prompts-api
+  name: Scrunch AI Prompts API
+  description: The Prompts API from Scrunch AI — 2 operation(s) for prompts.
+  humanURL: https://developers.scrunch.com/api-reference/introduction
+  baseURL: https://api.scrunchai.com/v1
+  tags:
+  - Prompts
+  properties:
+  - type: OpenAPI
+    url: openapi/scrunch-ai-prompts-api-openapi.yml
+  - type: Authentication
+    url: authentication/scrunch-ai-authentication.yml
+  - type: OAuthScopes
+    url: scopes/scrunch-ai-scopes.yml
+  - type: ErrorCatalog
+    url: errors/scrunch-ai-problem-types.yml
+  - type: Conventions
+    url: conventions/scrunch-ai-conventions.yml
+  - type: DataModel
+    url: data-model/scrunch-ai-data-model.yml
+  - type: Conformance
+    url: conformance/scrunch-ai-conformance.yml
+  - type: Webhooks
+    url: asyncapi/scrunch-ai-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/scrunch-ai-agentic-access.yml
+- aid: scrunch-ai:scrunch-ai-query-api
+  name: Scrunch AI Query API
+  description: The Query API from Scrunch AI — 1 operation(s) for query.
+  humanURL: https://developers.scrunch.com/api-reference/introduction
+  baseURL: https://api.scrunchai.com/v1
+  tags:
+  - Query
+  properties:
+  - type: OpenAPI
+    url: openapi/scrunch-ai-query-api-openapi.yml
+  - type: Authentication
+    url: authentication/scrunch-ai-authentication.yml
+  - type: OAuthScopes
+    url: scopes/scrunch-ai-scopes.yml
+  - type: ErrorCatalog
+    url: errors/scrunch-ai-problem-types.yml
+  - type: Conventions
+    url: conventions/scrunch-ai-conventions.yml
+  - type: DataModel
+    url: data-model/scrunch-ai-data-model.yml
+  - type: Conformance
+    url: conformance/scrunch-ai-conformance.yml
+  - type: Webhooks
+    url: asyncapi/scrunch-ai-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/scrunch-ai-agentic-access.yml
+- aid: scrunch-ai:scrunch-ai-responses-api
+  name: Scrunch AI Responses API
+  description: The Responses API from Scrunch AI — 1 operation(s) for responses.
+  humanURL: https://developers.scrunch.com/api-reference/introduction
+  baseURL: https://api.scrunchai.com/v1
+  tags:
+  - Responses
+  properties:
+  - type: OpenAPI
+    url: openapi/scrunch-ai-responses-api-openapi.yml
+  - type: Authentication
+    url: authentication/scrunch-ai-authentication.yml
+  - type: OAuthScopes
+    url: scopes/scrunch-ai-scopes.yml
+  - type: ErrorCatalog
+    url: errors/scrunch-ai-problem-types.yml
+  - type: Conventions
+    url: conventions/scrunch-ai-conventions.yml
+  - type: DataModel
+    url: data-model/scrunch-ai-data-model.yml
+  - type: Conformance
+    url: conformance/scrunch-ai-conformance.yml
+  - type: Webhooks
+    url: asyncapi/scrunch-ai-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/scrunch-ai-agentic-access.yml
+- aid: scrunch-ai:scrunch-ai-sitemap-api
+  name: Scrunch AI sitemap API
+  description: The sitemap API from Scrunch AI — 4 operation(s) for sitemap.
+  humanURL: https://developers.scrunch.com/api-reference/introduction
+  baseURL: https://api.scrunchai.com/v1
+  tags:
+  - sitemap
+  properties:
+  - type: OpenAPI
+    url: openapi/scrunch-ai-sitemap-api-openapi.yml
+  - type: Authentication
+    url: authentication/scrunch-ai-authentication.yml
+  - type: OAuthScopes
+    url: scopes/scrunch-ai-scopes.yml
+  - type: ErrorCatalog
+    url: errors/scrunch-ai-problem-types.yml
+  - type: Conventions
+    url: conventions/scrunch-ai-conventions.yml
+  - type: DataModel
+    url: data-model/scrunch-ai-data-model.yml
+  - type: Conformance
+    url: conformance/scrunch-ai-conformance.yml
+  - type: Webhooks
+    url: asyncapi/scrunch-ai-webhooks.yml
+  - type: AgenticAccess
+    url: agentic-access/scrunch-ai-agentic-access.yml
 common:
 - type: Website
-  url: https://scrunchai.com
+  url: https://scrunch.com
+- type: DeveloperPortal
+  url: https://developers.scrunch.com
+- type: Documentation
+  url: https://developers.scrunch.com
+- type: APIReference
+  url: https://developers.scrunch.com/api-reference/introduction
+- type: GettingStarted
+  url: https://developers.scrunch.com/getting-started/quickstart-query
+- type: Authentication
+  url: authentication/scrunch-ai-authentication.yml
+- type: OAuthScopes
+  url: scopes/scrunch-ai-scopes.yml
+- type: ErrorCatalog
+  url: errors/scrunch-ai-problem-types.yml
+- type: Conventions
+  url: conventions/scrunch-ai-conventions.yml
+- type: DataModel
+  url: data-model/scrunch-ai-data-model.yml
+- type: Conformance
+  url: conformance/scrunch-ai-conformance.yml
+- type: Lifecycle
+  url: lifecycle/scrunch-ai-lifecycle.yml
+- type: StatusPage
+  url: https://status.scrunchai.com
+- type: LLMsTxt
+  url: llms/scrunch-ai-llms.txt
+- type: MCPServer
+  url: mcp/scrunch-ai-mcp.yml
+- type: Webhooks
+  url: asyncapi/scrunch-ai-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Arazzo
+  name: Onboard a brand and seed tracking
+  url: arazzo/scrunch-ai-onboard-and-track.yml
+- type: Arazzo
+  name: Resolve a brand and query AI visibility
+  url: arazzo/scrunch-ai-query-visibility.yml
+- type: Arazzo
+  name: Optimize and deploy pages, then poll
+  url: arazzo/scrunch-ai-optimize-and-deploy.yml
+- type: AgenticAccess
+  url: agentic-access/scrunch-ai-agentic-access.yml
+- type: DomainSecurity
+  url: security/scrunch-ai-domain-security.yml
+- type: WellKnown
+  url: well-known/scrunch-ai-well-known.yml
+- type: GitHubOrganization
+  url: https://github.com/scrunch-ai
+- type: Blog
+  url: https://scrunch.com/blog
+- type: Support
+  url: https://scrunch.com/faqs
+- type: Pricing
+  url: https://scrunch.com/pricing
+- type: SignUp
+  url: https://app.scrunchai.com/sign-up
+- type: Login
+  url: https://app.scrunchai.com/
+- type: TermsOfService
+  url: https://scrunch.com/terms
+- type: PrivacyPolicy
+  url: https://scrunch.com/privacy
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 18
+  pass: local-v1

@@ -1,0 +1,32 @@
+{
+  "provider": "scrunch-ai",
+  "sources": [
+    "scrunch-ai-agent-traffic-api-openapi.yml",
+    "scrunch-ai-ai-referrals-api-openapi.yml",
+    "scrunch-ai-axp-render-api-openapi.yml",
+    "scrunch-ai-brands-api-openapi.yml",
+    "scrunch-ai-orchestration-api-openapi.yml",
+    "scrunch-ai-page-audits-api-openapi.yml",
+    "scrunch-ai-prompts-api-openapi.yml",
+    "scrunch-ai-query-api-openapi.yml",
+    "scrunch-ai-responses-api-openapi.yml",
+    "scrunch-ai-sitemap-api-openapi.yml"
+  ],
+  "outputs": [
+    "scrunch-ai-agent-traffic-api-openapi.yml",
+    "scrunch-ai-ai-referrals-api-openapi.yml",
+    "scrunch-ai-axp-render-api-openapi.yml",
+    "scrunch-ai-brands-api-openapi.yml",
+    "scrunch-ai-orchestration-api-openapi.yml",
+    "scrunch-ai-page-audits-api-openapi.yml",
+    "scrunch-ai-prompts-api-openapi.yml",
+    "scrunch-ai-query-api-openapi.yml",
+    "scrunch-ai-responses-api-openapi.yml",
+    "scrunch-ai-sitemap-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

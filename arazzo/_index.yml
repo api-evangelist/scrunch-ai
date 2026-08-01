@@ -1,0 +1,16 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/scrunch-ai-data-api-openapi.yml
+workflows:
+- file: scrunch-ai-onboard-and-track.yml
+  workflowId: onboardBrandAndTrack
+  title: Onboard a brand and seed tracking
+  summary: Create a brand, add a competitor and persona, seed a tracking prompt, and verify.
+- file: scrunch-ai-query-visibility.yml
+  workflowId: resolveBrandAndQuery
+  title: Resolve a brand and query AI visibility
+  summary: List brands, pick one, and pull aggregated AI visibility metrics.
+- file: scrunch-ai-optimize-and-deploy.yml
+  workflowId: optimizeAndDeploy
+  title: Optimize and deploy pages, then poll
+  summary: Submit pages to the Optimize-and-Deploy pipeline and poll for completion.

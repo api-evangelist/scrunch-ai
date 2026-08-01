@@ -1,0 +1,26 @@
+generated: '2026-07-21'
+method: searched
+spec_type: Webhooks
+source: https://developers.scrunch.com/api-reference/webhooks/overview
+status: preview
+summary: >
+  Scrunch offers webhook callbacks for the Optimize-and-Deploy pipeline, eliminating the
+  need to poll for status. The event catalog is published; full payload schemas, signature
+  verification, and retry behavior are documented as "coming soon" (early access via
+  Customer Success). No AsyncAPI document is published, so no verbatim spec is captured -
+  only the documented event catalog below.
+transport: http-callback
+events:
+- name: audit.completed
+  fired_when: A page audit finishes.
+- name: optimization.completed
+  fired_when: Content optimization finishes. Payload includes status "staged" when optimized
+    content was staged to AXP via stage_axp true.
+- name: deployment.completed
+  fired_when: An AXP deployment finishes.
+- name: pipeline.completed
+  fired_when: All URLs in a batch have finished.
+related_operations:
+- createOptimizeAndDeployPipeline
+- getOptimizeAndDeployStatus
+- bulkRenderOptimizedPages

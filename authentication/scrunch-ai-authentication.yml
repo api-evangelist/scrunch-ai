@@ -1,0 +1,34 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/scrunch-ai-data-api-openapi.yml
+docs: https://developers.scrunch.com/getting-started/authentication
+summary:
+  types:
+  - http
+  http_schemes:
+  - bearer
+  token_model: api-key
+  scopes:
+  - query
+  - configure
+  - create-brand
+schemes:
+- name: HTTPBearer
+  type: http
+  scheme: bearer
+  in: header
+  header: Authorization
+  format: 'Bearer <SCRUNCH_API_TOKEN>'
+  sources:
+  - openapi/scrunch-ai-data-api-openapi.yml
+notes: |
+  All Scrunch Data API endpoints require a Bearer token in the Authorization header.
+  API keys are provisioned at the organization level under Organization -> Settings ->
+  API Keys and are shown only once at creation time. Keys carry operational scopes
+  (Query / Configure / Create Brand) and a brand access grant: brand-scoped keys can
+  only access specific brands, organization-scoped keys can access and configure all
+  brands. API key creation is gated to the Agency and Enterprise plans; calling
+  POST /organizations/{organization_id}/api-keys without the required plan capability
+  returns HTTP 402 Payment Required.
+  Note: the hosted Scrunch MCP server (Scrunchie) uses OAuth sign-in instead of API keys
+  (see mcp/scrunch-ai-mcp.yml).

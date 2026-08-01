@@ -1,0 +1,22 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Scrunch Data API
+  version: 1.0.0
+extends: openapi/scrunch-ai-data-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: scrunch-ai
+    x-apievangelist-category: ai-search-optimization
+    x-apievangelist-docs: https://developers.scrunch.com
+    x-apievangelist-auth: bearer-api-key
+    x-apievangelist-mcp: https://app.scrunchai.com/api/mcp
+    x-apievangelist-status-page: https://status.scrunchai.com
+- target: $.servers
+  update:
+  - url: https://api.scrunchai.com/v1
+    description: Scrunch Data API production (base URL confirmed from developer docs).
+notes: >
+  This overlay records API Evangelist enrichment metadata for the Scrunch Data API. The
+  underlying spec in openapi/ was assembled verbatim from the provider's per-operation
+  OpenAPI fragments published at developers.scrunch.com; this overlay never mutates it.

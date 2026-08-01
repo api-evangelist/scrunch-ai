@@ -1,0 +1,29 @@
+arazzo: 1.0.1
+info:
+  title: Scrunch - Resolve a brand and query AI visibility
+  version: 1.0.0
+  summary: List brands, pick one, and pull aggregated AI visibility metrics for it.
+sourceDescriptions:
+- name: scrunch
+  url: ../openapi/scrunch-ai-data-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: resolveBrandAndQuery
+  summary: Resolve a brand_id then query visibility metrics.
+  inputs:
+    type: object
+    properties:
+      limit: {type: integer, default: 100}
+  steps:
+  - stepId: listBrands
+    operationId: listBrands
+    parameters:
+    - {name: limit, in: query, value: $inputs.limit}
+    outputs: {first_brand_id: $response.body#/data/0/id}
+  - stepId: queryVisibility
+    operationId: query
+    parameters:
+    - {name: brand_id, in: path, value: $steps.listBrands.outputs.first_brand_id}
+    outputs: {metrics: $response.body}
+  outputs:
+    metrics: $steps.queryVisibility.outputs.metrics

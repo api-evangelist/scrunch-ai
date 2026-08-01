@@ -1,0 +1,33 @@
+arazzo: 1.0.1
+info:
+  title: Scrunch - Optimize and deploy pages, then poll
+  version: 1.0.0
+  summary: Submit pages to the Optimize-and-Deploy pipeline and poll for completion.
+sourceDescriptions:
+- name: scrunch
+  url: ../openapi/scrunch-ai-data-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: optimizeAndDeploy
+  summary: Kick off the audit/optimize/deploy pipeline for a brand and poll status.
+  inputs:
+    type: object
+    properties:
+      brand_id: {type: string}
+      pipeline: {type: object}
+  steps:
+  - stepId: submitPipeline
+    operationId: createOptimizeAndDeployPipeline
+    parameters:
+    - {name: brand_id, in: path, value: $inputs.brand_id}
+    requestBody: {payload: $inputs.pipeline}
+    outputs: {token: $response.body#/token}
+  - stepId: pollStatus
+    operationId: getOptimizeAndDeployStatus
+    parameters:
+    - {name: brand_id, in: path, value: $inputs.brand_id}
+    - {name: token, in: path, value: $steps.submitPipeline.outputs.token}
+    outputs: {status: $response.body#/status}
+  outputs:
+    token: $steps.submitPipeline.outputs.token
+    status: $steps.pollStatus.outputs.status

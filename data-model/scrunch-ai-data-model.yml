@@ -1,0 +1,57 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/scrunch-ai-data-api-openapi.yml
+note: >
+  Entity graph derived from the Scrunch Data API path hierarchy and schema references.
+  Brand is the root aggregate; nearly every resource is brand-scoped ({brand_id}).
+entities:
+- name: Brand
+  root: true
+  operations: [listBrands, createBrand, patchBrand]
+  id_param: brand_id
+- name: Competitor
+  operations: [listCompetitors, createCompetitor, getCompetitor, updateCompetitor, archiveCompetitor]
+  id_param: competitor_id
+- name: Persona
+  operations: [listPersonas, createPersona, getPersona, updatePersona, archivePersona]
+  id_param: persona_id
+- name: Prompt
+  operations: [listPrompts, createPrompt, archivePrompt]
+  id_param: prompt_id
+- name: Response
+  operations: [listResponses]
+  description: Raw AI-generated answers to tracked prompts, with citations, sentiment,
+    competitor evaluations, persona and platform metadata.
+- name: PageAudit
+  operations: [listPageAudits, createPageAudits, getPageAudit]
+  id_param: page_audit_id
+- name: SitemapPage
+  operations: [listSitemapPages, getSitemapPage, getSitemapPageMetrics, exportSitemapPages]
+  id_param: page_id
+- name: AiReferralsConnection
+  operations: [listAiReferralsConnections, registerAiReferralsConnection, disableAiReferralsConnection,
+    pushAiReferralsEvents]
+  id_param: connection_id
+- name: OptimizeAndDeployPipeline
+  operations: [createOptimizeAndDeployPipeline, getOptimizeAndDeployStatus]
+  id_param: token
+- name: AgentTraffic
+  operations: [getAgentTraffic]
+  description: Aggregated AI bot / crawler traffic per site.
+relationships:
+- {from: Competitor, type: belongs_to, to: Brand, via: brand_id}
+- {from: Persona, type: belongs_to, to: Brand, via: brand_id}
+- {from: Prompt, type: belongs_to, to: Brand, via: brand_id}
+- {from: Response, type: belongs_to, to: Brand, via: brand_id}
+- {from: PageAudit, type: belongs_to, to: Brand, via: brand_id}
+- {from: SitemapPage, type: belongs_to, to: Brand, via: brand_id}
+- {from: AiReferralsConnection, type: belongs_to, to: Brand, via: brand_id}
+- {from: OptimizeAndDeployPipeline, type: belongs_to, to: Brand, via: brand_id}
+- {from: Brand, type: has_many, to: Competitor, via: brand_id}
+- {from: Brand, type: has_many, to: Persona, via: brand_id}
+- {from: Brand, type: has_many, to: Prompt, via: brand_id}
+- {from: Brand, type: has_many, to: Response, via: brand_id}
+- {from: Brand, type: has_many, to: PageAudit, via: brand_id}
+- {from: Brand, type: has_many, to: SitemapPage, via: brand_id}
+- {from: Response, type: belongs_to, to: Prompt, via: prompt}
+- {from: Response, type: belongs_to, to: Persona, via: persona}

@@ -1,0 +1,22 @@
+generated: '2026-07-21'
+method: searched
+note: >
+  Probed the /.well-known/ discovery surface on the marketing host (scrunch.com), the
+  app host (app.scrunchai.com), and the api host. scrunch.com returns 404 for all
+  well-known paths. app.scrunchai.com is a client-rendered SPA that returns HTTP 200 with
+  an HTML shell (content-type text/html) for every path including /.well-known/security.txt
+  and /.well-known/openid-configuration - these are NOT real discovery documents (the app
+  uses OAuth via the MCP/hosted flow, not a published OIDC discovery doc). No genuine
+  well-known documents were found; nothing saved.
+hosts:
+- host: https://scrunch.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://app.scrunchai.com
+  documents:
+  - {path: /.well-known/security.txt, status: 200, valid: false, reason: SPA HTML shell (text/html)}
+  - {path: /.well-known/openid-configuration, status: 200, valid: false, reason: SPA HTML shell (text/html)}

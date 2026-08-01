@@ -1,0 +1,45 @@
+arazzo: 1.0.1
+info:
+  title: Scrunch - Onboard a brand and seed tracking
+  version: 1.0.0
+  summary: Create a brand, add a competitor and persona, seed a tracking prompt, and verify the prompt library.
+sourceDescriptions:
+- name: scrunch
+  url: ../openapi/scrunch-ai-data-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: onboardBrandAndTrack
+  summary: Stand up a new brand with a competitor, persona, and tracking prompt.
+  inputs:
+    type: object
+    properties:
+      brand: {type: object}
+      competitor: {type: object}
+      persona: {type: object}
+      prompt: {type: object}
+  steps:
+  - stepId: createBrand
+    operationId: createBrand
+    requestBody: {payload: $inputs.brand}
+    outputs: {brand_id: $response.body#/id}
+  - stepId: addCompetitor
+    operationId: createCompetitor
+    parameters:
+    - {name: brand_id, in: path, value: $steps.createBrand.outputs.brand_id}
+    requestBody: {payload: $inputs.competitor}
+  - stepId: addPersona
+    operationId: createPersona
+    parameters:
+    - {name: brand_id, in: path, value: $steps.createBrand.outputs.brand_id}
+    requestBody: {payload: $inputs.persona}
+  - stepId: seedPrompt
+    operationId: createPrompt
+    parameters:
+    - {name: brand_id, in: path, value: $steps.createBrand.outputs.brand_id}
+    requestBody: {payload: $inputs.prompt}
+  - stepId: verifyPrompts
+    operationId: listPrompts
+    parameters:
+    - {name: brand_id, in: path, value: $steps.createBrand.outputs.brand_id}
+  outputs:
+    brand_id: $steps.createBrand.outputs.brand_id

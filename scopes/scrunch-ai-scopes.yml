@@ -1,0 +1,19 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/scrunch-ai-data-api-openapi.yml
+docs: https://developers.scrunch.com/getting-started/authentication
+model: api-key-scopes
+note: |
+  Scrunch does not use OAuth2 authorization flows for the Data API - scopes are attached
+  to organization-level API keys (Bearer tokens) at creation time and enforced per
+  operation via the HTTPBearer security scheme. These are the operational scopes the
+  OpenAPI security requirements reference and that the docs document as selectable key
+  scopes. (The separate hosted MCP server uses OAuth sign-in - see mcp/scrunch-ai-mcp.yml.)
+scheme: HTTPBearer
+scopes:
+- scope: query
+  description: Retrieve analytics and metrics (Query, Responses, Sitemap, Agent Traffic reads).
+- scope: configure
+  description: Update brand configuration - brands, competitors, personas, prompts, page audits.
+- scope: create-brand
+  description: Programmatically create new brands.

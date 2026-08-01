@@ -1,0 +1,21 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/scrunch-ai-data-api-openapi.yml
+skills:
+- file: scrunch-ai-query-visibility.md
+  name: Query Scrunch AI visibility metrics
+  api: openapi/scrunch-ai-data-api-openapi.yml
+  operations: [listBrands, query]
+- file: scrunch-ai-onboard-brand.md
+  name: Onboard a brand in Scrunch AI
+  api: openapi/scrunch-ai-data-api-openapi.yml
+  operations: [createBrand, createCompetitor, createPersona, createPrompt, listPrompts]
+- file: scrunch-ai-optimize-and-deploy.md
+  name: Run the Scrunch Optimize-and-Deploy pipeline
+  api: openapi/scrunch-ai-data-api-openapi.yml
+  operations: [createOptimizeAndDeployPipeline, getOptimizeAndDeployStatus, bulkRenderOptimizedPages]
+- file: scrunch-ai-agent-traffic-ingestion.md
+  name: Ingest AI agent traffic and referrals into Scrunch
+  api: openapi/scrunch-ai-data-api-openapi.yml
+  operations: [getAgentTraffic, registerAiReferralsConnection, listAiReferralsConnections,
+    pushAiReferralsEvents, disableAiReferralsConnection]

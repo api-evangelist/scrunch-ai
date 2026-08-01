@@ -1,0 +1,51 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/scrunch-ai-data-api-openapi.yml
+format: json
+envelope:
+  media_type: application/json
+  schema: HTTPValidationError
+  shape: '{"detail": [{"loc": [...], "msg": "...", "type": "..."}]}'
+  notes: >
+    Validation errors (422) use the FastAPI-style HTTPValidationError envelope with a
+    `detail` array of ValidationError items. Other 4xx/5xx responses return a JSON body
+    with a human-readable message. Scrunch does not advertise RFC 9457 problem+json.
+problems:
+- status: 400
+  title: Bad Request
+  meaning: Malformed payload (invalid JSON, empty body, unexpected shape), invalid date
+    range, or an export that would exceed the 10,000-row cap. Also raised when start_date
+    or end_date is not a valid YYYY-MM-DD calendar date.
+  operations: [query, exportSitemapPages, pushAiReferralsEvents, registerAiReferralsConnection,
+    createOptimizeAndDeployPipeline, bulkRenderOptimizedPages]
+- status: 404
+  title: Not Found
+  meaning: Resource not found - no matching brand, page, competitor, persona, sitemap
+    crawl, or audit for the supplied id.
+  operations: [getSitemapPage, getSitemapPageMetrics, getPageAudit, getCompetitor, getPersona,
+    getOptimizeAndDeployStatus, listSitemapPages]
+- status: 409
+  title: Conflict
+  meaning: A connection or conflicting integration already exists for this (brand, website,
+    provider) tuple; a Google Analytics integration can block a register call.
+  operations: [registerAiReferralsConnection]
+- status: 410
+  title: Gone
+  meaning: Connection is disabled; previously pushed events are retained but further pushes
+    are rejected. Re-register before retrying.
+  operations: [pushAiReferralsEvents]
+- status: 413
+  title: Payload Too Large
+  meaning: Payload exceeds the ingestion cap (over 10,000 events or 5 MB).
+  operations: [pushAiReferralsEvents]
+- status: 422
+  title: Validation Error
+  meaning: One or more request fields or events failed validation. Returns the
+    HTTPValidationError envelope with a detail[] array.
+  schema: HTTPValidationError
+  operations: [all]
+- status: 502
+  title: Bad Gateway
+  meaning: Render jobs were queued but at least one downstream (Inngest) dispatch failed;
+    pending jobs are returned so the caller can retry the failures.
+  operations: [bulkRenderOptimizedPages]
