@@ -314,6 +314,8 @@ apis:
   - type: AgenticAccess
     url: agentic-access/scrunch-ai-agentic-access.yml
 common:
+- type: Overlay
+  url: overlays/scrunch-ai-data-api-overlay.yaml
 - type: Website
   url: https://scrunch.com
 - type: DeveloperPortal
