@@ -11,13 +11,27 @@ description: >-
   page versions through its Agent Experience Platform (AXP). Scrunch exposes a REST Data
   API (api.scrunchai.com/v1, Bearer API keys with query/configure/create-brand scopes), a
   hosted MCP server ("Scrunchie") for Claude, ChatGPT, Cursor and other clients, and Looker
-  Studio / Data Studio connectors. Backed by Homebrew and Mayfield.
+  Studio / Data Studio connectors. The Data API also exposes a Signals surface - a nightly
+  detection sweep of statistically-tested level changes and trends, with stable signal
+  fingerprints and team reactions. Backed by Homebrew and Mayfield; acquired by Sitecore
+  in June 2026 and operating as a standalone platform.
 url: https://raw.githubusercontent.com/api-evangelist/scrunch-ai/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - homebrew
 - mayfield
+x-acquired-by:
+  company: Sitecore
+  announced: '2026-06-03'
+  source: https://scrunch.com/blog/scrunch-is-now-a-sitecore-company
+  status: operating as a standalone platform
+  terms: undisclosed
+  note: >
+    CEO Chris Andrew's announcement states Scrunch "isn't going away" and will "continue
+    to operate as a standalone platform" while the roadmap accelerates. Product,
+    developer docs, API host and MCP server are all still first-party Scrunch surfaces as
+    of 2026-08-13.
 x-tier: profiled
 x-tier-reason: enriched-from-developer-docs
 accessModel:
@@ -34,7 +48,7 @@ accessModel:
   method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-21'
+modified: '2026-08-13'
 image: https://cdn.sanity.io/images/3lyosn52/production/3846d0bcd45fb4d64491c6d548d181d696aaa339-1200x753.png?rect=0,62,1200,630&w=1200&h=630&q=75&fit=crop&auto=format
 tags:
 - Company
@@ -313,9 +327,42 @@ apis:
     url: asyncapi/scrunch-ai-webhooks.yml
   - type: AgenticAccess
     url: agentic-access/scrunch-ai-agentic-access.yml
+- aid: scrunch-ai:scrunch-ai-signals-api
+  name: Scrunch AI Signals API
+  description: >-
+    The Signals API from Scrunch AI — 6 operation(s) exposing Scrunch's nightly detection
+    sweep as a queryable feed of statistically-tested level changes and trends in AI
+    visibility metrics (presence_rate, position_top_rate, cited_domain_rate), each with a
+    confidence tier, a human-readable narrative, a stable fingerprint that survives nightly
+    re-detection, and team reactions. Split from the live OpenAPI served at
+    https://api.scrunchai.com/v1/openapi.json.
+  humanURL: https://developers.scrunch.com/api-reference/signals/overview
+  baseURL: https://api.scrunchai.com/v1
+  tags:
+  - Signals
+  properties:
+  - type: OpenAPI
+    url: openapi/scrunch-ai-signals-api-openapi.yml
+  - type: Authentication
+    url: authentication/scrunch-ai-authentication.yml
+  - type: OAuthScopes
+    url: scopes/scrunch-ai-scopes.yml
+  - type: ErrorCatalog
+    url: errors/scrunch-ai-problem-types.yml
+  - type: Conventions
+    url: conventions/scrunch-ai-conventions.yml
+  - type: Examples
+    url: examples/scrunch-ai-examples.yml
+  - type: Conformance
+    url: conformance/scrunch-ai-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/scrunch-ai-agentic-access.yml
 common:
 - type: Overlay
   url: overlays/scrunch-ai-data-api-overlay.yaml
+- type: Overlay
+  name: Signals API enhancements
+  url: overlays/scrunch-ai-signals-api-overlay.yaml
 - type: Website
   url: https://scrunch.com
 - type: DeveloperPortal
@@ -346,6 +393,20 @@ common:
   url: llms/scrunch-ai-llms.txt
 - type: MCPServer
   url: mcp/scrunch-ai-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/scrunch-ai-tool-crosswalk.yml
+- type: Examples
+  url: examples/scrunch-ai-examples.yml
+- type: Plans
+  url: plans/scrunch-ai-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/scrunch-ai-rate-limits.yml
+- type: Components
+  url: components/scrunch-ai-components.yml
+- type: TrustCenter
+  url: security/scrunch-ai-trust-center.yml
+- type: Compliance
+  url: https://trust.scrunchai.com/
 - type: Webhooks
   url: asyncapi/scrunch-ai-webhooks.yml
 - type: AgentSkill
@@ -363,8 +424,6 @@ common:
   url: agentic-access/scrunch-ai-agentic-access.yml
 - type: DomainSecurity
   url: security/scrunch-ai-domain-security.yml
-- type: WellKnown
-  url: well-known/scrunch-ai-well-known.yml
 - type: GitHubOrganization
   url: https://github.com/scrunch-ai
 - type: Blog
@@ -382,7 +441,7 @@ common:
 - type: PrivacyPolicy
   url: https://scrunch.com/privacy
 x-enrichment:
-  date: '2026-07-21'
+  date: '2026-08-13'
   status: enriched
-  artifacts_added: 18
+  artifacts_added: 12
   pass: local-v1
