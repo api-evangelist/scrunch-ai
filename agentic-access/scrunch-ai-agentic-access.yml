@@ -1,18 +1,22 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: generated
-source: openapi/scrunch-ai-data-api-openapi.yml
+source: openapi/scrunch-ai-agent-traffic-api-openapi.yml, openapi/scrunch-ai-ai-referrals-api-openapi.yml,
+  openapi/scrunch-ai-axp-render-api-openapi.yml, openapi/scrunch-ai-brands-api-openapi.yml,
+  openapi/scrunch-ai-orchestration-api-openapi.yml, openapi/scrunch-ai-page-audits-api-openapi.yml,
+  openapi/scrunch-ai-prompts-api-openapi.yml, openapi/scrunch-ai-query-api-openapi.yml, openapi/scrunch-ai-responses-api-openapi.yml,
+  openapi/scrunch-ai-signals-api-openapi.yml, openapi/scrunch-ai-sitemap-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
-  operations: 33
+  operations: 39
   by_action_class:
-    connected: 17
-    acting: 16
+    connected: 21
+    acting: 18
   by_consequence:
-    read: 17
+    read: 21
     safety-critical: 1
-    write: 14
+    write: 16
     physical: 1
   human_in_the_loop_required: 1
 operations:
@@ -79,6 +83,24 @@ operations:
 - path: /{brand_id}/ai-referrals/connections/{connection_id}/events
   method: post
   operationId: pushAiReferralsEvents
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - configure
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /orchestration/render-bulk/{brand_id}/sites/{site_id}
+  method: post
+  operationId: bulkRenderOptimizedPages
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -190,42 +212,6 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /{brand_id}/prompts/{prompt_id}
-  method: delete
-  operationId: archivePrompt
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    scope:
-    - configure
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /orchestration/render-bulk/{brand_id}/sites/{site_id}
-  method: post
-  operationId: bulkRenderOptimizedPages
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    scope:
-    - configure
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
 - path: /brands
   method: post
   operationId: createBrand
@@ -286,36 +272,6 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /{brand_id}/page-audits
-  method: post
-  operationId: createPageAudits
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    scope:
-    - configure
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /{brand_id}/page-audits
-  method: get
-  operationId: listPageAudits
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    scope:
-    - query
-    token:
-      max-ttl: 3600
-    audit: none
 - path: /brands/{brand_id}/personas
   method: post
   operationId: createPersona
@@ -346,9 +302,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /{brand_id}/prompts
-  method: post
-  operationId: createPrompt
+- path: /brands/{brand_id}
+  method: patch
+  operationId: patchBrand
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -364,40 +320,6 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /{brand_id}/prompts
-  method: get
-  operationId: listPrompts
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /{brand_id}/page-audits/{page_audit_id}
-  method: get
-  operationId: getPageAudit
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    scope:
-    - query
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /{brand_id}/responses
-  method: get
-  operationId: listResponses
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    scope:
-    - query
-    token:
-      max-ttl: 3600
-    audit: none
 - path: /orchestration/optimize-and-deploy/{brand_id}
   method: post
   operationId: createOptimizeAndDeployPipeline
@@ -430,6 +352,94 @@ operations:
     token:
       max-ttl: 3600
     audit: none
+- path: /{brand_id}/page-audits
+  method: post
+  operationId: createPageAudits
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - configure
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /{brand_id}/page-audits
+  method: get
+  operationId: listPageAudits
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - query
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /{brand_id}/page-audits/{page_audit_id}
+  method: get
+  operationId: getPageAudit
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - query
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /{brand_id}/prompts/{prompt_id}
+  method: delete
+  operationId: archivePrompt
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - configure
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /{brand_id}/prompts
+  method: post
+  operationId: createPrompt
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - configure
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /{brand_id}/prompts
+  method: get
+  operationId: listPrompts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /{brand_id}/query
   method: get
   operationId: query
@@ -440,6 +450,102 @@ operations:
     token:
       max-ttl: 3600
     audit: none
+- path: /{brand_id}/responses
+  method: get
+  operationId: listResponses
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - query
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /{brand_id}/signals
+  method: get
+  operationId: listSignals
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - query
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /{brand_id}/signals/anchors
+  method: get
+  operationId: listSignalAnchors
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - query
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /{brand_id}/signals/reactions
+  method: get
+  operationId: listSignalReactions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - query
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /{brand_id}/signals/{signal_id}
+  method: get
+  operationId: getSignal
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - query
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /{brand_id}/signals/{signal_id}/reaction
+  method: put
+  operationId: setSignalReaction
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - query
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /{brand_id}/signals/{signal_id}/reaction
+  method: delete
+  operationId: clearSignalReaction
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - query
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
 - path: /{brand_id}/sitemap/export
   method: get
   operationId: exportSitemapPages
@@ -488,21 +594,3 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /brands/{brand_id}
-  method: patch
-  operationId: patchBrand
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    scope:
-    - configure
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required

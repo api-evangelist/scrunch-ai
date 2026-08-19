@@ -1,0 +1,402 @@
+{
+  "item": [
+    {
+      "id": "bbde03af-189f-44dd-9861-1c01c8c19982",
+      "name": "Query",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3b4a6390-eb76-4e9d-a9d4-f05978ed6fbe",
+          "name": "Query",
+          "request": {
+            "name": "Query",
+            "description": {
+              "content": "Query the data API to retrieve aggregated observation data across multiple dimensions and metrics. This endpoint dynamically generates SQL queries based on the requested fields, allowing flexible aggregation for analytics and reporting workflows.\n\nThe query endpoint returns pre-aggregated metrics grouped by the specified dimensions. Results are optimized for BI tools, reporting pipelines, and dashboards.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "query"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<string>",
+                  "description": "Start date for the query range (inclusive). Format: YYYY-MM-DD. Defaults to 30 days ago. Empty or whitespace-only values are treated as missing and the default is applied. Malformed values (e.g. `2024-02-30`) return HTTP 400."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<string>",
+                  "description": "End date for the query range (inclusive). Format: YYYY-MM-DD. Defaults to today. Empty or whitespace-only values are treated as missing and the default is applied. Malformed values (e.g. `2024-02-30`) return HTTP 400."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50000",
+                  "description": "Maximum number of rows to return. Use with offset for pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of rows to skip for pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "Comma-separated list of dimensions and/or metrics to include in the query results. If omitted, all dimensions are returned.\n\n**Supported Dimensions:**\n- `date` - Daily timestamp (YYYYMMDD)\n- `date_week` - ISO week (YYYYWW)\n- `date_month` - Month (YYYYMM)\n- `date_quarter` - Quarter (YYYYQ#)\n- `date_year` - Year (YYYY)\n- `prompt_id` - Prompt ID (Integer)\n- `prompt` - Prompt text (String)\n- `persona_id` - Persona ID (Integer)\n- `persona_name` - Persona name (String)\n- `ai_platform` - AI platform name (String, mapped)\n- `ai_platform_search_enabled` - Search mode enabled (Boolean)\n- `tag` - Prompt tag (String)\n- `source_url` - Citation URL (String)\n- `source_type` - Citation type (brand, competitor, other)\n- `source_domain` - Citation host (String, www-stripped)\n- `competitor_id` - Competitor ID (Integer)\n- `competitor_name` - Competitor name (String)\n- `branded` - Branded prompt (Boolean)\n- `stage` - Journey stage (Display name)\n- `prompt_topic` - Topic name (String)\n- `country` - Geography (Country code)\n- `position_bucket` - Brand position bucket (top/middle/bottom)\n- `sentiment_band` - Brand sentiment band (positive/mixed/negative/none)\n\n**Supported Metrics:**\n- `responses` - Total responses (COUNT of distinct observations)\n- `brand_presence_percentage` - Brand mention rate (0-1 scale)\n- `brand_position_score` - Brand positioning (0-100 scale: top=100, middle=50, bottom=0)\n- `brand_sentiment_score` - Brand sentiment (0-100 scale: positive=100, mixed=50, negative=0)\n- `competitor_presence_percentage` - Competitor mention rate (0-1 scale)\n- `competitor_position_score` - Competitor positioning (0-100 scale)\n- `competitor_sentiment_score` - Competitor sentiment (0-100 scale)\n- `brand_citation_rate` / `competitor_citation_rate` - Share of responses citing an entity-owned source (0-1)\n- `brand_citation_share_of_voice` / `competitor_citation_share_of_voice` - Of responses that cite anything, share that cite an entity-owned source (0-1)\n- `citation_count` - Total citation occurrences across responses\n- `citation_unique_responses` - Distinct responses with at least one citation\n- `citation_unique_domains` - Distinct citation hosts (www-stripped)\n\n**Example:** `fields=date,ai_platform,brand_presence_percentage`"
+                },
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "Filter rows by dimension values **before** aggregation. Each filter uses the format `field:value`. Multiple values are joined with `|` for an IN match (e.g. `ai_platform:ChatGPT|Claude`). Prefix the value with `!` for negation (e.g. `branded:!true`). The `filters` parameter can be repeated to apply multiple filters; they are combined with AND.\n\nFilterable dimensions: `prompt_id`, `persona_id`, `persona_name`, `ai_platform`, `ai_platform_search_enabled`, `tag`, `competitor_id`, `competitor_name`, `branded`, `stage`, `prompt_topic`, `country`, `position_bucket`, `sentiment_band`, `date`, `date_week`, `date_month`, `date_quarter`, `date_year`.\n\n**Example:** `filters=ai_platform:ChatGPT&filters=branded:true`"
+                },
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "Filter rows by dimension values **before** aggregation. Each filter uses the format `field:value`. Multiple values are joined with `|` for an IN match (e.g. `ai_platform:ChatGPT|Claude`). Prefix the value with `!` for negation (e.g. `branded:!true`). The `filters` parameter can be repeated to apply multiple filters; they are combined with AND.\n\nFilterable dimensions: `prompt_id`, `persona_id`, `persona_name`, `ai_platform`, `ai_platform_search_enabled`, `tag`, `competitor_id`, `competitor_name`, `branded`, `stage`, `prompt_topic`, `country`, `position_bucket`, `sentiment_band`, `date`, `date_week`, `date_month`, `date_quarter`, `date_year`.\n\n**Example:** `filters=ai_platform:ChatGPT&filters=branded:true`"
+                },
+                {
+                  "disabled": false,
+                  "key": "having",
+                  "value": "<string>",
+                  "description": "Filter **aggregated** metric values after GROUP BY. Each entry uses `metric:operator:value` format.\n\n**Operators:** `gt`, `gte`, `lt`, `lte`, `eq`, `neq`.\n\n**Example:** `having=brand_presence_percentage:gt:0&having=responses:gte:10`"
+                },
+                {
+                  "disabled": false,
+                  "key": "having",
+                  "value": "<string>",
+                  "description": "Filter **aggregated** metric values after GROUP BY. Each entry uses `metric:operator:value` format.\n\n**Operators:** `gt`, `gte`, `lt`, `lte`, `eq`, `neq`.\n\n**Example:** `having=brand_presence_percentage:gt:0&having=responses:gte:10`"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "79cad2d5-aaa4-4317-9677-1f1231b7fe75",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50000"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "having",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "having",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f76ab90d-5963-4bce-ab62-30da43389df5",
+              "name": "Bad Request — `start_date` or `end_date` is not a valid `YYYY-MM-DD` calendar date. The response body's `detail` includes the offending value.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50000"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "having",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "having",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "32ddb340-2c9d-4a44-ba53-820c029cc867",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50000"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "having",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "having",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.scrunchai.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "5266f3a1-231d-4c05-bb9e-20b96e4ead09",
+    "name": "Scrunch Data agent-traffic Query API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

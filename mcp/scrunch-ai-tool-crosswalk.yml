@@ -1,0 +1,209 @@
+generated: '2026-08-13'
+method: derived
+source: https://developers.scrunch.com/mcp/tools
+note: >
+  Binds each of the 33 published Scrunch MCP ("Scrunchie") tools to the backing Scrunch
+  Data API operationId(s). The live MCP tools/list is OAuth-gated (POST
+  https://app.scrunchai.com/api/mcp returns 401 invalid_token anonymously), so no
+  inputSchema was retrievable from the server. Tool names and descriptions are taken
+  verbatim from the provider's published tool reference; the REST bindings are mapped by
+  name and documented semantics against operationIds verified to exist in
+  openapi/_original/scrunch-ai-data-api-runtime-openapi.json and
+  openapi/_original/scrunch-ai-data-api-openapi.yml. Confidence is set honestly - nothing
+  here was fabricated, and the four metrics tools bind to the single query operation
+  because that is what the docs describe them as projecting.
+surfaces:
+  openapi:
+    files:
+    - openapi/_original/scrunch-ai-data-api-runtime-openapi.json
+    - openapi/_original/scrunch-ai-data-api-openapi.yml
+    base_url: https://api.scrunchai.com/v1
+    gated: false
+    note: >
+      Two non-identical projections. The live runtime spec (37 ops) carries signals,
+      getBrand, archiveBrand, getPrompt and createCollection; the docs-derived spec (33
+      ops) carries the orchestration and ai-referrals operations the runtime spec omits.
+      The union is 44 operationIds.
+  graphql:
+    present: false
+  mcp:
+    url: https://app.scrunchai.com/api/mcp
+    transport: streamable-http
+    auth: oauth
+    gated: true
+    probe:
+      method: tools/list
+      status: 401
+      body: invalid_token
+      checked: '2026-08-13'
+coverage:
+  tools_published: 33
+  tools_bound_to_rest: 18
+  mcp_only: 15
+  rest_operations_total: 44
+  rest_operations_with_a_tool: 18
+crosswalk:
+- tool: get_presence_metrics
+  category: reporting
+  rest: [query]
+  binding: rest
+  confidence: medium
+  note: Brand mention rate over time - a metric projection of the single aggregate query operation.
+- tool: get_position_metrics
+  category: reporting
+  rest: [query]
+  binding: rest
+  confidence: medium
+  note: Top/middle/bottom position share - same query operation, different metric selection.
+- tool: get_sentiment_metrics
+  category: reporting
+  rest: [query]
+  binding: rest
+  confidence: medium
+  note: Positive/mixed/negative breakdown - same query operation.
+- tool: get_citations_metrics
+  category: reporting
+  rest: [query]
+  binding: rest
+  confidence: medium
+  note: Citation share by owner (brand/competitor/third-party) - same query operation.
+- tool: list_responses
+  category: responses
+  rest: [listResponses]
+  binding: rest
+  confidence: high
+  note: MCP defaults to ids_only with limit 10 / max 100; the REST operation returns full records.
+- tool: list_prompt_variants
+  category: prompts
+  rest: [listPrompts]
+  binding: rest
+  confidence: high
+- tool: create_prompt
+  category: prompts
+  rest: [createPrompt]
+  binding: rest
+  confidence: high
+- tool: archive_prompt
+  category: prompts
+  rest: [archivePrompt]
+  binding: rest
+  confidence: high
+- tool: list_brands
+  category: configure
+  rest: [listBrands]
+  binding: rest
+  confidence: high
+- tool: create_brand
+  category: configure
+  rest: [createBrand]
+  binding: rest
+  confidence: high
+- tool: update_brand
+  category: configure
+  rest: [patchBrand]
+  binding: rest
+  confidence: high
+- tool: list_competitors
+  category: configure
+  rest: [listCompetitors]
+  binding: rest
+  confidence: high
+- tool: create_competitor
+  category: configure
+  rest: [createCompetitor]
+  binding: rest
+  confidence: high
+- tool: update_competitor
+  category: configure
+  rest: [updateCompetitor]
+  binding: rest
+  confidence: high
+- tool: archive_competitor
+  category: configure
+  rest: [archiveCompetitor]
+  binding: rest
+  confidence: high
+- tool: list_personas
+  category: configure
+  rest: [listPersonas]
+  binding: rest
+  confidence: high
+- tool: create_persona
+  category: configure
+  rest: [createPersona]
+  binding: rest
+  confidence: high
+- tool: archive_persona
+  category: configure
+  rest: [archivePersona]
+  binding: rest
+  confidence: high
+- tool: export_agent_traffic
+  category: agent-traffic
+  rest: [getAgentTraffic]
+  binding: rest
+  confidence: high
+  note: Exports the aggregated bot/agent traffic the REST operation returns (CSV-shaped for spreadsheets).
+mcp_only:
+- tool: generate_explorer_chart
+  reason: >
+    Builds a Scrunch Explorer chart spec and returns a deep link into the app. No public
+    REST operation creates Explorer charts.
+- tool: create_explorer_dashboard
+  reason: >
+    Saves an Explorer dashboard of metric tiles and returns a deep link. The runtime spec's
+    createCollection is not documented as the dashboard endpoint, so no binding is asserted.
+- tool: get_response
+  reason: >
+    Fetches a single AI response by ID. The REST surface publishes listResponses only -
+    there is no getResponse operation in either spec.
+- tool: unarchive_prompt
+  reason: REST publishes archivePrompt but no unarchive operation.
+- tool: get_tags
+  reason: No REST operation exposes the brand tag list; tags appear only as fields on prompts.
+- tool: add_tag_to_prompts
+  reason: Bulk tag append across up to 500 prompts; no public REST operation.
+- tool: remove_tag_from_prompts
+  reason: Bulk tag removal; no public REST operation.
+- tool: update_persona_on_prompts
+  reason: >
+    Reassigns a persona across prompts. updatePersona edits the persona record itself, not
+    its assignment across prompts, so no binding is asserted.
+- tool: import_agent_traffic
+  reason: >
+    Ingests agent traffic. The documented ingestion endpoint is POST
+    https://webhooks.scrunchai.com/v1/sites/{site_id}/platforms/custom/web-traffic, which
+    sits on a different host and appears in no OpenAPI document, so it has no operationId
+    to bind to.
+- tool: list_scrunch_help_collections
+  reason: Scrunch help-center content; not part of the Data API.
+- tool: get_scrunch_help_article
+  reason: Scrunch help-center content; not part of the Data API.
+- tool: fetch_scrunch_url
+  reason: Server-side fetch of a Scrunch app/deep-link URL; no REST equivalent.
+- tool: get_caller_identity
+  reason: >
+    Returns the authenticated MCP caller's identity. The REST surface has only root__get,
+    which is an unlabelled root probe, not an identity endpoint.
+- tool: get_current_date
+  reason: Server-side clock utility for relative date phrasing; not an API capability.
+rest_only:
+- capability: Signals (nightly detection sweep)
+  operations: [listSignals, getSignal, listSignalAnchors, listSignalReactions, setSignalReaction, clearSignalReaction]
+  note: >
+    Newest REST surface, live in the runtime spec and documented at
+    /api-reference/signals/overview. No MCP tool exposes it as of the published 33-tool
+    reference. Reaction writes require a user JWT - API keys receive 403.
+- capability: Optimize-and-Deploy orchestration
+  operations: [createOptimizeAndDeployPipeline, getOptimizeAndDeployStatus, bulkRenderOptimizedPages]
+  note: The AXP pipeline is REST + webhooks only; no MCP tool drives it.
+- capability: Site Audit
+  operations: [createPageAudits, listPageAudits, getPageAudit]
+- capability: Sitemap
+  operations: [listSitemapPages, getSitemapPage, getSitemapPageMetrics, exportSitemapPages]
+- capability: AI Referrals ingestion
+  operations: [registerAiReferralsConnection, listAiReferralsConnections, pushAiReferralsEvents, disableAiReferralsConnection]
+- capability: Read-side configuration
+  operations: [getBrand, archiveBrand, getPrompt, getCompetitor, getPersona, updatePersona, createCollection]
+- capability: Service root
+  operations: [root__get]

@@ -1,6 +1,6 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: searched
-source: openapi/scrunch-ai-data-api-openapi.yml
+source: openapi/_original/scrunch-ai-data-api-runtime-openapi.json
 docs: https://developers.scrunch.com/api-reference/introduction
 authentication:
   style: bearer-token
@@ -19,7 +19,15 @@ pagination:
     limit: {in: query, default: 100, minimum: 1}
     offset: {in: query, default: 0, minimum: 0}
   applies_to: [listBrands, listCompetitors, listPersonas, listPrompts, listResponses,
-    listPageAudits, listSitemapPages, listAiReferralsConnections]
+    listPageAudits, listSitemapPages, listAiReferralsConnections, listSignals, listSignalReactions]
+  response_envelope: {total: integer, limit: integer, offset: integer, items_or_rows: array}
+  per_endpoint_caps:
+  - {operation: query, default: 50000, maximum: 90000, unit: rows}
+  - {operation: listSignals, default: 50, maximum: 200}
+  - {operation: listPageAudits, default: 100}
+  note: >
+    These are per-request result caps, not rate limits. Scrunch documents no rate limits
+    at all - see rate-limits/scrunch-ai-rate-limits.yml.
 idempotency:
   supported: false
   notes: >
@@ -40,6 +48,21 @@ error_envelope:
   ref: errors/scrunch-ai-problem-types.yml
 rate_limiting:
   documented: false
+  ref: rate-limits/scrunch-ai-rate-limits.yml
+token_identity:
+  note: >
+    Two distinct caller identities exist. API keys are organization-scoped machine
+    credentials and carry no user identity: the Signals reaction writes
+    (setSignalReaction, clearSignalReaction) require a user token (JWT) and return 403 to
+    an API key. Documented at /api-reference/signals/overview.
+secondary_hosts:
+- host: https://webhooks.scrunchai.com/v1
+  purpose: Custom agent/bot web-traffic ingestion from any web host, CDN, or edge function.
+  endpoint: POST /sites/{site_id}/platforms/custom/web-traffic
+  in_openapi: false
+  note: >
+    Documented in the API reference but present in no OpenAPI document, so it carries no
+    operationId and cannot be called from a generated client.
 content_negotiation:
   exports: [text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet]
   notes: Sitemap export (exportSitemapPages) returns CSV or XLSX; all other responses are JSON.

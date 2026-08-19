@@ -1,0 +1,1338 @@
+{
+  "item": [
+    {
+      "id": "75204f46-1cdc-46f4-989f-3c32d9cd522f",
+      "name": "Signals",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "81cdc062-ee59-4c7c-8f29-17293e5ee512",
+          "name": "List Signals",
+          "request": {
+            "name": "List Signals",
+            "description": {
+              "content": "List detected signals for a brand — statistically-tested movements (level changes and trends) in AI-visibility metrics, produced by the nightly detection sweep.\n\n## Population\n\nBy default only user-facing signals are returned: the confidence tiers `high`, `confident`, `worth_a_look`, and `provisional`. Pass an explicit `tier` to select a single tier, including the noise-floor tiers. An ongoing signal is re-detected daily under the same `fingerprint`; a multi-day date range returns only the latest detection per signal identity, so you never see day-by-day duplicates of the same issue.\n\n## Sorting\n\n`sort=score_desc` (default) orders by engine priority, `delta_desc` by largest absolute change, `detected_desc` by newest detection date.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "signals"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "scope",
+                  "value": "<string>",
+                  "description": "Slice granularity the signal was detected on: `account` (whole brand), `account_platform` (brand on one AI platform), `topic`, or `topic_platform`."
+                },
+                {
+                  "disabled": false,
+                  "key": "platform",
+                  "value": "<string>",
+                  "description": "AI platform the signal was detected on (e.g. `OpenAI`). Multi-platform signals carry the `(multi)` sentinel; the response `slice.platforms` lists the real platforms."
+                },
+                {
+                  "disabled": false,
+                  "key": "metric",
+                  "value": "<string>",
+                  "description": "Metric the signal fired on. Known values: `presence_rate`, `position_top_rate`, `cited_domain_rate` (new metrics may be added)."
+                },
+                {
+                  "disabled": false,
+                  "key": "alert_type",
+                  "value": "<string>",
+                  "description": "Detection kind: `level_change` (step shift) or `trend` (sustained drift)."
+                },
+                {
+                  "disabled": false,
+                  "key": "direction",
+                  "value": "<string>",
+                  "description": "Direction of the movement: `up`, `down`, or `none`."
+                },
+                {
+                  "disabled": false,
+                  "key": "tier",
+                  "value": "<string>",
+                  "description": "Confidence tier. When omitted, only the default user-facing tiers are returned (`high`, `confident`, `worth_a_look`, `provisional`); pass an explicit tier to see a single tier, including the noise-floor tiers (`low_confidence`, `underpowered`, `untested`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "subject_kind",
+                  "value": "<string>",
+                  "description": "Whose movement the signal describes: your `brand` or a `competitor`."
+                },
+                {
+                  "disabled": false,
+                  "key": "anchor_from",
+                  "value": "<date>",
+                  "description": "Earliest `detected_for_date` to include (inclusive, YYYY-MM-DD)."
+                },
+                {
+                  "disabled": false,
+                  "key": "anchor_to",
+                  "value": "<date>",
+                  "description": "Latest `detected_for_date` to include (inclusive, YYYY-MM-DD)."
+                },
+                {
+                  "disabled": false,
+                  "key": "mover_url",
+                  "value": "<string>",
+                  "description": "Case-insensitive substring matched against the URLs in the signal's `url_movers` evidence (per-URL citation movers, emitted for `cited_domain_rate` signals). Only signals with at least one matching mover URL are returned; signals without URL movers never match."
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "score_desc",
+                  "description": "Sort order: `score_desc` (engine priority, default), `delta_desc` (largest absolute change first), or `detected_desc` (newest first)."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Maximum number of signals to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of signals to skip (pagination)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "dcb34066-a92e-4219-b2f7-317a053f3902",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "signals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scope",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "platform",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "metric",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "alert_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tier",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subject_kind",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "anchor_from",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "anchor_to",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "mover_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "score_desc"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total\": 2548,\n  \"items\": [\n    {\n      \"id\": 6032,\n      \"detected_for_date\": \"1950-05-17\",\n      \"fingerprint\": \"string\",\n      \"subject_kind\": \"competitor\",\n      \"alert_type\": \"trend\",\n      \"scope\": \"topic\",\n      \"metric\": \"string\",\n      \"platform\": \"string\",\n      \"direction\": \"down\",\n      \"tier\": \"low_confidence\",\n      \"current_value\": 1885.1385364890948,\n      \"baseline_value\": 1167.945220561013,\n      \"delta_absolute\": 4259.954124853141,\n      \"narrative_what\": \"string\",\n      \"slice\": {\n        \"platforms\": [\n          \"string\",\n          \"string\"\n        ],\n        \"topic_labels\": [\n          \"string\",\n          \"string\"\n        ],\n        \"geo_country\": \"string\"\n      },\n      \"created_at\": \"2007-07-03T04:54:51.446Z\",\n      \"score\": 92.39406140174266,\n      \"narrative\": {\n        \"what_happened\": \"string\",\n        \"why_it_matters\": \"string\",\n        \"what_to_do\": \"string\"\n      },\n      \"window_current_start\": \"2010-07-16\",\n      \"window_current_end\": \"1992-09-04\",\n      \"baseline_definition\": \"string\",\n      \"url_movers\": [\n        {\n          \"normalized_url\": \"string\",\n          \"owner\": \"brand\",\n          \"current_responses\": 926,\n          \"baseline_responses\": 7759,\n          \"current_prompts\": 9185,\n          \"baseline_prompts\": 690,\n          \"competitor_id\": 4812,\n          \"competitor_name\": \"string\",\n          \"contribution\": 4921.68666397045\n        },\n        {\n          \"normalized_url\": \"string\",\n          \"owner\": \"brand\",\n          \"current_responses\": 7583,\n          \"baseline_responses\": 3403,\n          \"current_prompts\": 8134,\n          \"baseline_prompts\": 6995,\n          \"competitor_id\": 8794,\n          \"competitor_name\": \"string\",\n          \"contribution\": 6191.076638463825\n        }\n      ]\n    },\n    {\n      \"id\": 6888,\n      \"detected_for_date\": \"1975-10-25\",\n      \"fingerprint\": \"string\",\n      \"subject_kind\": \"competitor\",\n      \"alert_type\": \"level_change\",\n      \"scope\": \"topic\",\n      \"metric\": \"string\",\n      \"platform\": \"string\",\n      \"direction\": \"up\",\n      \"tier\": \"high\",\n      \"current_value\": 7378.21959715353,\n      \"baseline_value\": 3929.961667984343,\n      \"delta_absolute\": 6442.846415093906,\n      \"narrative_what\": \"string\",\n      \"slice\": {\n        \"platforms\": [\n          \"string\",\n          \"string\"\n        ],\n        \"topic_labels\": [\n          \"string\",\n          \"string\"\n        ],\n        \"geo_country\": \"string\"\n      },\n      \"created_at\": \"2023-09-27T14:34:02.092Z\",\n      \"score\": 6076.7052930947175,\n      \"narrative\": {\n        \"what_happened\": \"string\",\n        \"why_it_matters\": \"string\",\n        \"what_to_do\": \"string\"\n      },\n      \"window_current_start\": \"2000-06-16\",\n      \"window_current_end\": \"1966-11-19\",\n      \"baseline_definition\": \"string\",\n      \"url_movers\": [\n        {\n          \"normalized_url\": \"string\",\n          \"owner\": \"brand\",\n          \"current_responses\": 1250,\n          \"baseline_responses\": 2331,\n          \"current_prompts\": 2026,\n          \"baseline_prompts\": 1157,\n          \"competitor_id\": 666,\n          \"competitor_name\": \"string\",\n          \"contribution\": 5390.031309149843\n        },\n        {\n          \"normalized_url\": \"string\",\n          \"owner\": \"brand\",\n          \"current_responses\": 385,\n          \"baseline_responses\": 2602,\n          \"current_prompts\": 5414,\n          \"baseline_prompts\": 2313,\n          \"competitor_id\": 4066,\n          \"competitor_name\": \"string\",\n          \"contribution\": 2712.486434724156\n        }\n      ]\n    }\n  ],\n  \"offset\": 0,\n  \"limit\": 1043,\n  \"metadata\": {\n    \"aggregation_granularity\": \"weekly\",\n    \"period_count\": 7784,\n    \"start_date\": \"2004-08-22T02:29:27.232Z\",\n    \"end_date\": \"1983-04-10T10:22:20.524Z\",\n    \"top_domains\": {\n      \"domains\": [\n        {\n          \"domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"domain_owner\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"domain_owner\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"grand_total\": 1524,\n      \"owner_totals\": {\n        \"key_0\": 2960\n      },\n      \"owner_time_series\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"segment_totals\": [\n        {\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7752ac4-ab89-4e7b-a806-8253eb61660c",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "signals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scope",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "platform",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "metric",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "alert_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tier",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "subject_kind",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "anchor_from",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "anchor_to",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "mover_url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "score_desc"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "54ba700d-1d46-406e-92fb-282d3174137d",
+          "name": "List Signal Anchor Dates",
+          "request": {
+            "name": "List Signal Anchor Dates",
+            "description": {
+              "content": "List recent distinct detection dates (`detected_for_date`) that produced user-facing signals, newest first. Useful for building date pickers or polling for new detection runs — the population matches `listSignals` with default filters, so every returned day has at least one signal.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "signals",
+                "anchors"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "90",
+                  "description": "Maximum number of dates to return."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1cc4ca85-c61d-4577-bcff-be9345cf1f1a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "signals",
+                    "anchors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "90"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"dates\": [\n    \"1973-12-07\",\n    \"1967-02-10\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e22f1684-f5b5-4abb-b761-7a4bf081e8e0",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "signals",
+                    "anchors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "90"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9ec34ec0-3e58-494e-ab37-df141e80404e",
+          "name": "List Signal Reactions",
+          "request": {
+            "name": "List Signal Reactions",
+            "description": {
+              "content": "List reactions users have set on this brand's signals, newest first. This is **brand-wide** — it returns every user's reactions, not just the caller's — so an integration can export the team's aggregate feedback. Filter by `fingerprint` to get reactions for one signal identity, or by `reaction` to get e.g. everything marked `useful`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "signals",
+                "reactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fingerprint",
+                  "value": "<string>",
+                  "description": "Only reactions on this signal fingerprint."
+                },
+                {
+                  "disabled": false,
+                  "key": "reaction",
+                  "value": "<string>",
+                  "description": "Only reactions with this value."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Maximum number of reactions to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of reactions to skip (pagination)."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2a3df6cd-43ec-475a-85da-46a8d04c7058",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "signals",
+                    "reactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fingerprint",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "reaction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total\": 2978,\n  \"items\": [\n    {\n      \"user_id\": 2944,\n      \"insight_id\": 1864,\n      \"fingerprint\": \"string\",\n      \"reaction\": \"actioned\",\n      \"surface\": \"api\",\n      \"created_at\": \"1949-07-12T00:04:17.018Z\",\n      \"updated_at\": \"1993-11-01T13:25:33.086Z\",\n      \"reason\": \"string\"\n    },\n    {\n      \"user_id\": 3449,\n      \"insight_id\": 2792,\n      \"fingerprint\": \"string\",\n      \"reaction\": \"actioned\",\n      \"surface\": \"in_app\",\n      \"created_at\": \"2011-07-20T02:07:21.470Z\",\n      \"updated_at\": \"1961-04-19T07:30:54.051Z\",\n      \"reason\": \"string\"\n    }\n  ],\n  \"offset\": 0,\n  \"limit\": 569,\n  \"metadata\": {\n    \"aggregation_granularity\": \"daily\",\n    \"period_count\": 6282,\n    \"start_date\": \"2002-01-14T02:52:07.543Z\",\n    \"end_date\": \"1993-09-17T00:29:02.926Z\",\n    \"top_domains\": {\n      \"domains\": [\n        {\n          \"domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"domain_owner\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"domain_owner\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"grand_total\": 501,\n      \"owner_totals\": {\n        \"key_0\": 2170,\n        \"key_1\": 1720\n      },\n      \"owner_time_series\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"segment_totals\": [\n        {\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3907d32c-ed9d-48ff-af55-6a30101af9f8",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "signals",
+                    "reactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fingerprint",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "reaction",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c317d9ec-289c-4d28-a4c0-263cbc7a147d",
+          "name": "Get Signal",
+          "request": {
+            "name": "Get Signal",
+            "description": {
+              "content": "Fetch one signal by ID, including its full narrative (what happened, why it matters, what to do) when available. Returns 404 for IDs that exist but are not user-facing (non-fired or cluster-child rows) — the same population rule as `listSignals`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "signals",
+                ":signal_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "signal_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "63219a71-44db-4b46-a229-9275ee58e3e5",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "signals",
+                    ":signal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "signal_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 8191,\n  \"detected_for_date\": \"1955-08-15\",\n  \"fingerprint\": \"string\",\n  \"subject_kind\": \"brand\",\n  \"alert_type\": \"trend\",\n  \"scope\": \"account\",\n  \"metric\": \"string\",\n  \"platform\": \"string\",\n  \"direction\": \"down\",\n  \"tier\": \"provisional\",\n  \"current_value\": 7913.24319213507,\n  \"baseline_value\": 6666.269596716397,\n  \"delta_absolute\": 5028.62482622517,\n  \"narrative_what\": \"string\",\n  \"slice\": {\n    \"platforms\": [\n      \"string\",\n      \"string\"\n    ],\n    \"topic_labels\": [\n      \"string\",\n      \"string\"\n    ],\n    \"geo_country\": \"string\"\n  },\n  \"created_at\": \"1991-04-20T15:22:07.763Z\",\n  \"score\": 8949.622997004322,\n  \"narrative\": {\n    \"what_happened\": \"string\",\n    \"why_it_matters\": \"string\",\n    \"what_to_do\": \"string\"\n  },\n  \"window_current_start\": \"1955-04-09\",\n  \"window_current_end\": \"1971-04-14\",\n  \"baseline_definition\": \"string\",\n  \"url_movers\": [\n    {\n      \"normalized_url\": \"string\",\n      \"owner\": \"competitor\",\n      \"current_responses\": 5773,\n      \"baseline_responses\": 8204,\n      \"current_prompts\": 233,\n      \"baseline_prompts\": 1180,\n      \"competitor_id\": 9348,\n      \"competitor_name\": \"string\",\n      \"contribution\": 2364.684426936\n    },\n    {\n      \"normalized_url\": \"string\",\n      \"owner\": \"brand\",\n      \"current_responses\": 9307,\n      \"baseline_responses\": 7430,\n      \"current_prompts\": 7161,\n      \"baseline_prompts\": 1223,\n      \"competitor_id\": 7906,\n      \"competitor_name\": \"string\",\n      \"contribution\": 1600.4261979672717\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3c8248fd-d938-43bd-b608-3bc1650ab551",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "signals",
+                    ":signal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "signal_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "18f7915e-c039-4456-b68c-3a1a3a0fa831",
+          "name": "Set Signal Reaction",
+          "request": {
+            "name": "Set Signal Reaction",
+            "description": {
+              "content": "Set (or replace) the calling user's reaction on a signal. Reactions are keyed on the signal's stable `fingerprint`, so a reaction survives the nightly re-detection of the same underlying issue.\n\nRequires a **user token** (JWT) — API keys have no user identity to attribute the reaction to and receive 403.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "signals",
+                ":signal_id",
+                "reaction"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "signal_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reaction\": \"<string>\",\n  \"reason\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "be39704b-cbae-4f83-99b9-2d9bb4b84da6",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "signals",
+                    ":signal_id",
+                    "reaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "signal_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reaction\": \"<string>\",\n  \"reason\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"user_id\": 1085,\n  \"insight_id\": 2553,\n  \"fingerprint\": \"string\",\n  \"reaction\": \"not_useful\",\n  \"surface\": \"email\",\n  \"created_at\": \"1954-04-05T19:49:49.074Z\",\n  \"updated_at\": \"2006-01-23T00:30:04.124Z\",\n  \"reason\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e624874a-ab31-49c7-b9f7-98f5c3a7bf3e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "signals",
+                    ":signal_id",
+                    "reaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "signal_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reaction\": \"<string>\",\n  \"reason\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "188e3bfd-880f-4e8f-9b85-54845c6acbaf",
+          "name": "Clear Signal Reaction",
+          "request": {
+            "name": "Clear Signal Reaction",
+            "description": {
+              "content": "Remove the calling user's reaction on a signal's stable identity. Requires a **user token** (JWT); API keys receive 403.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "signals",
+                ":signal_id",
+                "reaction"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "signal_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fe4cf060-2da3-411a-adb3-b76d59d5b19b",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "signals",
+                    ":signal_id",
+                    "reaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "signal_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "eb7adb7e-b13c-4e75-a502-80ed84a41b10",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "signals",
+                    ":signal_id",
+                    "reaction"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "signal_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.scrunchai.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "4715e382-c14f-42e5-8e90-bdad58d1af24",
+    "name": "Scrunch Data Signals API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Signals surface of the Scrunch Data API: the nightly detection sweep of statistically-tested level changes and trends in AI visibility metrics, with stable signal fingerprints and team reactions. Split verbatim from the live OpenAPI served at https://api.scrunchai.com/v1/openapi.json.",
+      "type": "text/plain"
+    }
+  }
+}

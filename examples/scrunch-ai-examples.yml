@@ -1,0 +1,152 @@
+generated: '2026-08-13'
+method: searched
+source: https://developers.scrunch.com/
+note: >
+  Request/response examples captured verbatim from Scrunch's published developer docs.
+  The OpenAPI documents Scrunch serves carry no in-spec `example`/`examples` values, so
+  these are the only worked examples an agent can ground a call on. Every value below is
+  the provider's own published sample - nothing is invented, and no real credential
+  appears (the docs use placeholder environment variables).
+languages_shown: [curl, python, javascript]
+examples:
+- name: First Query API request - weekly brand presence
+  operation: query
+  spec: openapi/scrunch-ai-query-api-openapi.yml
+  docs: https://developers.scrunch.com/getting-started/quickstart-query
+  request:
+    lang: curl
+    code: |
+      curl "https://api.scrunchai.com/v1/$SCRUNCH_BRAND_ID/query?fields=date_week,brand_presence_percentage&start_date=2025-01-01&end_date=2025-01-31" \
+        -H "Authorization: Bearer $SCRUNCH_API_KEY" \
+        -H "Accept: application/json"
+  response:
+    status: 200
+    media_type: application/json
+    body: |
+      {
+        "total": 4,
+        "limit": 1000,
+        "offset": 0,
+        "rows": [
+          { "date_week": "2025-01-06", "brand_presence_percentage": 42.1 },
+          { "date_week": "2025-01-13", "brand_presence_percentage": 47.8 }
+        ]
+      }
+- name: Query API request in Python
+  operation: query
+  docs: https://developers.scrunch.com/getting-started/quickstart-query
+  request:
+    lang: python
+    code: |
+      import requests
+      import pandas as pd
+
+      API_KEY = "your-api-key"
+      BRAND_ID = "your-brand-id"
+      BASE_URL = f"https://api.scrunchai.com/v1/{BRAND_ID}/query"
+
+      params = {
+          "fields": "date_week,brand_presence_percentage",
+          "start_date": "2025-01-01",
+          "end_date": "2025-01-31",
+      }
+
+      response = requests.get(
+          BASE_URL,
+          headers={"Authorization": f"Bearer {API_KEY}"},
+          params=params,
+          timeout=30,
+      )
+      response.raise_for_status()
+
+      data = response.json()
+      df = pd.DataFrame(data)
+      print(df)
+- name: Authenticate and list brands
+  operation: listBrands
+  spec: openapi/scrunch-ai-brands-api-openapi.yml
+  docs: https://developers.scrunch.com/getting-started/authentication
+  request:
+    lang: curl
+    code: |
+      export SCRUNCH_API_TOKEN="your-key"
+
+      curl -H "Authorization: Bearer $SCRUNCH_API_TOKEN" \
+        https://api.scrunchai.com/v1/brands
+- name: List recent high-confidence signals
+  operation: listSignals
+  spec: openapi/scrunch-ai-signals-api-openapi.yml
+  docs: https://developers.scrunch.com/api-reference/signals/overview
+  request:
+    lang: curl
+    code: |
+      curl -X GET \
+        "https://api.scrunchai.com/v1/1234/signals?tier=high&sort=detected_desc&limit=20" \
+        -H "Authorization: Bearer $SCRUNCH_API_TOKEN"
+  response:
+    status: 200
+    media_type: application/json
+    body: |
+      {
+        "total": 4,
+        "offset": 0,
+        "limit": 20,
+        "items": [
+          {
+            "id": 90211,
+            "detected_for_date": "2026-07-14",
+            "fingerprint": "b1e0c7a4f9e5...",
+            "subject_kind": "brand",
+            "alert_type": "level_change",
+            "scope": "account_platform",
+            "metric": "presence_rate",
+            "platform": "OpenAI",
+            "direction": "down",
+            "tier": "high",
+            "current_value": 0.31,
+            "baseline_value": 0.47,
+            "delta_absolute": -0.16,
+            "score": 0.82,
+            "narrative_what": "Brand presence on OpenAI dropped 16 pts week-over-week.",
+            "narrative": {
+              "what_happened": "Presence on OpenAI fell from 47% to 31% over the last 7 days.",
+              "why_it_matters": "OpenAI drives the largest share of your tracked AI traffic.",
+              "what_to_do": "Investigate top prompts where the brand disappeared and check citation coverage."
+            },
+            "slice": { "platforms": ["OpenAI"], "topic_labels": [], "geo_country": null },
+            "window_current_start": "2026-07-08",
+            "window_current_end": "2026-07-14",
+            "baseline_definition": "Previous 28 days",
+            "url_movers": [],
+            "created_at": "2026-07-15T02:14:00Z"
+          }
+        ]
+      }
+- name: Get one signal's full narrative
+  operation: getSignal
+  spec: openapi/scrunch-ai-signals-api-openapi.yml
+  docs: https://developers.scrunch.com/api-reference/signals/overview
+  request:
+    lang: curl
+    code: |
+      curl -X GET \
+        "https://api.scrunchai.com/v1/1234/signals/90211" \
+        -H "Authorization: Bearer $SCRUNCH_API_TOKEN"
+- name: Push custom agent-traffic events
+  operation: null
+  docs: https://developers.scrunch.com/api-reference/agent-traffic/post-custom-web-traffic
+  note: >
+    Documented ingestion endpoint on a separate host that appears in no OpenAPI document,
+    so it has no operationId. Recorded here because it is the only way to feed agent
+    traffic from an arbitrary CDN or edge function.
+  request:
+    lang: curl
+    endpoint: POST https://webhooks.scrunchai.com/v1/sites/{site_id}/platforms/custom/web-traffic
+x-evidence:
+- url: https://developers.scrunch.com/getting-started/quickstart-query.md
+  status: 200
+- url: https://developers.scrunch.com/api-reference/signals/overview.md
+  status: 200
+- url: https://developers.scrunch.com/api-reference/agent-traffic/post-custom-web-traffic.md
+  status: 200
+  fetched: '2026-08-13'

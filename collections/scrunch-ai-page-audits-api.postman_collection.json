@@ -1,0 +1,612 @@
+{
+  "item": [
+    {
+      "id": "271096cd-fee9-4f2a-8082-a1ce1ce2dc8f",
+      "name": "Page Audits",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ec795c15-b865-43bc-abb9-07de6618fba1",
+          "name": "Create Page Audits",
+          "request": {
+            "name": "Create Page Audits",
+            "description": {
+              "content": "Create one or more page audits",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "page-audits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"urls\": [\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "820ba757-5778-4b3a-9e0c-282b0c74ece5",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "page-audits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"urls\": [\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"url\": \"string\",\n    \"page_audit_id\": \"string\"\n  },\n  {\n    \"url\": \"string\",\n    \"page_audit_id\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff52da58-2705-4aeb-b7b4-4174a3b45694",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "page-audits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"urls\": [\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9a0a0b85-2c7d-45a0-9358-f57976c08717",
+          "name": "List Page Audits",
+          "request": {
+            "name": "List Page Audits",
+            "description": {
+              "content": "List page audits in reverse chronological order",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "page-audits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by status"
+                },
+                {
+                  "disabled": false,
+                  "key": "url",
+                  "value": "<string>",
+                  "description": "Filter by URL (partial match)"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "Maximum number of results"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Offset for pagination"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3f172bf3-af53-4c82-883e-1080818e47fb",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "page-audits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total\": 3620,\n  \"items\": [\n    {\n      \"request_id\": \"string\",\n      \"url\": \"string\",\n      \"status\": \"pending\",\n      \"created_at\": \"1980-09-27T10:00:10.276Z\",\n      \"updated_at\": \"2012-10-11T17:37:19.351Z\",\n      \"brand_id\": 9229\n    },\n    {\n      \"request_id\": \"string\",\n      \"url\": \"string\",\n      \"status\": \"pending\",\n      \"created_at\": \"1948-08-01T18:25:39.221Z\",\n      \"updated_at\": \"1991-12-07T22:26:17.276Z\",\n      \"brand_id\": 6336\n    }\n  ],\n  \"offset\": 0,\n  \"limit\": 5373,\n  \"metadata\": {\n    \"aggregation_granularity\": \"monthly\",\n    \"period_count\": 1448,\n    \"start_date\": \"1966-08-26T00:31:13.021Z\",\n    \"end_date\": \"2023-04-19T20:37:28.720Z\",\n    \"top_domains\": {\n      \"domains\": [\n        {\n          \"domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"domain_owner\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"domain_owner\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"grand_total\": 6109,\n      \"owner_totals\": {\n        \"key_0\": 838,\n        \"key_1\": 7176,\n        \"key_2\": 5759\n      },\n      \"owner_time_series\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"segment_totals\": [\n        {\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "080259f6-060f-4d03-95df-67efca023430",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "page-audits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "url",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1b23cdc6-5cda-43b2-a6a2-2d41a880a104",
+          "name": "Get Page Audit",
+          "request": {
+            "name": "Get Page Audit",
+            "description": {
+              "content": "Get a specific page audit by ID",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "page-audits",
+                ":page_audit_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "page_audit_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3db972f0-4374-47eb-b03b-b2d3698db8ff",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "page-audits",
+                    ":page_audit_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "page_audit_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"string\",\n  \"status\": \"pending\",\n  \"result\": {\n    \"access_controls_score\": 3070,\n    \"content_delivery_score\": 847,\n    \"content_quality_score\": 1913,\n    \"access_controls_succeeded\": 7910,\n    \"content_delivery_succeeded\": 8144,\n    \"content_quality_succeeded\": 7317,\n    \"access_controls_failed\": 1956,\n    \"content_delivery_failed\": 7662,\n    \"content_quality_failed\": 9825,\n    \"access_controls_total\": 143,\n    \"content_delivery_total\": 3302,\n    \"content_quality_total\": 3801,\n    \"version\": 1,\n    \"checks\": [\n      {\n        \"section\": \"content_quality\",\n        \"check_id\": \"substantial_image_content\",\n        \"check_outcome\": \"skipped\",\n        \"check_score\": 3911,\n        \"check_description\": \"string\",\n        \"detail\": \"string\",\n        \"help_text\": \"string\"\n      },\n      {\n        \"section\": \"access_controls\",\n        \"check_id\": \"page_loads_in_under_5s\",\n        \"check_outcome\": \"passed\",\n        \"check_score\": 5475,\n        \"check_description\": \"string\",\n        \"detail\": \"string\",\n        \"help_text\": \"string\"\n      }\n    ],\n    \"visitor_preview_image_url\": \"string\",\n    \"ai_preview_markdown\": \"string\",\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"final_url\": \"string\",\n    \"assistant_statuses\": [\n      {\n        \"assistant\": {\n          \"name\": \"string\",\n          \"does_training\": true,\n          \"does_retrieval\": true,\n          \"does_search_indexing\": true,\n          \"can_cite\": true\n        },\n        \"trainable\": \"not_applicable\",\n        \"findable\": \"ok\",\n        \"retrievable\": \"failed\",\n        \"sample_title\": \"string\",\n        \"sample_description\": \"string\",\n        \"sample_final_url\": \"string\",\n        \"can_retrieve\": true,\n        \"retrieval_response_time\": 2234.122500190099,\n        \"retrieval_block_reason\": \"string\"\n      },\n      {\n        \"assistant\": {\n          \"name\": \"string\",\n          \"does_training\": false,\n          \"does_retrieval\": false,\n          \"does_search_indexing\": false,\n          \"can_cite\": false\n        },\n        \"trainable\": \"not_applicable\",\n        \"findable\": \"unknown\",\n        \"retrievable\": \"failed\",\n        \"sample_title\": \"string\",\n        \"sample_description\": \"string\",\n        \"sample_final_url\": \"string\",\n        \"can_retrieve\": true,\n        \"retrieval_response_time\": 5235.810866527929,\n        \"retrieval_block_reason\": \"string\"\n      }\n    ],\n    \"screenshot_vs_page\": {\n      \"screenshot_is_representative\": true,\n      \"difference_explanation\": \"string\",\n      \"missing_content_from_markdown\": [\n        \"string\",\n        \"string\"\n      ],\n      \"importance_of_missing_content\": \"critical\"\n    },\n    \"intent_vs_page\": {\n      \"markdown_respresents_intent\": false,\n      \"intent_of_page\": \"string\",\n      \"difference_explanation\": \"string\"\n    },\n    \"key_question_answers\": [\n      {\n        \"question\": \"string\",\n        \"answer\": \"string\",\n        \"rationale\": \"string\"\n      },\n      {\n        \"question\": \"string\",\n        \"answer\": \"string\",\n        \"rationale\": \"string\"\n      }\n    ]\n  },\n  \"created_at\": \"1995-06-17T14:12:32.402Z\",\n  \"updated_at\": \"1951-05-11T07:34:06.294Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "81c173b4-5a2d-46f7-9946-d6ef77c458b7",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "page-audits",
+                    ":page_audit_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "page_audit_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.scrunchai.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "fc0002f1-f6a7-4a51-9cef-63ce968a22a5",
+    "name": "Scrunch Data agent-traffic Page Audits API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

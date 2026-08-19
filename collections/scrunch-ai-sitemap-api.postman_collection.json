@@ -1,0 +1,1483 @@
+{
+  "item": [
+    {
+      "id": "02cd717a-06e2-4f2b-93ed-a28e1e89d7d3",
+      "name": "sitemap",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "27e07f51-6db8-436f-8c78-1db6d11ce386",
+          "name": "Export Sitemap Pages",
+          "request": {
+            "name": "Export Sitemap Pages",
+            "description": {
+              "content": "Download every page matching the supplied filters as CSV or XLSX. Uses the same filters as the list endpoint but skips pagination.\n\nWith `include_metrics=true` (the default), each row also includes totals over the selected date range for `agent_traffic`, `citations`, and `ai_referrals`, plus a percent-change column comparing the first and last buckets of the range — matching the totals and trend percentages shown in the sitemap UI.\n\nLimits:\n- Maximum 10,000 rows per export.\n- Maximum 366-day window for `start_date`/`end_date`.\n\nThe response sets `Content-Disposition` with a `sitemap-{brand_id}-{YYYY-MM-DD}.{csv|xlsx}` filename.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "sitemap",
+                "export"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "csv",
+                  "description": "Output format. `csv` returns a UTF-8 (BOM) CSV stream. `xlsx` returns a binary Excel workbook."
+                },
+                {
+                  "disabled": false,
+                  "key": "mapped_site_id",
+                  "value": "<integer>",
+                  "description": "Explicit sitemap (mapped site) identifier to export. Defaults to the latest finished crawl for the brand and optional `domain`."
+                },
+                {
+                  "disabled": false,
+                  "key": "domain",
+                  "value": "<string>",
+                  "description": "Filter to a specific domain when the brand has multiple registered sites."
+                },
+                {
+                  "disabled": false,
+                  "key": "max_depth",
+                  "value": "<integer>",
+                  "description": "Maximum URL path depth to include. `0` returns root pages only."
+                },
+                {
+                  "disabled": false,
+                  "key": "path_prefix",
+                  "value": "<string>",
+                  "description": "Filter by segment-aligned URL path prefix."
+                },
+                {
+                  "disabled": false,
+                  "key": "is_priority",
+                  "value": "<boolean>",
+                  "description": "Filter to (or exclude) priority pages."
+                },
+                {
+                  "disabled": false,
+                  "key": "has_optimized_content",
+                  "value": "<boolean>",
+                  "description": "Filter to (or exclude) pages with active AXP optimized content."
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Case-insensitive substring match against the page URL or title."
+                },
+                {
+                  "disabled": false,
+                  "key": "include_metrics",
+                  "value": "true",
+                  "description": "Include per-page totals and percent-change columns for `agent_traffic`, `citations`, and `ai_referrals` over the selected date range."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>",
+                  "description": "Metrics start date (YYYY-MM-DD). Defaults to 30 days ago."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>",
+                  "description": "Metrics end date (YYYY-MM-DD). Defaults to today."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) The unique identifier for the brand."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/csv"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "53643b32-ea60-4520-aa5a-8be7962041e5",
+              "name": "Streamed export file.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "csv"
+                    },
+                    {
+                      "key": "mapped_site_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "max_depth",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "path_prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_priority",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "has_optimized_content",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_metrics",
+                      "value": "true"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/csv"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/csv"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "98cf1353-3380-445e-a821-9a6fa48024dc",
+              "name": "Invalid date range, or export would exceed the 10,000-row cap.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "csv"
+                    },
+                    {
+                      "key": "mapped_site_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "max_depth",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "path_prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_priority",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "has_optimized_content",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_metrics",
+                      "value": "true"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b52133b3-c4f4-4fc2-b4de-2e8bf4708f4b",
+              "name": "No matching sitemap crawl found for this brand.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "csv"
+                    },
+                    {
+                      "key": "mapped_site_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "max_depth",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "path_prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_priority",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "has_optimized_content",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_metrics",
+                      "value": "true"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "55086e3e-b1e9-46ae-b0b9-2f8095a4c91f",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "csv"
+                    },
+                    {
+                      "key": "mapped_site_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "max_depth",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "path_prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_priority",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "has_optimized_content",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_metrics",
+                      "value": "true"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "835f1ba2-a8ec-4668-b267-1e28729ebd93",
+          "name": "Get Sitemap Page Metrics",
+          "request": {
+            "name": "Get Sitemap Page Metrics",
+            "description": {
+              "content": "Return time-series performance metrics for a single page: citations, AI referrals, and AI agent traffic. Each metric is reported as a list of buckets keyed by date, with counts broken down by AI platform.\n\nGranularity is chosen automatically based on the requested date range — short ranges return daily buckets, longer ranges return weekly buckets. Date ranges are capped at 366 days.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "sitemap",
+                "pages",
+                ":page_id",
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>",
+                  "description": "Start date (YYYY-MM-DD). Defaults to 30 days ago."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>",
+                  "description": "End date (YYYY-MM-DD). Defaults to today."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) The unique identifier for the brand."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "page_id",
+                  "description": "(Required) The unique identifier for the page."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0c07e821-e3ef-410a-9ca8-5d9d3a4e0d09",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "pages",
+                    ":page_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "page_id",
+                      "description": "(Required) The unique identifier for the page."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"granularity\": \"daily\",\n  \"metrics\": {\n    \"citations\": [\n      {\n        \"date\": \"string\",\n        \"count_by_platform\": {\n          \"key_0\": 7451,\n          \"key_1\": 2838,\n          \"key_2\": 7024\n        }\n      },\n      {\n        \"date\": \"string\",\n        \"count_by_platform\": {\n          \"key_0\": 4184,\n          \"key_1\": 9425,\n          \"key_2\": 5221\n        }\n      }\n    ],\n    \"ai_referrals\": [\n      {\n        \"date\": \"string\",\n        \"count_by_platform\": {\n          \"key_0\": 185,\n          \"key_1\": 420\n        }\n      },\n      {\n        \"date\": \"string\",\n        \"count_by_platform\": {\n          \"key_0\": 6327,\n          \"key_1\": 7913\n        }\n      }\n    ],\n    \"agent_traffic\": [\n      {\n        \"date\": \"string\",\n        \"count_by_platform\": {\n          \"key_0\": 6591\n        }\n      },\n      {\n        \"date\": \"string\",\n        \"count_by_platform\": {\n          \"key_0\": 6712,\n          \"key_1\": 461,\n          \"key_2\": 325\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e3c6764-2c09-4807-bffc-b59b3b7f1309",
+              "name": "Invalid or out-of-range date parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "pages",
+                    ":page_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "page_id",
+                      "description": "(Required) The unique identifier for the page."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "eecfb855-c7e2-49c3-98b4-447dc798a415",
+              "name": "Page not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "pages",
+                    ":page_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "page_id",
+                      "description": "(Required) The unique identifier for the page."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6447fb21-a9f6-40c9-9c9d-ea324639b332",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "pages",
+                    ":page_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "page_id",
+                      "description": "(Required) The unique identifier for the page."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "370c37bb-eca3-4128-8e4f-fb021b4f51a7",
+          "name": "Get Sitemap Page",
+          "request": {
+            "name": "Get Sitemap Page",
+            "description": {
+              "content": "Get detailed information about a single page in the brand's sitemap, including title, description, depth, audit score, canonical URL, last-indexed timestamp, priority flag, and optimized-content flag.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "sitemap",
+                "pages",
+                ":page_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) The unique identifier for the brand."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "page_id",
+                  "description": "(Required) The unique identifier for the page."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6336bdd6-49f5-46b8-aa21-b9cd93b7a7d9",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "pages",
+                    ":page_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "page_id",
+                      "description": "(Required) The unique identifier for the page."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 435,\n  \"url\": \"string\",\n  \"title\": \"string\",\n  \"description\": \"string\",\n  \"depth\": 7829,\n  \"audit_score\": 2774,\n  \"canonical_url\": \"string\",\n  \"is_priority\": true,\n  \"has_optimized_content\": true,\n  \"last_indexed\": \"2013-05-15T09:14:44.506Z\",\n  \"content_updated_at\": \"1975-05-18T12:01:29.408Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a902c0a-aa32-4b26-a1fc-e9a8c16dac09",
+              "name": "Page not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "pages",
+                    ":page_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "page_id",
+                      "description": "(Required) The unique identifier for the page."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "85b0398a-c2a4-4537-9b63-ca015e7c2b2c",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "pages",
+                    ":page_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "page_id",
+                      "description": "(Required) The unique identifier for the page."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bf982870-c9d1-4daa-9e6c-d24db4243f55",
+          "name": "List Sitemap Pages",
+          "request": {
+            "name": "List Sitemap Pages",
+            "description": {
+              "content": "List pages discovered in the brand's sitemap with their title, description, depth, audit score, priority flag, and optimized-content flag.\n\nResults come from the most recent completed crawl for the brand. Supports filtering by domain, URL depth, path prefix, priority flag, optimized-content flag, and a case-insensitive substring search across the page URL and title.\n\nResults are paginated and ordered by depth then URL.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "sitemap",
+                "pages"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "domain",
+                  "value": "<string>",
+                  "description": "Filter to a specific domain when the brand has multiple registered sites."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "Maximum number of pages to return. Defaults to 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of pages to skip. Use with `limit` for pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "max_depth",
+                  "value": "<integer>",
+                  "description": "Maximum URL path depth to include. `0` returns root pages only."
+                },
+                {
+                  "disabled": false,
+                  "key": "path_prefix",
+                  "value": "<string>",
+                  "description": "Filter by segment-aligned URL path prefix. For example `/blog` matches `/blog` and `/blog/post` but not `/blogger`."
+                },
+                {
+                  "disabled": false,
+                  "key": "is_priority",
+                  "value": "<boolean>",
+                  "description": "Filter to (or exclude) pages flagged as priority for the brand."
+                },
+                {
+                  "disabled": false,
+                  "key": "has_optimized_content",
+                  "value": "<boolean>",
+                  "description": "Filter to (or exclude) pages with active AXP optimized content deployed."
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Case-insensitive substring match against the page URL or title."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) The unique identifier for the brand."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4d73771b-162f-4abd-9086-a1e8d054d1bb",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "pages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "max_depth",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "path_prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_priority",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "has_optimized_content",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total\": 1333,\n  \"items\": [\n    {\n      \"id\": 4602,\n      \"url\": \"string\",\n      \"title\": \"string\",\n      \"description\": \"string\",\n      \"depth\": 6851,\n      \"audit_score\": 7052,\n      \"canonical_url\": \"string\",\n      \"is_priority\": false,\n      \"has_optimized_content\": true\n    },\n    {\n      \"id\": 2818,\n      \"url\": \"string\",\n      \"title\": \"string\",\n      \"description\": \"string\",\n      \"depth\": 9870,\n      \"audit_score\": 7265,\n      \"canonical_url\": \"string\",\n      \"is_priority\": true,\n      \"has_optimized_content\": false\n    }\n  ],\n  \"domain\": \"string\",\n  \"last_crawl_completed\": \"2025-02-06T13:02:15.979Z\",\n  \"offset\": 0,\n  \"limit\": 6569\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "67a6c0fc-e69c-4e0a-81a3-f04e19049432",
+              "name": "No completed sitemap crawl found for this brand.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "pages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "max_depth",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "path_prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_priority",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "has_optimized_content",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "29a73e04-5bda-4ef7-9d1b-76d66ef8af7b",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "sitemap",
+                    "pages"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "max_depth",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "path_prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "is_priority",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "has_optimized_content",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.scrunchai.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "1f02c306-ff3a-4932-aceb-0e525891dfcd",
+    "name": "Scrunch Data agent-traffic sitemap API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

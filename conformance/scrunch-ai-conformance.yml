@@ -1,6 +1,7 @@
-generated: '2026-07-21'
-method: derived
+generated: '2026-08-13'
+method: searched
 source: openapi/scrunch-ai-data-api-openapi.yml
+docs: https://scrunch.com/enterprise/
 standards:
 - id: openapi-3.1
   conforms: true
@@ -29,3 +30,25 @@ standards:
 - id: mcp
   conforms: true
   evidence: First-party hosted MCP server (Scrunchie) at app.scrunchai.com/api/mcp with OAuth.
+- id: a2a
+  conforms: false
+  evidence: >
+    No agent card served. /.well-known/agent-card.json and /.well-known/agent.json probed
+    on scrunch.com (404), api.scrunchai.com (404), webhooks.scrunchai.com (404) and
+    app.scrunchai.com (HTTP 200 but an SPA HTML shell, not a card).
+- id: soc2-type-ii
+  conforms: true
+  evidence: >
+    Provider states "SOC 2 Type II compliant. Review details in our Trust Center." on
+    https://scrunch.com/enterprise/, with a live Vanta-hosted trust center at
+    https://trust.scrunchai.com/. See security/scrunch-ai-trust-center.yml.
+- id: saml-sso
+  conforms: true
+  evidence: >
+    Enterprise plan publishes SAML / OIDC SSO; Starter and Growth publish Google SSO only
+    (plans/scrunch-ai-plans-pricing.yml).
+compliance:
+  published: true
+  program_url: https://trust.scrunchai.com/
+  certifications: [SOC 2 Type II]
+  artifact: security/scrunch-ai-trust-center.yml

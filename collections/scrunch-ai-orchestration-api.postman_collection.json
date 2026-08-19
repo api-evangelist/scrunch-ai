@@ -1,0 +1,427 @@
+{
+  "item": [
+    {
+      "id": "384eb988-c362-462a-9390-578158175d5f",
+      "name": "orchestration",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a53a6c04-2a1d-404b-9f40-28a3c34befbf",
+          "name": "Create Optimize And Deploy Pipeline",
+          "request": {
+            "name": "Create Optimize And Deploy Pipeline",
+            "description": {
+              "content": "Create an orchestrated pipeline: audit pages, optimize content, and deploy to AXP",
+              "type": "text/plain"
+            },
+            "url": {
+              "protocol": "https",
+              "path": [
+                "v2",
+                "orchestration",
+                "optimize-and-deploy",
+                ":brand_id"
+              ],
+              "host": [
+                "api",
+                "scrunchai",
+                "com"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"urls\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"requests\": [\n    {\n      \"url\": \"<string>\",\n      \"target_prompts\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"target_personas\": [\n        {\n          \"name\": \"<string>\",\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"name\": \"<string>\",\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"target_sources\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"custom_instructions\": \"<string>\",\n      \"override_suggestions\": \"<boolean>\",\n      \"retain_schema_types\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"url\": \"<string>\",\n      \"target_prompts\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"target_personas\": [\n        {\n          \"name\": \"<string>\",\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"name\": \"<string>\",\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"target_sources\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"custom_instructions\": \"<string>\",\n      \"override_suggestions\": \"<boolean>\",\n      \"retain_schema_types\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"optimize\": false,\n  \"deploy_axp\": false,\n  \"stage_axp\": false,\n  \"site_id\": \"<string>\",\n  \"target_prompts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"target_personas\": [\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"target_sources\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"override_suggestions\": false,\n  \"webhook_url_override\": \"<uri>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "463b496e-901e-4dff-84b7-4c790af0bb41",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "v2",
+                    "orchestration",
+                    "optimize-and-deploy",
+                    ":brand_id"
+                  ],
+                  "host": [
+                    "api",
+                    "scrunchai",
+                    "com"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"urls\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"requests\": [\n    {\n      \"url\": \"string\",\n      \"target_prompts\": [\n        \"string\",\n        \"string\"\n      ],\n      \"target_personas\": [\n        {\n          \"name\": \"string\",\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"name\": \"string\",\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"target_sources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"custom_instructions\": \"string\",\n      \"override_suggestions\": true,\n      \"retain_schema_types\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"url\": \"string\",\n      \"target_prompts\": [\n        \"string\",\n        \"string\"\n      ],\n      \"target_personas\": [\n        {\n          \"name\": \"string\",\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"name\": \"string\",\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"target_sources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"custom_instructions\": \"string\",\n      \"override_suggestions\": false,\n      \"retain_schema_types\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"optimize\": false,\n  \"deploy_axp\": false,\n  \"stage_axp\": false,\n  \"site_id\": \"<string>\",\n  \"target_prompts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"target_personas\": [\n    {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    }\n  ],\n  \"target_sources\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"override_suggestions\": false,\n  \"webhook_url_override\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tokens\": [\n    {\n      \"token\": \"string\",\n      \"url\": \"string\",\n      \"status\": \"string\",\n      \"orchestration_status\": \"completed\"\n    },\n    {\n      \"token\": \"string\",\n      \"url\": \"string\",\n      \"status\": \"string\",\n      \"orchestration_status\": \"optimizing\"\n    }\n  ],\n  \"pipeline_id\": \"string\",\n  \"status\": \"pending\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aabd6f5e-fcfb-414c-995b-70d2c8b7db17",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "v2",
+                    "orchestration",
+                    "optimize-and-deploy",
+                    ":brand_id"
+                  ],
+                  "host": [
+                    "api",
+                    "scrunchai",
+                    "com"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"urls\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"requests\": [\n    {\n      \"url\": \"string\",\n      \"target_prompts\": [\n        \"string\",\n        \"string\"\n      ],\n      \"target_personas\": [\n        {\n          \"name\": \"string\",\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"name\": \"string\",\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"target_sources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"custom_instructions\": \"string\",\n      \"override_suggestions\": true,\n      \"retain_schema_types\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"url\": \"string\",\n      \"target_prompts\": [\n        \"string\",\n        \"string\"\n      ],\n      \"target_personas\": [\n        {\n          \"name\": \"string\",\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"name\": \"string\",\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"target_sources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"custom_instructions\": \"string\",\n      \"override_suggestions\": false,\n      \"retain_schema_types\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"optimize\": false,\n  \"deploy_axp\": false,\n  \"stage_axp\": false,\n  \"site_id\": \"<string>\",\n  \"target_prompts\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"target_personas\": [\n    {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    }\n  ],\n  \"target_sources\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"override_suggestions\": false,\n  \"webhook_url_override\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4a3ed39e-f767-47fc-95d6-b7cf3a046d10",
+          "name": "Get Pipeline Status",
+          "request": {
+            "name": "Get Pipeline Status",
+            "description": {
+              "content": "Get the status of an optimize-and-deploy pipeline by token",
+              "type": "text/plain"
+            },
+            "url": {
+              "protocol": "https",
+              "path": [
+                "v2",
+                "orchestration",
+                "optimize-and-deploy",
+                ":brand_id",
+                ":token"
+              ],
+              "host": [
+                "api",
+                "scrunchai",
+                "com"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "af0b16be-f109-4be1-9ffd-e50312a293c1",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "v2",
+                    "orchestration",
+                    "optimize-and-deploy",
+                    ":brand_id",
+                    ":token"
+                  ],
+                  "host": [
+                    "api",
+                    "scrunchai",
+                    "com"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"token\": \"string\",\n  \"url\": \"string\",\n  \"status\": \"string\",\n  \"created_at\": \"2009-02-01T15:27:13.863Z\",\n  \"updated_at\": \"2009-08-18T12:10:57.029Z\",\n  \"orchestration_status\": \"failed\",\n  \"optimization_run_id\": \"string\",\n  \"axp_version_id\": 764,\n  \"result\": {\n    \"key_0\": true,\n    \"key_1\": 3199\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f877347d-e633-45ed-a6a8-ede7f0e4e9f1",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "path": [
+                    "v2",
+                    "orchestration",
+                    "optimize-and-deploy",
+                    ":brand_id",
+                    ":token"
+                  ],
+                  "host": [
+                    "api",
+                    "scrunchai",
+                    "com"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.scrunchai.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "3b87291b-b661-46b2-891e-5d79f811e375",
+    "name": "Scrunch Data agent-traffic orchestration API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

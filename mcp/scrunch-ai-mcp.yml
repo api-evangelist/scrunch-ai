@@ -1,7 +1,7 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: searched
 status: published
-source: https://developers.scrunch.com/mcp/overview
+source: https://developers.scrunch.com/mcp/tools
 docs: https://developers.scrunch.com/mcp/setup
 server:
   name: scrunch
@@ -9,7 +9,7 @@ server:
   transport: streamable-http
   url: https://app.scrunchai.com/api/mcp
   authentication: oauth
-  auth_notes: |
+  auth_notes: >
     Connects via Scrunch's standard OAuth sign-in flow using your Scrunch account
     credentials - no API key or shared secret required. Leave OAuth Client ID / Secret
     blank unless self-hosting an OAuth provider. Some clients require removing `openid`
@@ -21,31 +21,83 @@ server:
   - Cursor
   - VS Code
   - Windsurf
+deployment:
+  mode: remote
+  endpoint: https://app.scrunchai.com/api/mcp
+  auth: oauth
+  verified: probed
+  probe:
+    method: tools/list
+    status: 401
+    body: invalid_token
+    note: >
+      The endpoint is live and answers the MCP protocol, but tools/list requires an OAuth
+      bearer token, so live inputSchemas could not be introspected anonymously. The tool
+      list below is the provider's own published reference, not a guess.
+    checked: '2026-08-13'
 tool_count: 33
 tool_categories:
 - reporting
 - responses
 - prompts
-- brand configuration
+- configure
 - agent traffic
-- help docs
-tools_verified:
-- name: get_response
-  description: Retrieve a single raw AI response.
-- name: list_responses
-  description: List raw AI responses with citations and evaluation data.
-- name: generate_explorer_chart
-  description: Turn a metric question into a Scrunch Explorer chart.
-- name: create_explorer_dashboard
-  description: Save a Scrunch Explorer dashboard.
-- name: get_scrunch_help_article
-  description: Fetch a Scrunch help-doc article.
-- name: list_scrunch_help_collections
-  description: List Scrunch help-doc collections.
-notes: |
-  Hosted, first-party remote MCP server ("Scrunchie"). The docs advertise 33 MCP tools
-  covering reporting, responses, prompts, brand configuration, agent traffic, and help
-  docs, plus a large library of guided MCP prompts and workflows
-  (see llms/scrunch-ai-llms.txt). Only the tool names explicitly named in the public
-  docs are listed under tools_verified; the full 33-tool list is not enumerated verbatim
-  in the public reference and is not fabricated here.
+- help & docs
+- utility
+tools:
+- {name: get_presence_metrics, category: reporting, description: 'Brand mention rate (presence) over time; include_competitors compares brands side by side.'}
+- {name: get_position_metrics, category: reporting, description: 'How often the brand appears top/middle/bottom within AI responses, relative to other brands mentioned.'}
+- {name: get_sentiment_metrics, category: reporting, description: 'Sentiment breakdown (positive, mixed, negative) for brand mentions.'}
+- {name: get_citations_metrics, category: reporting, description: 'AI-cited URLs broken down by ownership: brand-owned, competitor-owned, third-party.'}
+- {name: generate_explorer_chart, category: reporting, description: 'Builds a Scrunch Explorer chart from a metric/breakdown/filter spec and returns a deep link.'}
+- {name: create_explorer_dashboard, category: reporting, description: 'Creates a saved Explorer dashboard of metric tiles and returns a deep link.'}
+- {name: list_responses, category: responses, description: 'Lists individual AI responses (observations) for a brand; ids-only by default, limit 10 / max 100.'}
+- {name: get_response, category: responses, description: 'Fetches a single AI response by ID with evaluation data, citations, and competitor analysis.'}
+- {name: list_prompt_variants, category: prompts, description: 'Lists the prompt variants Scrunch is monitoring for a brand, with filters.'}
+- {name: create_prompt, category: prompts, description: 'Adds a new seed prompt, optionally with category, key topics, persona, platforms, and tags.'}
+- {name: archive_prompt, category: prompts, description: 'Archives (soft-deletes) a seed prompt so it stops running; history is preserved.'}
+- {name: unarchive_prompt, category: prompts, description: 'Restores previously archived prompts so they resume running.'}
+- {name: get_tags, category: prompts, description: 'Returns all tags currently configured for a brand.'}
+- {name: add_tag_to_prompts, category: prompts, description: 'Appends one tag to up to 500 prompts; existing tags preserved, tag created if new.'}
+- {name: remove_tag_from_prompts, category: prompts, description: 'Removes one tag from a list of prompts; other tags unaffected.'}
+- {name: list_brands, category: configure, description: 'Lists the brands in the organization.'}
+- {name: create_brand, category: configure, description: 'Creates a new brand.'}
+- {name: update_brand, category: configure, description: 'Updates brand configuration.'}
+- {name: list_competitors, category: configure, description: 'Lists tracked competitors for a brand.'}
+- {name: create_competitor, category: configure, description: 'Adds a competitor to a brand.'}
+- {name: update_competitor, category: configure, description: 'Updates a competitor record.'}
+- {name: archive_competitor, category: configure, description: 'Archives a competitor (soft delete).'}
+- {name: list_personas, category: configure, description: 'Lists the personas metrics can be sliced by.'}
+- {name: create_persona, category: configure, description: 'Creates a persona.'}
+- {name: archive_persona, category: configure, description: 'Archives a persona (soft delete).'}
+- {name: update_persona_on_prompts, category: configure, description: 'Reassigns a persona across a set of prompts.'}
+- {name: import_agent_traffic, category: agent-traffic, description: 'Imports AI bot / agent traffic events into Scrunch.'}
+- {name: export_agent_traffic, category: agent-traffic, description: "Exports Scrunch's AI bot crawl data (e.g. as CSV for spreadsheets)."}
+- {name: list_scrunch_help_collections, category: help & docs, description: 'Lists Scrunch help-doc collections.'}
+- {name: get_scrunch_help_article, category: help & docs, description: 'Fetches a Scrunch help-doc article.'}
+- {name: fetch_scrunch_url, category: utility, description: 'Server-side fetch of a Scrunch URL / deep link.'}
+- {name: get_caller_identity, category: utility, description: 'Returns the identity of the authenticated MCP caller.'}
+- {name: get_current_date, category: utility, description: "Returns the server's current date for relative date phrasing."}
+prompts_library:
+  count: 11
+  note: >
+    Scrunch also publishes a library of guided MCP prompts (visibility-overview, rankings,
+    sentiment-signals, citation-analysis, competitive-intel, platform-analysis,
+    visibility-gaps, white-space, trends-and-alerts, reporting, configuration,
+    visualize-it) and ~20 documented end-to-end MCP workflows.
+  docs: https://developers.scrunch.com/mcp/overview
+crosswalk: mcp/scrunch-ai-tool-crosswalk.yml
+notes: >
+  Hosted, first-party remote MCP server ("Scrunchie"). All 33 tool names and descriptions
+  above are captured verbatim from the provider's published tool reference
+  (developers.scrunch.com/mcp/tools), which upgrades the previous round's partial
+  six-tool capture. Input schemas are NOT recorded: tools/list is OAuth-gated, so they
+  require authenticated introspection. See mcp/scrunch-ai-tool-crosswalk.yml for how each
+  tool binds to the REST surface, and for the 15 tools with no public REST equivalent.
+x-evidence:
+- url: https://developers.scrunch.com/mcp/tools.md
+  status: 200
+- url: https://app.scrunchai.com/api/mcp
+  status: 401
+  method: POST tools/list
+  fetched: '2026-08-13'

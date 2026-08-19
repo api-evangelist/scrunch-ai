@@ -1,0 +1,1208 @@
+{
+  "item": [
+    {
+      "id": "c73322ca-1c91-4cb5-a811-c79edd8ffd93",
+      "name": "ai-referrals",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e083bef7-339a-49ff-9e2a-04b9f142b2ff",
+          "name": "Disable AI Referrals Connection",
+          "request": {
+            "name": "Disable AI Referrals Connection",
+            "description": {
+              "content": "Soft-disable a connection. Previously pushed events are retained but further pushes are rejected with `410 Gone` and the dashboard stops reading from this connection.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "ai-referrals",
+                "connections",
+                ":connection_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) The unique identifier for the brand."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "connection_id",
+                  "description": "(Required) The ULID of the AI Referrals connection."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ac55535c-b486-4d02-b916-152d61092711",
+              "name": "Connection disabled.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections",
+                    ":connection_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "connection_id",
+                      "description": "(Required) The ULID of the AI Referrals connection."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"brand_id\": 9465,\n  \"website\": \"string\",\n  \"provider\": \"adobe_analytics\",\n  \"status\": \"disabled\",\n  \"created_at\": \"1962-04-26T07:31:00.058Z\",\n  \"last_pushed_at\": \"1975-01-20T12:26:42.886Z\",\n  \"last_push_error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a69441a2-fb5d-475d-a3f6-d0970ca9940e",
+              "name": "Connection not found for this brand.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections",
+                    ":connection_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "connection_id",
+                      "description": "(Required) The ULID of the AI Referrals connection."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "32f8bc09-6e2d-4619-be24-4d7a43f4d550",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections",
+                    ":connection_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "connection_id",
+                      "description": "(Required) The ULID of the AI Referrals connection."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9af79ee1-fe69-4a11-b8c6-83da278f9c42",
+          "name": "List AI Referrals Connections",
+          "request": {
+            "name": "List AI Referrals Connections",
+            "description": {
+              "content": "List AI Referrals push connections registered for this brand. Scope is limited to push connections only — Google Analytics integrations live in a separate system and are not returned here, even though they can block a register call with `409`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "ai-referrals",
+                "connections"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) The unique identifier for the brand."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4feb6ae3-8ad6-4003-8400-988ea9110b6c",
+              "name": "List of connections.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": \"string\",\n      \"brand_id\": 9508,\n      \"website\": \"string\",\n      \"provider\": \"adobe_analytics\",\n      \"status\": \"disabled\",\n      \"created_at\": \"1965-08-16T18:36:04.167Z\",\n      \"last_pushed_at\": \"2002-06-25T21:04:52.708Z\",\n      \"last_push_error\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"brand_id\": 9620,\n      \"website\": \"string\",\n      \"provider\": \"adobe_analytics\",\n      \"status\": \"disabled\",\n      \"created_at\": \"2008-11-06T18:09:07.132Z\",\n      \"last_pushed_at\": \"1998-06-01T15:13:10.574Z\",\n      \"last_push_error\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9b4aabe5-07dd-433d-97ab-3f4e74b8625e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "285d8483-2955-4392-880e-e78afe10e25d",
+          "name": "Register AI Referrals Connection",
+          "request": {
+            "name": "Register AI Referrals Connection",
+            "description": {
+              "content": "Register an AI Referrals push connection for a (brand, website, provider) tuple. Events can only be pushed once a connection exists.\n\nA brand cannot have both a Google Analytics integration and an active AI Referrals push connection for the same website — the conflicting integration must be disabled first.\n\nMVP provider allow-list: `adobe_analytics`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "ai-referrals",
+                "connections"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) The unique identifier for the brand."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"website\": \"<string>\",\n  \"provider\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6a654b60-cead-4667-80f1-bad3a80a4d33",
+              "name": "Connection registered.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"website\": \"example.com\",\n  \"provider\": \"adobe_analytics\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"brand_id\": 9465,\n  \"website\": \"string\",\n  \"provider\": \"adobe_analytics\",\n  \"status\": \"disabled\",\n  \"created_at\": \"1962-04-26T07:31:00.058Z\",\n  \"last_pushed_at\": \"1975-01-20T12:26:42.886Z\",\n  \"last_push_error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "73523c38-5c7f-4b51-a89e-a2ee3cf47f65",
+              "name": "Invalid provider or payload.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"website\": \"example.com\",\n  \"provider\": \"adobe_analytics\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "aef71289-b2e1-4f92-9974-d8164a34c2a0",
+              "name": "A connection or conflicting integration already exists for this (brand, website).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"website\": \"example.com\",\n  \"provider\": \"adobe_analytics\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "04f631de-6f31-4f40-a0a0-128596ce891f",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"website\": \"example.com\",\n  \"provider\": \"adobe_analytics\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8f1017fd-264a-4c99-87d4-0dec48a1400d",
+          "name": "Push AI Referrals Events",
+          "request": {
+            "name": "Push AI Referrals Events",
+            "description": {
+              "content": "Push a batch of pre-aggregated daily AI-referral events for a registered connection.\n\nAccepts `application/json` (a JSON array of events) or `application/x-ndjson` (one event per line). The upsert key is `(date, raw_referrer_value, raw_page_value)` — re-sending the same tuple replaces the prior values, so backfills and corrections are safe to retry.\n\nLimits:\n- Maximum 10,000 events per batch.\n- Maximum 5 MB request body.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "ai-referrals",
+                "connections",
+                ":connection_id",
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) The unique identifier for the brand."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "connection_id",
+                  "description": "(Required) The ULID of the AI Referrals connection."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"date\": \"<date>\",\n    \"raw_referrer_value\": \"<string>\",\n    \"raw_page_value\": \"<string>\",\n    \"pageviews\": \"<integer,null>\",\n    \"sessions\": \"<integer,null>\",\n    \"transactions\": \"<integer,null>\",\n    \"purchase_revenue\": \"<number,null>\",\n    \"batch_id\": \"<string,null>\"\n  },\n  {\n    \"date\": \"<date>\",\n    \"raw_referrer_value\": \"<string>\",\n    \"raw_page_value\": \"<string>\",\n    \"pageviews\": \"<integer,null>\",\n    \"sessions\": \"<integer,null>\",\n    \"transactions\": \"<integer,null>\",\n    \"purchase_revenue\": \"<number,null>\",\n    \"batch_id\": \"<string,null>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "29c04974-6d54-4370-9d8e-73b3cfaed632",
+              "name": "Batch accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections",
+                    ":connection_id",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "connection_id",
+                      "description": "(Required) The ULID of the AI Referrals connection."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"date\": \"2026-05-20\",\n    \"raw_referrer_value\": \"chatgpt.com\",\n    \"raw_page_value\": \"/blog/launch-notes\",\n    \"pageviews\": 4192,\n    \"sessions\": 1540,\n    \"transactions\": 774,\n    \"purchase_revenue\": 6251.740053187822,\n    \"batch_id\": \"string\"\n  },\n  {\n    \"date\": \"2026-05-20\",\n    \"raw_referrer_value\": \"chatgpt.com\",\n    \"raw_page_value\": \"/blog/launch-notes\",\n    \"pageviews\": 1138,\n    \"sessions\": 1380,\n    \"transactions\": 9966,\n    \"purchase_revenue\": 5241.494373235819,\n    \"batch_id\": \"string\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accepted\": 3120,\n  \"rejected\": 5855,\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6ced9949-4144-428b-95c2-3e521b218a57",
+              "name": "Malformed payload (invalid JSON, empty body, unexpected shape).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections",
+                    ":connection_id",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "connection_id",
+                      "description": "(Required) The ULID of the AI Referrals connection."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"date\": \"2026-05-20\",\n    \"raw_referrer_value\": \"chatgpt.com\",\n    \"raw_page_value\": \"/blog/launch-notes\",\n    \"pageviews\": 4192,\n    \"sessions\": 1540,\n    \"transactions\": 774,\n    \"purchase_revenue\": 6251.740053187822,\n    \"batch_id\": \"string\"\n  },\n  {\n    \"date\": \"2026-05-20\",\n    \"raw_referrer_value\": \"chatgpt.com\",\n    \"raw_page_value\": \"/blog/launch-notes\",\n    \"pageviews\": 1138,\n    \"sessions\": 1380,\n    \"transactions\": 9966,\n    \"purchase_revenue\": 5241.494373235819,\n    \"batch_id\": \"string\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7c577ab8-5daf-436e-beda-1fd6f2c2caf1",
+              "name": "Connection not found for this brand.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections",
+                    ":connection_id",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "connection_id",
+                      "description": "(Required) The ULID of the AI Referrals connection."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"date\": \"2026-05-20\",\n    \"raw_referrer_value\": \"chatgpt.com\",\n    \"raw_page_value\": \"/blog/launch-notes\",\n    \"pageviews\": 4192,\n    \"sessions\": 1540,\n    \"transactions\": 774,\n    \"purchase_revenue\": 6251.740053187822,\n    \"batch_id\": \"string\"\n  },\n  {\n    \"date\": \"2026-05-20\",\n    \"raw_referrer_value\": \"chatgpt.com\",\n    \"raw_page_value\": \"/blog/launch-notes\",\n    \"pageviews\": 1138,\n    \"sessions\": 1380,\n    \"transactions\": 9966,\n    \"purchase_revenue\": 5241.494373235819,\n    \"batch_id\": \"string\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "53e64f30-a3ee-4637-ab13-323fae71985d",
+              "name": "Connection is disabled; re-register before retrying.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections",
+                    ":connection_id",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "connection_id",
+                      "description": "(Required) The ULID of the AI Referrals connection."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"date\": \"2026-05-20\",\n    \"raw_referrer_value\": \"chatgpt.com\",\n    \"raw_page_value\": \"/blog/launch-notes\",\n    \"pageviews\": 4192,\n    \"sessions\": 1540,\n    \"transactions\": 774,\n    \"purchase_revenue\": 6251.740053187822,\n    \"batch_id\": \"string\"\n  },\n  {\n    \"date\": \"2026-05-20\",\n    \"raw_referrer_value\": \"chatgpt.com\",\n    \"raw_page_value\": \"/blog/launch-notes\",\n    \"pageviews\": 1138,\n    \"sessions\": 1380,\n    \"transactions\": 9966,\n    \"purchase_revenue\": 5241.494373235819,\n    \"batch_id\": \"string\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Gone",
+              "code": 410,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d45ff103-475c-468e-a89d-38a05345e0c7",
+              "name": "Payload too large (over 10,000 events or 5 MB).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections",
+                    ":connection_id",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "connection_id",
+                      "description": "(Required) The ULID of the AI Referrals connection."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"date\": \"2026-05-20\",\n    \"raw_referrer_value\": \"chatgpt.com\",\n    \"raw_page_value\": \"/blog/launch-notes\",\n    \"pageviews\": 4192,\n    \"sessions\": 1540,\n    \"transactions\": 774,\n    \"purchase_revenue\": 6251.740053187822,\n    \"batch_id\": \"string\"\n  },\n  {\n    \"date\": \"2026-05-20\",\n    \"raw_referrer_value\": \"chatgpt.com\",\n    \"raw_page_value\": \"/blog/launch-notes\",\n    \"pageviews\": 1138,\n    \"sessions\": 1380,\n    \"transactions\": 9966,\n    \"purchase_revenue\": 5241.494373235819,\n    \"batch_id\": \"string\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "09acfec2-771d-4166-8861-567cc0f29949",
+              "name": "One or more events failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "ai-referrals",
+                    "connections",
+                    ":connection_id",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "connection_id",
+                      "description": "(Required) The ULID of the AI Referrals connection."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"date\": \"2026-05-20\",\n    \"raw_referrer_value\": \"chatgpt.com\",\n    \"raw_page_value\": \"/blog/launch-notes\",\n    \"pageviews\": 4192,\n    \"sessions\": 1540,\n    \"transactions\": 774,\n    \"purchase_revenue\": 6251.740053187822,\n    \"batch_id\": \"string\"\n  },\n  {\n    \"date\": \"2026-05-20\",\n    \"raw_referrer_value\": \"chatgpt.com\",\n    \"raw_page_value\": \"/blog/launch-notes\",\n    \"pageviews\": 1138,\n    \"sessions\": 1380,\n    \"transactions\": 9966,\n    \"purchase_revenue\": 5241.494373235819,\n    \"batch_id\": \"string\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.scrunchai.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "57209b64-3063-4ace-b1ef-c37c2d096364",
+    "name": "Scrunch Data agent-traffic ai-referrals API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

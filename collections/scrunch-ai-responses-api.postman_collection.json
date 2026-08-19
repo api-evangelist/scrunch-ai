@@ -1,0 +1,317 @@
+{
+  "item": [
+    {
+      "id": "d5213f90-a190-4d9a-900b-96f529b06181",
+      "name": "Responses",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ee5aedea-e749-47ba-b10b-ade190a1fb0b",
+          "name": "List Responses",
+          "request": {
+            "name": "List Responses",
+            "description": {
+              "content": "Returns AI responses (observations) with full evaluation data, citations, and competitor analysis. Each response represents a single AI-generated answer to a tracked prompt.\n\nThis endpoint provides the raw response data needed for deep analysis, audits, and research. For aggregated metrics, use the Query API instead.\n\n**Response data includes:**\n- Full response text from the AI platform\n- Brand evaluation (presence, sentiment, position)\n- Competitor evaluations with individual metrics\n- Citations with source classification (brand/competitor/other)\n- Prompt and persona context",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":brand_id",
+                "responses"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "platform",
+                  "value": "<string>",
+                  "description": "Filter responses by AI platform.\n\n**Supported platforms:**\n- `chatgpt` - OpenAI ChatGPT\n- `claude` - Anthropic Claude\n- `google_ai_overviews` - Google AI Overviews (Search)\n- `perplexity` - Perplexity AI\n- `meta` - Meta AI\n- `google_ai_mode` - Google AI Mode\n- `google_gemini` - Google Gemini\n- `copilot` - Microsoft Copilot"
+                },
+                {
+                  "disabled": false,
+                  "key": "prompt_id",
+                  "value": "<integer>",
+                  "description": "Filter responses to a specific prompt by its ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "persona_id",
+                  "value": "<integer>",
+                  "description": "Filter responses to a specific persona by its ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "stage",
+                  "value": "<string>",
+                  "description": "Filter responses by customer journey stage. Values are resolved from your brand's configured stages, so they vary per brand.\n\n**Default stage sets:**\n- **Intent (v1)** — `Advice`, `Awareness`, `Evaluation`, `Comparison`, `Other`\n- **Funnel (v2)** — `Awareness`, `Consideration`, `Conversion`, `Loyalty`, `Other`\n\nBrands that rename or add stages accept those custom names too."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<string>",
+                  "description": "Only return responses collected on or after this date (inclusive). Format: YYYY-MM-DD"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<string>",
+                  "description": "Only return responses collected before this date (exclusive). Format: YYYY-MM-DD"
+                },
+                {
+                  "disabled": false,
+                  "key": "has_shopping_data",
+                  "value": "<boolean>",
+                  "description": "Filter responses by shopping data presence. True returns only responses with shopping results, False returns only responses without."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100",
+                  "description": "Maximum number of responses to return per page"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of responses to skip for pagination"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "brand_id",
+                  "description": "(Required) The unique identifier for the brand"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "efc52d4c-5b51-43e0-9564-303a7bb7d063",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "responses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "platform",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "prompt_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "persona_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "stage",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "has_shopping_data",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total\": 2141,\n  \"items\": [\n    {\n      \"id\": 9551,\n      \"created_at\": \"1982-10-12T12:16:52.429Z\",\n      \"prompt_id\": 5559,\n      \"prompt\": \"string\",\n      \"persona_id\": 3609,\n      \"stage\": \"string\",\n      \"branded\": false,\n      \"platform\": \"string\",\n      \"brand_present\": true,\n      \"response_text\": \"string\",\n      \"persona_name\": \"string\",\n      \"country\": \"string\",\n      \"brand_sentiment\": \"string\",\n      \"brand_position\": \"string\",\n      \"query_fanout\": {\n        \"queries\": [\n          \"string\",\n          \"string\"\n        ],\n        \"engine_metadata\": {\n          \"key_0\": \"string\"\n        }\n      }\n    },\n    {\n      \"id\": 5534,\n      \"created_at\": \"1977-08-12T16:14:39.556Z\",\n      \"prompt_id\": 2579,\n      \"prompt\": \"string\",\n      \"persona_id\": 5685,\n      \"stage\": \"string\",\n      \"branded\": false,\n      \"platform\": \"string\",\n      \"brand_present\": false,\n      \"response_text\": \"string\",\n      \"persona_name\": \"string\",\n      \"country\": \"string\",\n      \"brand_sentiment\": \"string\",\n      \"brand_position\": \"string\",\n      \"query_fanout\": {\n        \"queries\": [\n          \"string\",\n          \"string\"\n        ],\n        \"engine_metadata\": {\n          \"key_0\": \"string\",\n          \"key_1\": 6428.313418722524,\n          \"key_2\": 9297,\n          \"key_3\": 5770.348601179724\n        }\n      }\n    }\n  ],\n  \"offset\": 0,\n  \"limit\": 5065,\n  \"metadata\": {\n    \"aggregation_granularity\": \"weekly\",\n    \"period_count\": 2686,\n    \"start_date\": \"2011-04-03T00:56:10.463Z\",\n    \"end_date\": \"2005-05-31T14:13:16.338Z\",\n    \"top_domains\": {\n      \"domains\": [\n        {\n          \"domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"domain_owner\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"domain_owner\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"grand_total\": 3895,\n      \"owner_totals\": {\n        \"key_0\": 5514\n      },\n      \"owner_time_series\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"segment_totals\": [\n        {\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"observation_count\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "422bbff4-fafe-476c-b45f-c8f68b85d4dc",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":brand_id",
+                    "responses"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "platform",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "prompt_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "persona_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "stage",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "has_shopping_data",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "brand_id",
+                      "description": "(Required) The unique identifier for the brand"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\",\n      \"input\": {},\n      \"ctx\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.scrunchai.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "eb352e8f-981f-4605-bd40-b5170032f128",
+    "name": "Scrunch Data agent-traffic Responses API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

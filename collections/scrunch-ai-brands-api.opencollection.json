@@ -1,0 +1,376 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Scrunch Data agent-traffic Brands API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Brands",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Competitor",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/brands/:brand_id/competitors/:competitor_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "competitor_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a competitor by ID"
+        },
+        {
+          "info": {
+            "name": "Update Competitor",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.scrunchai.com/v1/brands/:brand_id/competitors/:competitor_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "competitor_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a competitor"
+        },
+        {
+          "info": {
+            "name": "Archive Competitor",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.scrunchai.com/v1/brands/:brand_id/competitors/:competitor_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "competitor_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Archive a competitor"
+        },
+        {
+          "info": {
+            "name": "Get Persona",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/brands/:brand_id/personas/:persona_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "persona_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a persona by ID"
+        },
+        {
+          "info": {
+            "name": "Update Persona",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.scrunchai.com/v1/brands/:brand_id/personas/:persona_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "persona_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update a persona"
+        },
+        {
+          "info": {
+            "name": "Archive Persona",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.scrunchai.com/v1/brands/:brand_id/personas/:persona_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "persona_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Archive a persona"
+        },
+        {
+          "info": {
+            "name": "List Brands",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/brands",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List available brands"
+        },
+        {
+          "info": {
+            "name": "Create Brand",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.scrunchai.com/v1/brands",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new brand"
+        },
+        {
+          "info": {
+            "name": "List Competitors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/brands/:brand_id/competitors",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List competitors for a brand"
+        },
+        {
+          "info": {
+            "name": "Create Competitor",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.scrunchai.com/v1/brands/:brand_id/competitors",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new competitor"
+        },
+        {
+          "info": {
+            "name": "List Personas",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/brands/:brand_id/personas",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List personas for a brand"
+        },
+        {
+          "info": {
+            "name": "Create Persona",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.scrunchai.com/v1/brands/:brand_id/personas",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new persona"
+        },
+        {
+          "info": {
+            "name": "Update Brand",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.scrunchai.com/v1/brands/:brand_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Partially update a brand. Only fields included in the request body are modified. For competitors and personas, the provided list represents the full desired state: include an `id` to update an existing record, omit `id` to create a new one, and any existing records not in the list are archived.\n\nIf you submit a persona without an `id` and its `name` matches a previously archived persona on the same brand, the archived persona is reactivated (its `status` returns to `active` and its `description`"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

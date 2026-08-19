@@ -1,0 +1,117 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Scrunch Data agent-traffic Page Audits API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Page Audits",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Page Audits",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/page-audits",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by status"
+              },
+              {
+                "name": "url",
+                "value": "",
+                "type": "query",
+                "description": "Filter by URL (partial match)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset for pagination"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List page audits in reverse chronological order"
+        },
+        {
+          "info": {
+            "name": "Create Page Audits",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.scrunchai.com/v1/:brand_id/page-audits",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create one or more page audits"
+        },
+        {
+          "info": {
+            "name": "Get Page Audit",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/page-audits/:page_audit_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "page_audit_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get a specific page audit by ID"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,6 +1,6 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: generated
-source: openapi/scrunch-ai-data-api-openapi.yml
+source: openapi/_original/scrunch-ai-data-api-openapi.yml, openapi/scrunch-ai-signals-api-openapi.yml
 skills:
 - file: scrunch-ai-query-visibility.md
   name: Query Scrunch AI visibility metrics
@@ -14,6 +14,11 @@ skills:
   name: Run the Scrunch Optimize-and-Deploy pipeline
   api: openapi/scrunch-ai-data-api-openapi.yml
   operations: [createOptimizeAndDeployPipeline, getOptimizeAndDeployStatus, bulkRenderOptimizedPages]
+- file: scrunch-ai-triage-signals.md
+  name: Triage Scrunch AI visibility signals
+  api: openapi/scrunch-ai-signals-api-openapi.yml
+  operations: [listSignalAnchors, listSignals, getSignal, setSignalReaction, clearSignalReaction,
+    listSignalReactions]
 - file: scrunch-ai-agent-traffic-ingestion.md
   name: Ingest AI agent traffic and referrals into Scrunch
   api: openapi/scrunch-ai-data-api-openapi.yml

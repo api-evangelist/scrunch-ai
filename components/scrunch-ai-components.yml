@@ -1,0 +1,61 @@
+generated: '2026-08-13'
+method: searched
+source: https://developers.scrunch.com/integrations/data-studio-connector
+note: >
+  Scrunch ships no embeddable web components or JS element library. What it does ship on
+  the client side are two first-party Google Looker Studio / Data Studio community
+  connectors - installed by connectorId inside Looker Studio rather than from a package
+  registry - which render Scrunch Query API and Agent Traffic data as a native BI data
+  source. They are distinct from SDKs (there are none - see
+  packages/scrunch-ai-packages.yml) and are the only client-side distribution Scrunch
+  publishes.
+families:
+- name: BI connectors
+  kind: hosted-connector
+  platform: Google Looker Studio / Data Studio
+  auth: Scrunch API key (Query scope), entered in the connector configuration screen
+  components:
+  - name: Scrunch Data Studio Connector (v2)
+    status: current
+    docs: https://developers.scrunch.com/integrations/data-studio-connector
+    install_url: https://datastudio.google.com/datasources/create?connectorId=AKfycbyi7ba5UXYeYqau1m6upcPFRBm2n0z49C5fg3dSwdbdFArz2IjLbCBc05HcNsoMpLFOcQ
+    version: null
+    published: null
+    distribution: unlisted
+    distribution_note: >
+      Not in the public Looker Studio connector gallery; installed via a direct
+      connectorId deploy link. No version string or publish date is exposed by the
+      distribution channel, so currency cannot be read - a consumer cannot tell which
+      build they are getting either.
+    capabilities:
+    - Multi-brand data source (1 to 30+ brands in a single connection)
+    - Agent Traffic data (which AI bots crawl the site, how often, and where)
+    - Comparison fields (brand vs. competitor presence in one chart)
+    - Caching and parallel fetching
+    config_parameters: [API Key, Brand IDs, Site ID (optional), Path Filter (optional)]
+    security_note: >
+      The docs explicitly warn against checking "Allow 'API Key' to be modified in
+      reports", which would expose the key to report viewers.
+  - name: Scrunch Looker Studio Community Connector (legacy, single-brand)
+    status: legacy
+    docs: https://developers.scrunch.com/integrations/looker-studio
+    install_url: https://lookerstudio.google.com/datasources/create?connectorId=AKfycbzRRK2rRqh1_ujHS313hitMb5PopzgNUS5m5ih6ohI
+    version: null
+    published: null
+    distribution: unlisted
+    distribution_note: Superseded by the v2 Data Studio connector; same unlisted connectorId install path.
+    capabilities:
+    - All standard Scrunch Query API fields (presence, position, sentiment)
+    - Competitor presence metrics
+    - Date, platform, persona, tag, and source dimensions
+    - Blending with GA4 and other Looker Studio sources
+  supporting_docs:
+  - https://developers.scrunch.com/integrations/data-studio-templates
+  - https://developers.scrunch.com/integrations/data-studio-troubleshooting
+backing_api: openapi/scrunch-ai-query-api-openapi.yml
+x-evidence:
+- url: https://developers.scrunch.com/integrations/data-studio-connector.md
+  status: 200
+- url: https://developers.scrunch.com/integrations/looker-studio.md
+  status: 200
+  fetched: '2026-08-13'

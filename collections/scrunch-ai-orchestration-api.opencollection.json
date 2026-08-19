@@ -1,0 +1,71 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Scrunch Data agent-traffic orchestration API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "orchestration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Optimize And Deploy Pipeline",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.scrunchai.com/v1/orchestration/optimize-and-deploy/:brand_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create an orchestrated pipeline: audit pages, optimize content, and deploy to AXP"
+        },
+        {
+          "info": {
+            "name": "Get Pipeline Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/orchestration/optimize-and-deploy/:brand_id/:token",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get the status of an optimize-and-deploy pipeline by token"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

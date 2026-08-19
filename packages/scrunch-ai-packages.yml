@@ -1,0 +1,54 @@
+generated: '2026-08-13'
+method: searched
+source: registry searches + https://developers.scrunch.com/llms.txt
+package_count: 0
+official_package_count: 0
+packages: []
+note: >
+  Scrunch AI publishes no first-party client libraries. The complete developer docs index
+  (developers.scrunch.com/llms.txt) documents raw curl usage only - there is no SDK,
+  client-library, or install page anywhere in the 108-page index. The scrunch-ai GitHub
+  organization exists (github.com/scrunch-ai, created 2026) but publishes zero public
+  repositories. Non-registry client distribution does exist: two first-party Looker
+  Studio / Data Studio community connectors, captured in
+  components/scrunch-ai-components.yml rather than here, because they are installed by
+  connectorId inside Google Looker Studio and have no package registry, no version, and
+  no metadata endpoint to query.
+registries_checked:
+- registry: npm
+  query: scrunch
+  result: no first-party package
+  note: >
+    The @scrunch npm scope (@scrunch/ui-components-react, @scrunch/budget-calculator, last
+    published 2018) belongs to Scrunch Enterprises / "Scrunche", an unrelated influencer
+    marketing company - NOT Scrunch AI (scrunch.com / scrunchai.com). Not claimed here.
+- registry: pypi
+  query: scrunch, scrunch-ai, scrunchai
+  result: no first-party package
+  note: >
+    pypi.org/project/scrunch exists but is Crunch.io's Python client for the Crunch
+    platform, an unrelated company. scrunch-ai and scrunchai both 404.
+- registry: rubygems
+  result: not checked - no Ruby surface documented
+- registry: maven-central
+  result: not checked - no JVM surface documented
+- registry: nuget
+  result: not checked - no .NET surface documented
+- registry: crates.io
+  result: not checked - no Rust surface documented
+- registry: pkg.go.dev
+  result: not checked - no Go surface documented
+- registry: packagist
+  result: not checked - no PHP surface documented
+- registry: github
+  query: https://api.github.com/orgs/scrunch-ai/repos
+  status: 200
+  result: 0 public repositories
+x-evidence:
+- url: https://registry.npmjs.org/-/v1/search?text=scrunch
+  status: 200
+- url: https://pypi.org/pypi/scrunch-ai/json
+  status: 404
+- url: https://api.github.com/orgs/scrunch-ai/repos
+  status: 200
+  fetched: '2026-08-13'

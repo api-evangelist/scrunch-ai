@@ -1,0 +1,115 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Scrunch Data agent-traffic Prompts API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Prompts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Archive Prompt",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.scrunchai.com/v1/:brand_id/prompts/:prompt_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the brand"
+              },
+              {
+                "name": "prompt_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the prompt to archive"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Archives a prompt (soft delete). The prompt will no longer be tracked but historical data is preserved. Requires the `configure` scope."
+        },
+        {
+          "info": {
+            "name": "List Prompts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/prompts",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the brand"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of prompts to return per page."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of prompts to skip for pagination."
+              },
+              {
+                "name": "stage",
+                "value": "",
+                "type": "query",
+                "description": "Filter prompts by journey stage. Values are resolved from your brand's configured stages, so they vary per brand.\n\n**Default stage sets:**\n- **Intent (v1)** — `Advice`, `Awareness`, `Evaluation`, `Comparison`, `Other`\n- **Funnel (v2)** — `Awareness`, `Consideration`, `Conversion`, `Loyalty`, `Other`\n\nBrands that rename or add stages accept those custom names too. A value that doesn't match any of the brand's active stages matches zero rows rather than erroring."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a paginated list of active prompts for the specified brand, including their variants, tags, and topics. Use this endpoint to retrieve all prompts configured for AI visibility tracking."
+        },
+        {
+          "info": {
+            "name": "Create Prompt",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.scrunchai.com/v1/:brand_id/prompts",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the brand"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new prompt with variants for the specified platforms. Requires the `configure` scope.\n\n**Behavior:**\n- `stage` is optional. If omitted, the journey stage is auto-classified against your brand's active stages using an LLM.\n- If `stage` is provided, it must match one of your brand's active stages (case-sensitive display name). An unknown value returns `400`. An explicit stage is treated as a manual assertion and won't be overwritten by later re-classification.\n- Creates variants for each"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

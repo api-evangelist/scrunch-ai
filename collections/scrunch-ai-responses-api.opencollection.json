@@ -1,0 +1,95 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Scrunch Data agent-traffic Responses API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Responses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Responses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/responses",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the brand"
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "Filter responses by AI platform.\n\n**Supported platforms:**\n- `chatgpt` - OpenAI ChatGPT\n- `claude` - Anthropic Claude\n- `google_ai_overviews` - Google AI Overviews (Search)\n- `perplexity` - Perplexity AI\n- `meta` - Meta AI\n- `google_ai_mode` - Google AI Mode\n- `google_gemini` - Google Gemini\n- `copilot` - Microsoft Copilot"
+              },
+              {
+                "name": "prompt_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter responses to a specific prompt by its ID"
+              },
+              {
+                "name": "persona_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter responses to a specific persona by its ID"
+              },
+              {
+                "name": "stage",
+                "value": "",
+                "type": "query",
+                "description": "Filter responses by customer journey stage. Values are resolved from your brand's configured stages, so they vary per brand.\n\n**Default stage sets:**\n- **Intent (v1)** — `Advice`, `Awareness`, `Evaluation`, `Comparison`, `Other`\n- **Funnel (v2)** — `Awareness`, `Consideration`, `Conversion`, `Loyalty`, `Other`\n\nBrands that rename or add stages accept those custom names too."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Only return responses collected on or after this date (inclusive). Format: YYYY-MM-DD"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "Only return responses collected before this date (exclusive). Format: YYYY-MM-DD"
+              },
+              {
+                "name": "has_shopping_data",
+                "value": "",
+                "type": "query",
+                "description": "Filter responses by shopping data presence. True returns only responses with shopping results, False returns only responses without."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of responses to return per page"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of responses to skip for pagination"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns AI responses (observations) with full evaluation data, citations, and competitor analysis. Each response represents a single AI-generated answer to a tracked prompt.\n\nThis endpoint provides the raw response data needed for deep analysis, audits, and research. For aggregated metrics, use the Query API instead.\n\n**Response data includes:**\n- Full response text from the AI platform\n- Brand evaluation (presence, sentiment, position)\n- Competitor evaluations with individual metrics\n- Citation"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

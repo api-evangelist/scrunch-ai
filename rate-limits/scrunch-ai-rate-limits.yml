@@ -1,0 +1,32 @@
+generated: '2026-08-13'
+method: searched
+source: https://developers.scrunch.com/llms.txt
+limit_count: 0
+limits: []
+response_headers: []
+exhaustion_status: null
+note: >
+  Scrunch publishes no rate limits for the Data API. The full developer documentation
+  index (developers.scrunch.com/llms.txt, 108 pages) contains zero occurrences of
+  "rate limit", "throttle", or "429", and neither the live OpenAPI served at
+  https://api.scrunchai.com/v1/openapi.json nor the docs-derived spec declares a 429
+  response or any X-RateLimit-*/RateLimit-* response header on any operation. An honest
+  zero: limits may be enforced server-side but nothing about them is documented, so an
+  agent has no runtime signal to read.
+pagination_caps_not_rate_limits: >
+  The docs DO publish per-request result caps, which are pagination bounds rather than
+  rate limits and are recorded in conventions/scrunch-ai-conventions.yml: query limit
+  default 50000 / max 90000 rows; list endpoints default limit 100; listSignals default
+  50 / max 200; MCP list_responses default 10 / max 100.
+docs_checked:
+- url: https://developers.scrunch.com/api-reference/introduction
+  status: 200
+- url: https://developers.scrunch.com/getting-started/authentication
+  status: 200
+- url: https://developers.scrunch.com/llms.txt
+  status: 200
+x-evidence:
+- url: https://developers.scrunch.com/llms.txt
+  status: 200
+  fetched: '2026-08-13'
+  finding: no rate-limit documentation in the complete docs index

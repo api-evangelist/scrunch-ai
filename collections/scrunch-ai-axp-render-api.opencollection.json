@@ -1,0 +1,51 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Scrunch Data agent-traffic axp-render API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "axp-render",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Bulk Render Optimized Pages",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.scrunchai.com/v1/orchestration/render-bulk/:brand_id/sites/:site_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the brand that owns the site."
+              },
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path",
+                "description": "The ULID of the registered AXP site to render pages on."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Queue render jobs for a list of paths on a registered AXP site. Each path is fetched, sanitized, and persisted as an AXP optimized page asynchronously, so the endpoint returns immediately with one job entry per input path.\n\nPaths are normalized (trimmed and given a leading slash) and deduplicated before queueing. A path that already has an in-flight job on the same site coalesces onto that job, so the same batch can be retried safely. Inputs are capped at 100 paths per call."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

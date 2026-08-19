@@ -1,13 +1,20 @@
-generated: '2026-07-21'
-method: searched
+generated: '2026-08-13'
+method: probed
+documents_found: 0
 note: >
-  Probed the /.well-known/ discovery surface on the marketing host (scrunch.com), the
-  app host (app.scrunchai.com), and the api host. scrunch.com returns 404 for all
-  well-known paths. app.scrunchai.com is a client-rendered SPA that returns HTTP 200 with
-  an HTML shell (content-type text/html) for every path including /.well-known/security.txt
-  and /.well-known/openid-configuration - these are NOT real discovery documents (the app
-  uses OAuth via the MCP/hosted flow, not a published OIDC discovery doc). No genuine
-  well-known documents were found; nothing saved.
+  Probed the /.well-known/ discovery surface on the marketing host (scrunch.com), the app
+  host (app.scrunchai.com), the API host (api.scrunchai.com), the ingestion host
+  (webhooks.scrunchai.com) and the trust host (trust.scrunchai.com). NOT ONE genuine
+  well-known document is served. scrunch.com, api.scrunchai.com and webhooks.scrunchai.com
+  return 404 for every path. app.scrunchai.com and trust.scrunchai.com are client-rendered
+  SPAs that answer HTTP 200 with an HTML shell (content-type text/html) for every
+  /.well-known/* path, including security.txt, openid-configuration and agent-card.json -
+  those 200s are NOT documents and are recorded as misses. Because nothing real was found,
+  no WellKnown or SecurityTxt pointer is wired in apis.yml; the file records a verified
+  absence. (The hosted MCP server authenticates via an OAuth flow negotiated by the MCP
+  client rather than a published RFC 8414 / OIDC discovery document: POST to
+  https://app.scrunchai.com/api/mcp returns a WWW-Authenticate Bearer challenge, but no
+  anonymous authorization-server metadata is served.)
 hosts:
 - host: https://scrunch.com
   documents:
@@ -16,7 +23,30 @@ hosts:
   - {path: /.well-known/oauth-authorization-server, status: 404}
   - {path: /.well-known/api-catalog, status: 404}
   - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://api.scrunchai.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404, body: '{"detail":"Not Found"}'}
+  - {path: /.well-known/agent-card.json, status: 404, body: '{"detail":"Not Found"}'}
+  - {path: /.well-known/agent.json, status: 404, body: '{"detail":"Not Found"}'}
+- host: https://webhooks.scrunchai.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404, body: '{"detail":"Not Found"}'}
+  - {path: /.well-known/agent-card.json, status: 404, body: '{"detail":"Not Found"}'}
+  - {path: /.well-known/agent.json, status: 404, body: '{"detail":"Not Found"}'}
 - host: https://app.scrunchai.com
   documents:
   - {path: /.well-known/security.txt, status: 200, valid: false, reason: SPA HTML shell (text/html)}
   - {path: /.well-known/openid-configuration, status: 200, valid: false, reason: SPA HTML shell (text/html)}
+  - {path: /.well-known/oauth-authorization-server, status: 301, valid: false}
+  - {path: /.well-known/oauth-protected-resource, status: 301, valid: false}
+  - {path: /.well-known/oauth-authorization-server/api/mcp, status: 200, valid: false, reason: SPA HTML shell (text/html)}
+  - {path: /.well-known/agent-card.json, status: 200, valid: false, reason: SPA HTML shell (text/html), rejected: true}
+  - {path: /.well-known/agent.json, status: 200, valid: false, reason: SPA HTML shell (text/html), rejected: true}
+- host: https://trust.scrunchai.com
+  documents:
+  - {path: /.well-known/security.txt, status: 200, valid: false, reason: Vanta SPA HTML shell (text/html)}
+x-evidence:
+  fetched: '2026-08-13'
+  method: curl HEAD/GET with content-type and body inspection on every path

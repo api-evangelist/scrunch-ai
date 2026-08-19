@@ -1,0 +1,248 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Scrunch Data agent-traffic sitemap API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "sitemap",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Export Sitemap Pages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/sitemap/export",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the brand."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Output format. `csv` returns a UTF-8 (BOM) CSV stream. `xlsx` returns a binary Excel workbook."
+              },
+              {
+                "name": "mapped_site_id",
+                "value": "",
+                "type": "query",
+                "description": "Explicit sitemap (mapped site) identifier to export. Defaults to the latest finished crawl for the brand and optional `domain`."
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "Filter to a specific domain when the brand has multiple registered sites."
+              },
+              {
+                "name": "max_depth",
+                "value": "",
+                "type": "query",
+                "description": "Maximum URL path depth to include. `0` returns root pages only."
+              },
+              {
+                "name": "path_prefix",
+                "value": "",
+                "type": "query",
+                "description": "Filter by segment-aligned URL path prefix."
+              },
+              {
+                "name": "is_priority",
+                "value": "",
+                "type": "query",
+                "description": "Filter to (or exclude) priority pages."
+              },
+              {
+                "name": "has_optimized_content",
+                "value": "",
+                "type": "query",
+                "description": "Filter to (or exclude) pages with active AXP optimized content."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Case-insensitive substring match against the page URL or title."
+              },
+              {
+                "name": "include_metrics",
+                "value": "",
+                "type": "query",
+                "description": "Include per-page totals and percent-change columns for `agent_traffic`, `citations`, and `ai_referrals` over the selected date range."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Metrics start date (YYYY-MM-DD). Defaults to 30 days ago."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "Metrics end date (YYYY-MM-DD). Defaults to today."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Download every page matching the supplied filters as CSV or XLSX. Uses the same filters as the list endpoint but skips pagination.\n\nWith `include_metrics=true` (the default), each row also includes totals over the selected date range for `agent_traffic`, `citations`, and `ai_referrals`, plus a percent-change column comparing the first and last buckets of the range — matching the totals and trend percentages shown in the sitemap UI.\n\nLimits:\n- Maximum 10,000 rows per export.\n- Maximum 366-day win"
+        },
+        {
+          "info": {
+            "name": "Get Sitemap Page Metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/sitemap/pages/:page_id/metrics",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the brand."
+              },
+              {
+                "name": "page_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the page."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date (YYYY-MM-DD). Defaults to 30 days ago."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date (YYYY-MM-DD). Defaults to today."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Return time-series performance metrics for a single page: citations, AI referrals, and AI agent traffic. Each metric is reported as a list of buckets keyed by date, with counts broken down by AI platform.\n\nGranularity is chosen automatically based on the requested date range — short ranges return daily buckets, longer ranges return weekly buckets. Date ranges are capped at 366 days."
+        },
+        {
+          "info": {
+            "name": "Get Sitemap Page",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/sitemap/pages/:page_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the brand."
+              },
+              {
+                "name": "page_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the page."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get detailed information about a single page in the brand's sitemap, including title, description, depth, audit score, canonical URL, last-indexed timestamp, priority flag, and optimized-content flag."
+        },
+        {
+          "info": {
+            "name": "List Sitemap Pages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/sitemap/pages",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the brand."
+              },
+              {
+                "name": "domain",
+                "value": "",
+                "type": "query",
+                "description": "Filter to a specific domain when the brand has multiple registered sites."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of pages to return. Defaults to 100."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of pages to skip. Use with `limit` for pagination."
+              },
+              {
+                "name": "max_depth",
+                "value": "",
+                "type": "query",
+                "description": "Maximum URL path depth to include. `0` returns root pages only."
+              },
+              {
+                "name": "path_prefix",
+                "value": "",
+                "type": "query",
+                "description": "Filter by segment-aligned URL path prefix. For example `/blog` matches `/blog` and `/blog/post` but not `/blogger`."
+              },
+              {
+                "name": "is_priority",
+                "value": "",
+                "type": "query",
+                "description": "Filter to (or exclude) pages flagged as priority for the brand."
+              },
+              {
+                "name": "has_optimized_content",
+                "value": "",
+                "type": "query",
+                "description": "Filter to (or exclude) pages with active AXP optimized content deployed."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Case-insensitive substring match against the page URL or title."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List pages discovered in the brand's sitemap with their title, description, depth, audit score, priority flag, and optimized-content flag.\n\nResults come from the most recent completed crawl for the brand. Supports filtering by domain, URL depth, path prefix, priority flag, optimized-content flag, and a case-insensitive substring search across the page URL and title.\n\nResults are paginated and ordered by depth then URL."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

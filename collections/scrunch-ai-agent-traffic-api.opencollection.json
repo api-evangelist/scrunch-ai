@@ -1,0 +1,88 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Scrunch Data agent-traffic API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "agent-traffic",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Agent Traffic",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/sites/:site_id/agent-traffic",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the site to retrieve agent traffic for."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date for the query range (inclusive). Format: YYYY-MM-DD."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date for the query range (inclusive). Format: YYYY-MM-DD."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of dimensions to include in the response. Available dimensions: `date`, `site`, `path`, `agent_source`, `agent_type`. If not specified, returns aggregated totals."
+              },
+              {
+                "name": "time_bucket",
+                "value": "",
+                "type": "query",
+                "description": "Time aggregation bucket for grouping results. Options: `day`, `week`, `month`. Defaults to `day`."
+              },
+              {
+                "name": "path",
+                "value": "",
+                "type": "query",
+                "description": "Filter results to a specific URL path or path prefix."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of rows to return. Use with offset for pagination."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of rows to skip before returning results. Use with limit for pagination."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve aggregated bot and AI agent traffic data for a specific site.\n\nThis endpoint provides visibility into how AI agents and bots are accessing your web properties. Use it to analyze traffic patterns, identify top agents, and understand crawl behavior over time.\n\n## Available Dimensions\n\nThe following dimensions can be included in the `fields` parameter to group results:\n\n| Field | Description |\n|-------|-------------|\n| `date` | Daily timestamp for the traffic record |\n| `site` | The site d"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

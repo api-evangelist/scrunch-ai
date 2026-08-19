@@ -1,0 +1,277 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Scrunch Data Signals API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Signals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Signals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/signals",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "Slice granularity the signal was detected on: `account` (whole brand), `account_platform` (brand on one AI platform), `topic`, or `topic_platform`."
+              },
+              {
+                "name": "platform",
+                "value": "",
+                "type": "query",
+                "description": "AI platform the signal was detected on (e.g. `OpenAI`). Multi-platform signals carry the `(multi)` sentinel; the response `slice.platforms` lists the real platforms."
+              },
+              {
+                "name": "metric",
+                "value": "",
+                "type": "query",
+                "description": "Metric the signal fired on. Known values: `presence_rate`, `position_top_rate`, `cited_domain_rate` (new metrics may be added)."
+              },
+              {
+                "name": "alert_type",
+                "value": "",
+                "type": "query",
+                "description": "Detection kind: `level_change` (step shift) or `trend` (sustained drift)."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction of the movement: `up`, `down`, or `none`."
+              },
+              {
+                "name": "tier",
+                "value": "",
+                "type": "query",
+                "description": "Confidence tier. When omitted, only the default user-facing tiers are returned (`high`, `confident`, `worth_a_look`, `provisional`); pass an explicit tier to see a single tier, including the noise-floor tiers (`low_confidence`, `underpowered`, `untested`)."
+              },
+              {
+                "name": "subject_kind",
+                "value": "",
+                "type": "query",
+                "description": "Whose movement the signal describes: your `brand` or a `competitor`."
+              },
+              {
+                "name": "anchor_from",
+                "value": "",
+                "type": "query",
+                "description": "Earliest `detected_for_date` to include (inclusive, YYYY-MM-DD)."
+              },
+              {
+                "name": "anchor_to",
+                "value": "",
+                "type": "query",
+                "description": "Latest `detected_for_date` to include (inclusive, YYYY-MM-DD)."
+              },
+              {
+                "name": "mover_url",
+                "value": "",
+                "type": "query",
+                "description": "Case-insensitive substring matched against the URLs in the signal's `url_movers` evidence (per-URL citation movers, emitted for `cited_domain_rate` signals). Only signals with at least one matching mover URL are returned; signals without URL movers never match."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort order: `score_desc` (engine priority, default), `delta_desc` (largest absolute change first), or `detected_desc` (newest first)."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of signals to return."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of signals to skip (pagination)."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List detected signals for a brand — statistically-tested movements (level changes and trends) in AI-visibility metrics, produced by the nightly detection sweep.\n\n## Population\n\nBy default only user-facing signals are returned: the confidence tiers `high`, `confident`, `worth_a_look`, and `provisional`. Pass an explicit `tier` to select a single tier, including the noise-floor tiers. An ongoing signal is re-detected daily under the same `fingerprint`; a multi-day date range returns only the lates"
+        },
+        {
+          "info": {
+            "name": "List Signal Anchor Dates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/signals/anchors",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of dates to return."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List recent distinct detection dates (`detected_for_date`) that produced user-facing signals, newest first. Useful for building date pickers or polling for new detection runs — the population matches `listSignals` with default filters, so every returned day has at least one signal."
+        },
+        {
+          "info": {
+            "name": "List Signal Reactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/signals/reactions",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "fingerprint",
+                "value": "",
+                "type": "query",
+                "description": "Only reactions on this signal fingerprint."
+              },
+              {
+                "name": "reaction",
+                "value": "",
+                "type": "query",
+                "description": "Only reactions with this value."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of reactions to return."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of reactions to skip (pagination)."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List reactions users have set on this brand's signals, newest first. This is **brand-wide** — it returns every user's reactions, not just the caller's — so an integration can export the team's aggregate feedback. Filter by `fingerprint` to get reactions for one signal identity, or by `reaction` to get e.g. everything marked `useful`."
+        },
+        {
+          "info": {
+            "name": "Get Signal",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/signals/:signal_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "signal_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetch one signal by ID, including its full narrative (what happened, why it matters, what to do) when available. Returns 404 for IDs that exist but are not user-facing (non-fired or cluster-child rows) — the same population rule as `listSignals`."
+        },
+        {
+          "info": {
+            "name": "Set Signal Reaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.scrunchai.com/v1/:brand_id/signals/:signal_id/reaction",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "signal_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Set (or replace) the calling user's reaction on a signal. Reactions are keyed on the signal's stable `fingerprint`, so a reaction survives the nightly re-detection of the same underlying issue.\n\nRequires a **user token** (JWT) — API keys have no user identity to attribute the reaction to and receive 403."
+        },
+        {
+          "info": {
+            "name": "Clear Signal Reaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.scrunchai.com/v1/:brand_id/signals/:signal_id/reaction",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "signal_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Remove the calling user's reaction on a signal's stable identity. Requires a **user token** (JWT); API keys receive 403."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

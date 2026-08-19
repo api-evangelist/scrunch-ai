@@ -1,0 +1,47 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Scrunch AI Signals API
+  version: 1.0.0
+extends: openapi/scrunch-ai-signals-api-openapi.yml
+x-generated: '2026-08-13'
+x-method: generated
+x-source: >
+  Captures API Evangelist's enrichment of the Signals surface as an Overlay rather than
+  mutating the harvested contract. The base document is a faithful per-tag split of the
+  live OpenAPI served at https://api.scrunchai.com/v1/openapi.json on 2026-08-13.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: scrunch-ai
+    x-apievangelist-source: https://api.scrunchai.com/v1/openapi.json
+    x-apievangelist-harvested: '2026-08-13'
+    x-apievangelist-docs: https://developers.scrunch.com/api-reference/signals/overview
+    contact:
+      name: Scrunch AI Support
+      email: support@scrunchai.com
+      url: https://developers.scrunch.com
+- target: $
+  update:
+    x-apievangelist-artifacts:
+      authentication: authentication/scrunch-ai-authentication.yml
+      scopes: scopes/scrunch-ai-scopes.yml
+      conventions: conventions/scrunch-ai-conventions.yml
+      errors: errors/scrunch-ai-problem-types.yml
+      examples: examples/scrunch-ai-examples.yml
+      rate_limits: rate-limits/scrunch-ai-rate-limits.yml
+      plans: plans/scrunch-ai-plans-pricing.yml
+- target: $.paths['/{brand_id}/signals/{signal_id}/reaction'].put
+  update:
+    x-apievangelist-note: >
+      Requires a user token (JWT). Organization API keys carry no user identity to
+      attribute a reaction to and receive HTTP 403.
+- target: $.paths['/{brand_id}/signals/{signal_id}/reaction'].delete
+  update:
+    x-apievangelist-note: >
+      Requires a user token (JWT). Organization API keys receive HTTP 403.
+- target: $.paths['/{brand_id}/signals'].get
+  update:
+    x-apievangelist-note: >
+      Results are deduplicated to the latest detection per signal identity (fingerprint),
+      so a multi-day range returns one row per underlying issue, not one per re-detection.
+      Default limit 50, maximum 200.

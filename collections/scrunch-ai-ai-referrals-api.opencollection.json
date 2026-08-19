@@ -1,0 +1,130 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Scrunch Data agent-traffic ai-referrals API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ai-referrals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Disable AI Referrals Connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.scrunchai.com/v1/:brand_id/ai-referrals/connections/:connection_id",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the brand."
+              },
+              {
+                "name": "connection_id",
+                "value": "",
+                "type": "path",
+                "description": "The ULID of the AI Referrals connection."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Soft-disable a connection. Previously pushed events are retained but further pushes are rejected with `410 Gone` and the dashboard stops reading from this connection."
+        },
+        {
+          "info": {
+            "name": "List AI Referrals Connections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.scrunchai.com/v1/:brand_id/ai-referrals/connections",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the brand."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List AI Referrals push connections registered for this brand. Scope is limited to push connections only — Google Analytics integrations live in a separate system and are not returned here, even though they can block a register call with `409`."
+        },
+        {
+          "info": {
+            "name": "Register AI Referrals Connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.scrunchai.com/v1/:brand_id/ai-referrals/connections",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the brand."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Register an AI Referrals push connection for a (brand, website, provider) tuple. Events can only be pushed once a connection exists.\n\nA brand cannot have both a Google Analytics integration and an active AI Referrals push connection for the same website — the conflicting integration must be disabled first.\n\nMVP provider allow-list: `adobe_analytics`."
+        },
+        {
+          "info": {
+            "name": "Push AI Referrals Events",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.scrunchai.com/v1/:brand_id/ai-referrals/connections/:connection_id/events",
+            "params": [
+              {
+                "name": "brand_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the brand."
+              },
+              {
+                "name": "connection_id",
+                "value": "",
+                "type": "path",
+                "description": "The ULID of the AI Referrals connection."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Push a batch of pre-aggregated daily AI-referral events for a registered connection.\n\nAccepts `application/json` (a JSON array of events) or `application/x-ndjson` (one event per line). The upsert key is `(date, raw_referrer_value, raw_page_value)` — re-sending the same tuple replaces the prior values, so backfills and corrections are safe to retry.\n\nLimits:\n- Maximum 10,000 events per batch.\n- Maximum 5 MB request body."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

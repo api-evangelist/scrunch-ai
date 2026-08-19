@@ -1,0 +1,38 @@
+generated: '2026-08-13'
+method: searched
+probe: true
+url: https://trust.scrunchai.com/
+platform: Vanta Trust Center
+certifications:
+- SOC 2 Type II
+claims:
+- claim: SOC 2 Type II compliant
+  source: https://scrunch.com/enterprise/
+  quote: 'SOC 2 Type II compliant. Review details in our Trust Center.'
+- claim: Enterprise identity management with SAML and OAuth-based SSO
+  source: https://scrunch.com/enterprise/
+- claim: Role-based access control (RBAC) for granular permissions
+  source: https://scrunch.com/enterprise/
+- claim: Multi-brand, multi-domain, multi-region, and multilingual support
+  source: https://scrunch.com/enterprise/
+evidence:
+- source: https://trust.scrunchai.com/
+  status: 200
+  kind: trust-center
+  keywords: [trust center, security, compliance]
+  note: >
+    Live Vanta-hosted trust center (title "Scrunch Trust Center", canonical
+    https://trust.scrunchai.com, assets served from assets.vanta.com). The page itself is
+    a client-rendered SPA, so the certification list, subprocessors, and document requests
+    render only in a browser - the SOC 2 Type II certification recorded above is taken
+    from the provider's own enterprise page, which names it in text and links here.
+- source: https://scrunch.com/enterprise/
+  status: 200
+  kind: compliance-claim
+not_found:
+- No security.txt served on scrunch.com, api.scrunchai.com, webhooks.scrunchai.com, or
+  trust.scrunchai.com (see well-known/scrunch-ai-well-known.yml).
+- No public vulnerability disclosure policy or bug bounty program found; the
+  probe-security-programs.py sweep returned vdp=none.
+x-evidence:
+  fetched: '2026-08-13'

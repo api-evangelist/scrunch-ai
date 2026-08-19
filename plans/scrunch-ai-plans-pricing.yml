@@ -1,0 +1,93 @@
+generated: '2026-08-13'
+method: searched
+source: https://scrunch.com/pricing/
+currency: USD
+billing_periods: [monthly, annual]
+annual_discount: '17% when billed annually'
+plan_count: 3
+plans:
+- name: Starter
+  price_monthly: 300
+  price_monthly_billed_annually: 250
+  currency: USD
+  billing_period: month
+  quotas:
+    user_licenses: 3
+    custom_prompts: 350
+    industry_prompts: 1000
+    personas: 3
+    page_audits: 5
+    key_topics: unlimited
+  includes:
+  - Prompt Manager
+  - Insights
+  - Citations tracking
+  - Reporting dashboard
+  - Key Topic monitoring (unlimited)
+  - Agent traffic monitoring
+  - Google Single Sign-On
+  - Email support
+  - 30-minute onboarding
+  - Customer Success
+  api_access: false
+- name: Growth
+  price_monthly: 500
+  price_monthly_billed_annually: 417
+  currency: USD
+  billing_period: month
+  quotas:
+    user_licenses: 5
+    custom_prompts: 700
+    industry_prompts: 2500
+    personas: 5
+    page_audits: 10
+    key_topics: unlimited
+  includes:
+  - Everything in Starter
+  - Strategy reviews
+  - 30-minute onboarding
+  api_access: false
+- name: Enterprise
+  price: custom
+  currency: USD
+  billing_period: custom
+  quotas:
+    user_licenses: custom
+    custom_prompts: custom
+    industry_prompts: custom
+    personas: custom
+    page_audits: custom
+  includes:
+  - Everything in Growth
+  - SAML / OIDC SSO
+  - Enterprise Data API
+  - Dedicated GTM team
+  - Quarterly executive support
+  - Email + Slack support
+  - Custom onboarding
+  api_access: true
+add_ons:
+- name: Additional user seat
+  price: 25
+  currency: USD
+  billing_period: month
+  note: Per additional seat.
+- name: Starter seat pack
+  price: 75
+  currency: USD
+  billing_period: month
+  note: Starter plan only, up to 5 additional seats.
+api_access_note: >
+  API access is NOT included in the published Starter and Growth tiers. The Scrunch docs
+  state that API key creation is available on the Agency and Enterprise plans only, and
+  that calling POST /organizations/{organization_id}/api-keys without the required plan
+  capability returns HTTP 402 Payment Required. The Agency plan named in the API docs is
+  not one of the three tiers published on the pricing page - it is sold through sales.
+  See authentication/scrunch-ai-authentication.yml.
+docs:
+- https://scrunch.com/pricing/
+- https://developers.scrunch.com/getting-started/authentication
+x-evidence:
+- url: https://scrunch.com/pricing/
+  status: 200
+  fetched: '2026-08-13'

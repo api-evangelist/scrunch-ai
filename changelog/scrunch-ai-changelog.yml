@@ -1,0 +1,36 @@
+generated: '2026-08-13'
+method: probed
+source: https://developers.scrunch.com/changelog
+access: gated
+scheme: unknown
+current_version: '0.1.0'
+current_version_source: openapi/_original/scrunch-ai-data-api-runtime-openapi.json info.version
+entry_count: 0
+entries: []
+note: >
+  Scrunch publishes a developer changelog page, but it is not public: GET
+  https://developers.scrunch.com/changelog 302s to
+  https://developers.scrunch.com/login?redirect=%2Fchangelog. No dated entries could be
+  read, so none are recorded and no ChangeLog pointer is wired in apis.yml - the page
+  exists, but a reader (or an agent) without a Scrunch login cannot see what changed. The
+  public product-announcement surface is the marketing blog (scrunch.com/blog), which is
+  narrative rather than a structured API changelog.
+public_alternatives:
+- url: https://scrunch.com/blog
+  kind: product announcements
+  note: >
+    Undated in the llms.txt index; recent posts announce Signals & Explorer, Knowledge
+    Studio, Prompt Templates, and the Keyword Volume Estimator.
+observed_api_drift:
+  note: >
+    Without a public changelog, the only readable evidence of change is spec drift. The
+    live spec at https://api.scrunchai.com/v1/openapi.json now carries a signals surface
+    (6 operations), plus getBrand, archiveBrand, getPrompt and createCollection, that the
+    documented spec harvested on 2026-07-21 did not have - and it no longer serves the
+    orchestration and ai-referrals operations that the docs still publish. Both are
+    recorded; see mcp/scrunch-ai-tool-crosswalk.yml for the surface divergence.
+x-evidence:
+- url: https://developers.scrunch.com/changelog
+  status: 302
+  redirect: https://developers.scrunch.com/login?redirect=%2Fchangelog
+  fetched: '2026-08-13'
