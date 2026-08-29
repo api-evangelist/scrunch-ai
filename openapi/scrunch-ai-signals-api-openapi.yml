@@ -1,38 +1,30 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Scrunch Data Signals API
   version: 0.1.0
-  description: 'Signals surface of the Scrunch Data API: the nightly detection sweep of statistically-tested level changes
-    and trends in AI visibility metrics, with stable signal fingerprints and team reactions. Split verbatim from the live
-    OpenAPI served at https://api.scrunchai.com/v1/openapi.json.'
 servers:
-- url: https://api.scrunchai.com/v1
+- url: /v1
 tags:
-- name: Signals
+- name: signals
 paths:
   /{brand_id}/signals:
     get:
       tags:
-      - Signals
+      - signals
       summary: List Signals
-      description: 'List detected signals for a brand — statistically-tested movements (level changes and trends) in AI-visibility
-        metrics, produced by the nightly detection sweep.
+      description: 'List detected signals for a brand — statistically-tested movements (level changes and trends) in AI-visibility metrics, produced by the nightly detection sweep.
 
 
         ## Population
 
 
-        By default only user-facing signals are returned: the confidence tiers `high`, `confident`, `worth_a_look`, and `provisional`.
-        Pass an explicit `tier` to select a single tier, including the noise-floor tiers. An ongoing signal is re-detected
-        daily under the same `fingerprint`; a multi-day date range returns only the latest detection per signal identity,
-        so you never see day-by-day duplicates of the same issue.
+        By default only user-facing signals are returned: the confidence tiers `high`, `confident`, `worth_a_look`, and `provisional`. Pass an explicit `tier` to select a single tier, including the noise-floor tiers. An ongoing signal is re-detected daily under the same `fingerprint`; a multi-day date range returns only the latest detection per signal identity, so you never see day-by-day duplicates of the same issue.
 
 
         ## Sorting
 
 
-        `sort=score_desc` (default) orders by engine priority, `delta_desc` by largest absolute change, `detected_desc` by
-        newest detection date.'
+        `sort=score_desc` (default) orders by engine priority, `delta_desc` by largest absolute change, `detected_desc` by newest detection date.'
       operationId: listSignals
       security:
       - HTTPBearer:
@@ -56,11 +48,9 @@ paths:
             - topic_platform
             type: string
           - type: 'null'
-          description: 'Slice granularity the signal was detected on: `account` (whole brand), `account_platform` (brand on
-            one AI platform), `topic`, or `topic_platform`.'
+          description: 'Slice granularity the signal was detected on: `account` (whole brand), `account_platform` (brand on one AI platform), `topic`, or `topic_platform`.'
           title: Scope
-        description: 'Slice granularity the signal was detected on: `account` (whole brand), `account_platform` (brand on
-          one AI platform), `topic`, or `topic_platform`.'
+        description: 'Slice granularity the signal was detected on: `account` (whole brand), `account_platform` (brand on one AI platform), `topic`, or `topic_platform`.'
       - name: platform
         in: query
         required: false
@@ -68,11 +58,9 @@ paths:
           anyOf:
           - type: string
           - type: 'null'
-          description: AI platform the signal was detected on (e.g. `OpenAI`). Multi-platform signals carry the `(multi)`
-            sentinel; the response `slice.platforms` lists the real platforms.
+          description: AI platform the signal was detected on (e.g. `OpenAI`). Multi-platform signals carry the `(multi)` sentinel; the response `slice.platforms` lists the real platforms.
           title: Platform
-        description: AI platform the signal was detected on (e.g. `OpenAI`). Multi-platform signals carry the `(multi)` sentinel;
-          the response `slice.platforms` lists the real platforms.
+        description: AI platform the signal was detected on (e.g. `OpenAI`). Multi-platform signals carry the `(multi)` sentinel; the response `slice.platforms` lists the real platforms.
       - name: metric
         in: query
         required: false
@@ -80,11 +68,9 @@ paths:
           anyOf:
           - type: string
           - type: 'null'
-          description: 'Metric the signal fired on. Known values: `presence_rate`, `position_top_rate`, `cited_domain_rate`
-            (new metrics may be added).'
+          description: 'Metric the signal fired on. Known values: `presence_rate`, `position_top_rate`, `cited_domain_rate` (new metrics may be added).'
           title: Metric
-        description: 'Metric the signal fired on. Known values: `presence_rate`, `position_top_rate`, `cited_domain_rate`
-          (new metrics may be added).'
+        description: 'Metric the signal fired on. Known values: `presence_rate`, `position_top_rate`, `cited_domain_rate` (new metrics may be added).'
       - name: alert_type
         in: query
         required: false
@@ -127,13 +113,9 @@ paths:
             - untested
             type: string
           - type: 'null'
-          description: Confidence tier. When omitted, only the default user-facing tiers are returned (`high`, `confident`,
-            `worth_a_look`, `provisional`); pass an explicit tier to see a single tier, including the noise-floor tiers (`low_confidence`,
-            `underpowered`, `untested`).
+          description: Confidence tier. When omitted, only the default user-facing tiers are returned (`high`, `confident`, `worth_a_look`, `provisional`); pass an explicit tier to see a single tier, including the noise-floor tiers (`low_confidence`, `underpowered`, `untested`).
           title: Tier
-        description: Confidence tier. When omitted, only the default user-facing tiers are returned (`high`, `confident`,
-          `worth_a_look`, `provisional`); pass an explicit tier to see a single tier, including the noise-floor tiers (`low_confidence`,
-          `underpowered`, `untested`).
+        description: Confidence tier. When omitted, only the default user-facing tiers are returned (`high`, `confident`, `worth_a_look`, `provisional`); pass an explicit tier to see a single tier, including the noise-floor tiers (`low_confidence`, `underpowered`, `untested`).
       - name: subject_kind
         in: query
         required: false
@@ -178,13 +160,9 @@ paths:
             minLength: 1
             maxLength: 2048
           - type: 'null'
-          description: Case-insensitive substring matched against the URLs in the signal's `url_movers` evidence (per-URL
-            citation movers, emitted for `cited_domain_rate` signals). Only signals with at least one matching mover URL are
-            returned; signals without URL movers never match.
+          description: Case-insensitive substring matched against the URLs in the signal's `url_movers` evidence (per-URL citation movers, emitted for `cited_domain_rate` signals). Only signals with at least one matching mover URL are returned; signals without URL movers never match.
           title: Mover Url
-        description: Case-insensitive substring matched against the URLs in the signal's `url_movers` evidence (per-URL citation
-          movers, emitted for `cited_domain_rate` signals). Only signals with at least one matching mover URL are returned;
-          signals without URL movers never match.
+        description: Case-insensitive substring matched against the URLs in the signal's `url_movers` evidence (per-URL citation movers, emitted for `cited_domain_rate` signals). Only signals with at least one matching mover URL are returned; signals without URL movers never match.
       - name: sort
         in: query
         required: false
@@ -194,12 +172,10 @@ paths:
           - delta_desc
           - detected_desc
           type: string
-          description: 'Sort order: `score_desc` (engine priority, default), `delta_desc` (largest absolute change first),
-            or `detected_desc` (newest first).'
+          description: 'Sort order: `score_desc` (engine priority, default), `delta_desc` (largest absolute change first), or `detected_desc` (newest first).'
           default: score_desc
           title: Sort
-        description: 'Sort order: `score_desc` (engine priority, default), `delta_desc` (largest absolute change first), or
-          `detected_desc` (newest first).'
+        description: 'Sort order: `score_desc` (engine priority, default), `delta_desc` (largest absolute change first), or `detected_desc` (newest first).'
       - name: limit
         in: query
         required: false
@@ -237,11 +213,9 @@ paths:
   /{brand_id}/signals/anchors:
     get:
       tags:
-      - Signals
+      - signals
       summary: List Signal Anchor Dates
-      description: List recent distinct detection dates (`detected_for_date`) that produced user-facing signals, newest first.
-        Useful for building date pickers or polling for new detection runs — the population matches `listSignals` with default
-        filters, so every returned day has at least one signal.
+      description: List recent distinct detection dates (`detected_for_date`) that produced user-facing signals, newest first. Useful for building date pickers or polling for new detection runs — the population matches `listSignals` with default filters, so every returned day has at least one signal.
       operationId: listSignalAnchors
       security:
       - HTTPBearer:
@@ -280,11 +254,9 @@ paths:
   /{brand_id}/signals/reactions:
     get:
       tags:
-      - Signals
+      - signals
       summary: List Signal Reactions
-      description: List reactions users have set on this brand's signals, newest first. This is **brand-wide** — it returns
-        every user's reactions, not just the caller's — so an integration can export the team's aggregate feedback. Filter
-        by `fingerprint` to get reactions for one signal identity, or by `reaction` to get e.g. everything marked `useful`.
+      description: List reactions users have set on this brand's signals, newest first. This is **brand-wide** — it returns every user's reactions, not just the caller's — so an integration can export the team's aggregate feedback. Filter by `fingerprint` to get reactions for one signal identity, or by `reaction` to get e.g. everything marked `useful`.
       operationId: listSignalReactions
       security:
       - HTTPBearer:
@@ -358,11 +330,9 @@ paths:
   /{brand_id}/signals/{signal_id}:
     get:
       tags:
-      - Signals
+      - signals
       summary: Get Signal
-      description: Fetch one signal by ID, including its full narrative (what happened, why it matters, what to do) when available.
-        Returns 404 for IDs that exist but are not user-facing (non-fired or cluster-child rows) — the same population rule
-        as `listSignals`.
+      description: Fetch one signal by ID, including its full narrative (what happened, why it matters, what to do) when available. Returns 404 for IDs that exist but are not user-facing (non-fired or cluster-child rows) — the same population rule as `listSignals`.
       operationId: getSignal
       security:
       - HTTPBearer:
@@ -396,10 +366,9 @@ paths:
   /{brand_id}/signals/{signal_id}/reaction:
     put:
       tags:
-      - Signals
+      - signals
       summary: Set Signal Reaction
-      description: 'Set (or replace) the calling user''s reaction on a signal. Reactions are keyed on the signal''s stable
-        `fingerprint`, so a reaction survives the nightly re-detection of the same underlying issue.
+      description: 'Set (or replace) the calling user''s reaction on a signal. Reactions are keyed on the signal''s stable `fingerprint`, so a reaction survives the nightly re-detection of the same underlying issue.
 
 
         Requires a **user token** (JWT) — API keys have no user identity to attribute the reaction to and receive 403.'
@@ -441,10 +410,9 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
     delete:
       tags:
-      - Signals
+      - signals
       summary: Clear Signal Reaction
-      description: Remove the calling user's reaction on a signal's stable identity. Requires a **user token** (JWT); API
-        keys receive 403.
+      description: Remove the calling user's reaction on a signal's stable identity. Requires a **user token** (JWT); API keys receive 403.
       operationId: clearSignalReaction
       security:
       - HTTPBearer:
@@ -473,6 +441,128 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    APISignalSlice:
+      properties:
+        platforms:
+          items:
+            type: string
+          type: array
+          title: Platforms
+          description: AI platforms the slice covers. Empty means all platforms.
+        topic_labels:
+          items:
+            type: string
+          type: array
+          title: Topic Labels
+          description: Topic labels the slice covers. Empty means all topics.
+        geo_country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Geo Country
+          description: Country the slice is restricted to, when geo-scoped.
+      type: object
+      title: APISignalSlice
+      description: The data slice a signal was detected on.
+    APISignalNarrative:
+      properties:
+        what_happened:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: What Happened
+          description: Plain-language description of the detected change.
+        why_it_matters:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Why It Matters
+          description: Why the change is significant for the brand.
+        what_to_do:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: What To Do
+          description: Suggested next step or investigation.
+      type: object
+      title: APISignalNarrative
+      description: Engine-generated narrative for a signal.
+    TimeSeriesMetadata:
+      properties:
+        aggregation_granularity:
+          $ref: '#/components/schemas/AggregationGranularity'
+          description: 'The aggregation granularity: daily, weekly, or monthly'
+        period_count:
+          type: integer
+          title: Period Count
+          description: The number of periods in the time series
+        start_date:
+          type: string
+          format: date-time
+          title: Start Date
+          description: The start date of the time series
+        end_date:
+          type: string
+          format: date-time
+          title: End Date
+          description: The end date of the time series
+        top_domains:
+          anyOf:
+          - $ref: '#/components/schemas/TopDomainsMetadata'
+          - type: 'null'
+          description: Top domains metadata (only populated by sources/domains endpoints)
+      type: object
+      required:
+      - aggregation_granularity
+      - period_count
+      - start_date
+      - end_date
+      title: TimeSeriesMetadata
+    TopDomainSummary:
+      properties:
+        domain:
+          type: string
+          title: Domain
+        domain_owner:
+          type: string
+          title: Domain Owner
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - domain
+      - domain_owner
+      - observation_count
+      title: TopDomainSummary
+    CollectionResponse_APISignalReaction_:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/APISignalReaction'
+          type: array
+          title: Items
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/TimeSeriesMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - total
+      - items
+      title: CollectionResponse[APISignalReaction]
     APISignal:
       properties:
         id:
@@ -487,8 +577,7 @@ components:
         fingerprint:
           type: string
           title: Fingerprint
-          description: Stable identity of the underlying issue across nightly re-detections (hash of the slice + metric).
-            An ongoing signal is re-raised daily under the same fingerprint; reactions are keyed on it.
+          description: Stable identity of the underlying issue across nightly re-detections (hash of the slice + metric). An ongoing signal is re-raised daily under the same fingerprint; reactions are keyed on it.
         subject_kind:
           type: string
           enum:
@@ -519,8 +608,7 @@ components:
         platform:
           type: string
           title: Platform
-          description: AI platform the signal was detected on. `(multi)` means the slice spans several platforms — see `slice.platforms`
-            for the real list.
+          description: AI platform the signal was detected on. `(multi)` means the slice spans several platforms — see `slice.platforms` for the real list.
         direction:
           type: string
           enum:
@@ -540,8 +628,7 @@ components:
           - underpowered
           - untested
           title: Tier
-          description: 'Confidence tier, best first: `high`, `confident`, `worth_a_look`, `provisional`, then noise-floor
-            tiers `low_confidence`, `underpowered`, `untested` (hidden by default).'
+          description: 'Confidence tier, best first: `high`, `confident`, `worth_a_look`, `provisional`, then noise-floor tiers `low_confidence`, `underpowered`, `untested` (hidden by default).'
         current_value:
           type: number
           title: Current Value
@@ -597,9 +684,7 @@ components:
             $ref: '#/components/schemas/APISignalUrlMover'
           type: array
           title: Url Movers
-          description: 'Per-URL citation movers behind the signal: the brand/competitor URLs whose distinct-response citation
-            counts moved most between the baseline and current windows. Emitted for `cited_domain_rate` signals; empty for
-            other metrics and older signals. Filterable via `mover_url`.'
+          description: 'Per-URL citation movers behind the signal: the brand/competitor URLs whose distinct-response citation counts moved most between the baseline and current windows. Emitted for `cited_domain_rate` signals; empty for other metrics and older signals. Filterable via `mover_url`.'
         created_at:
           type: string
           format: date-time
@@ -625,44 +710,6 @@ components:
       - created_at
       title: APISignal
       description: A detected, statistically-tested movement in an AI-visibility metric.
-    APISignalAnchors:
-      properties:
-        dates:
-          items:
-            type: string
-            format: date
-          type: array
-          title: Dates
-          description: Distinct `detected_for_date` days with user-facing signals, newest first. Same population as `listSignals`
-            with default filters.
-      type: object
-      required:
-      - dates
-      title: APISignalAnchors
-      description: Recent distinct detection dates that produced signals.
-    APISignalNarrative:
-      properties:
-        what_happened:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: What Happened
-          description: Plain-language description of the detected change.
-        why_it_matters:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Why It Matters
-          description: Why the change is significant for the brand.
-        what_to_do:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: What To Do
-          description: Suggested next step or investigation.
-      type: object
-      title: APISignalNarrative
-      description: Engine-generated narrative for a signal.
     APISignalReaction:
       properties:
         user_id:
@@ -722,6 +769,106 @@ components:
       - updated_at
       title: APISignalReaction
       description: A user's reaction to a signal's stable identity.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    OwnerTimeSeriesPoint:
+      properties:
+        time_bucket:
+          type: string
+          title: Time Bucket
+          description: Date string for the time bucket (YYYY-MM-DD)
+        brand:
+          type: integer
+          title: Brand
+          description: Observation count for brand-owned domains
+        competitor:
+          type: integer
+          title: Competitor
+          description: Observation count for competitor-owned domains
+        other:
+          type: integer
+          title: Other
+          description: Observation count for third-party domains
+      type: object
+      required:
+      - time_bucket
+      - brand
+      - competitor
+      - other
+      title: OwnerTimeSeriesPoint
+      description: A single time bucket with observation counts by owner type.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TopDomainsMetadata:
+      properties:
+        domains:
+          items:
+            $ref: '#/components/schemas/TopDomainSummary'
+          type: array
+          title: Domains
+          description: Top domains by observation count (always domain-level aggregated)
+        grand_total:
+          type: integer
+          title: Grand Total
+          description: Total observation count across all domains (for calculating 'Other')
+        owner_totals:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Owner Totals
+          description: Observation counts by owner type (brand, competitor, other)
+        owner_time_series:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/OwnerTimeSeriesPoint'
+            type: array
+          - type: 'null'
+          title: Owner Time Series
+          description: Time series data by owner type for trend visualization
+        segment_totals:
+          items:
+            $ref: '#/components/schemas/SegmentTotal'
+          type: array
+          title: Segment Totals
+          description: Server-side observation counts per citation segment (covers all domains, not just top-N)
+      type: object
+      required:
+      - domains
+      - grand_total
+      - owner_totals
+      title: TopDomainsMetadata
+      description: Metadata about top domains, used by sources/domains endpoints.
     APISignalReactionUpsert:
       properties:
         reaction:
@@ -745,29 +892,6 @@ components:
       - reaction
       title: APISignalReactionUpsert
       description: Request body for `setSignalReaction`.
-    APISignalSlice:
-      properties:
-        platforms:
-          items:
-            type: string
-          type: array
-          title: Platforms
-          description: AI platforms the slice covers. Empty means all platforms.
-        topic_labels:
-          items:
-            type: string
-          type: array
-          title: Topic Labels
-          description: Topic labels the slice covers. Empty means all topics.
-        geo_country:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Geo Country
-          description: Country the slice is restricted to, when geo-scoped.
-      type: object
-      title: APISignalSlice
-      description: The data slice a signal was detected on.
     APISignalUrlMover:
       properties:
         normalized_url:
@@ -814,8 +938,7 @@ components:
           - type: number
           - type: 'null'
           title: Contribution
-          description: Exact share of the signal's metric delta attributed to this URL. Brand-owned URLs only; null on competitor
-            entries and older signals.
+          description: Exact share of the signal's metric delta attributed to this URL. Brand-owned URLs only; null on competitor entries and older signals.
       type: object
       required:
       - normalized_url
@@ -832,34 +955,34 @@ components:
       - daily
       - weekly
       - monthly
-    CollectionResponse_APISignalReaction_:
+    APISignalAnchors:
       properties:
-        total:
-          type: integer
-          title: Total
-        offset:
-          type: integer
-          title: Offset
-          default: 0
-        limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Limit
-        items:
+        dates:
           items:
-            $ref: '#/components/schemas/APISignalReaction'
+            type: string
+            format: date
           type: array
-          title: Items
-        metadata:
-          anyOf:
-          - $ref: '#/components/schemas/TimeSeriesMetadata'
-          - type: 'null'
+          title: Dates
+          description: Distinct `detected_for_date` days with user-facing signals, newest first. Same population as `listSignals` with default filters.
       type: object
       required:
-      - total
-      - items
-      title: CollectionResponse[APISignalReaction]
+      - dates
+      title: APISignalAnchors
+      description: Recent distinct detection dates that produced signals.
+    SegmentTotal:
+      properties:
+        name:
+          type: string
+          title: Name
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - name
+      - observation_count
+      title: SegmentTotal
+      description: Observation count for a citation segment, computed server-side.
     CollectionResponse_APISignal_:
       properties:
         total:
@@ -888,168 +1011,6 @@ components:
       - total
       - items
       title: CollectionResponse[APISignal]
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    OwnerTimeSeriesPoint:
-      properties:
-        time_bucket:
-          type: string
-          title: Time Bucket
-          description: Date string for the time bucket (YYYY-MM-DD)
-        brand:
-          type: integer
-          title: Brand
-          description: Observation count for brand-owned domains
-        competitor:
-          type: integer
-          title: Competitor
-          description: Observation count for competitor-owned domains
-        other:
-          type: integer
-          title: Other
-          description: Observation count for third-party domains
-      type: object
-      required:
-      - time_bucket
-      - brand
-      - competitor
-      - other
-      title: OwnerTimeSeriesPoint
-      description: A single time bucket with observation counts by owner type.
-    SegmentTotal:
-      properties:
-        name:
-          type: string
-          title: Name
-        observation_count:
-          type: integer
-          title: Observation Count
-      type: object
-      required:
-      - name
-      - observation_count
-      title: SegmentTotal
-      description: Observation count for a citation segment, computed server-side.
-    TimeSeriesMetadata:
-      properties:
-        aggregation_granularity:
-          $ref: '#/components/schemas/AggregationGranularity'
-          description: 'The aggregation granularity: daily, weekly, or monthly'
-        period_count:
-          type: integer
-          title: Period Count
-          description: The number of periods in the time series
-        start_date:
-          type: string
-          format: date-time
-          title: Start Date
-          description: The start date of the time series
-        end_date:
-          type: string
-          format: date-time
-          title: End Date
-          description: The end date of the time series
-        top_domains:
-          anyOf:
-          - $ref: '#/components/schemas/TopDomainsMetadata'
-          - type: 'null'
-          description: Top domains metadata (only populated by sources/domains endpoints)
-      type: object
-      required:
-      - aggregation_granularity
-      - period_count
-      - start_date
-      - end_date
-      title: TimeSeriesMetadata
-    TopDomainSummary:
-      properties:
-        domain:
-          type: string
-          title: Domain
-        domain_owner:
-          type: string
-          title: Domain Owner
-        observation_count:
-          type: integer
-          title: Observation Count
-      type: object
-      required:
-      - domain
-      - domain_owner
-      - observation_count
-      title: TopDomainSummary
-    TopDomainsMetadata:
-      properties:
-        domains:
-          items:
-            $ref: '#/components/schemas/TopDomainSummary'
-          type: array
-          title: Domains
-          description: Top domains by observation count (always domain-level aggregated)
-        grand_total:
-          type: integer
-          title: Grand Total
-          description: Total observation count across all domains (for calculating 'Other')
-        owner_totals:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Owner Totals
-          description: Observation counts by owner type (brand, competitor, other)
-        owner_time_series:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/OwnerTimeSeriesPoint'
-            type: array
-          - type: 'null'
-          title: Owner Time Series
-          description: Time series data by owner type for trend visualization
-        segment_totals:
-          items:
-            $ref: '#/components/schemas/SegmentTotal'
-          type: array
-          title: Segment Totals
-          description: Server-side observation counts per citation segment (covers all domains, not just top-N)
-      type: object
-      required:
-      - domains
-      - grand_total
-      - owner_totals
-      title: TopDomainsMetadata
-      description: Metadata about top domains, used by sources/domains endpoints.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
   securitySchemes:
     HTTPBearer:
       type: http

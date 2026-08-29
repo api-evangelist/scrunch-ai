@@ -1,0 +1,28 @@
+openapi: 3.2.0
+info:
+  title: Scrunch Data API
+  version: 0.1.0
+servers:
+- url: /v1
+tags:
+- name: Scrunch Data API
+paths:
+  /:
+    get:
+      summary: Root
+      operationId: root__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - HTTPBearer: []
+      tags:
+      - Scrunch Data API
+components:
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

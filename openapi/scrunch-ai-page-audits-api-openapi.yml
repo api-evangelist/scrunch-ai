@@ -1,9 +1,11 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Scrunch Data agent-traffic Page Audits API
+  title: Scrunch Ai Page Audits API
   version: 0.1.0
+  description: 'Operations tagged Page Audits across 2 of this provider''s published API definitions: scrunch-ai-data-api-openapi.yml, scrunch-ai-data-api-runtime-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.scrunchai.com/v1
+- url: /v1
 tags:
 - name: Page Audits
 paths:
@@ -120,6 +122,8 @@ paths:
         - query
       tags:
       - Page Audits
+    servers:
+    - url: https://api.scrunchai.com/v1
   /{brand_id}/page-audits/{page_audit_id}:
     get:
       summary: Get Page Audit
@@ -156,8 +160,271 @@ paths:
         - query
       tags:
       - Page Audits
+    servers:
+    - url: https://api.scrunchai.com/v1
 components:
   schemas:
+    IntentVsPage:
+      properties:
+        intent_of_page:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Intent Of Page
+          description: The intent of the page based on the provided title, description, and URL.
+        markdown_respresents_intent:
+          type: boolean
+          title: Markdown Respresents Intent
+          description: Whether the intent of the page is represented in the provided Markdown.
+        difference_explanation:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Difference Explanation
+          description: If the intent is not represented in the Markdown, explain why.
+      type: object
+      required:
+      - markdown_respresents_intent
+      title: IntentVsPage
+    PageTestListing:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        brand_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Brand Id
+        url:
+          type: string
+          title: Url
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - completed
+          - failed
+          title: Status
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - request_id
+      - url
+      - status
+      - created_at
+      - updated_at
+      title: PageTestListing
+    AssistantStatus:
+      properties:
+        assistant:
+          $ref: '#/components/schemas/Assistant'
+        trainable:
+          type: string
+          enum:
+          - ok
+          - failed
+          - not_applicable
+          - unknown
+          title: Trainable
+          readOnly: true
+        findable:
+          type: string
+          enum:
+          - ok
+          - failed
+          - not_applicable
+          - unknown
+          title: Findable
+          readOnly: true
+        retrievable:
+          type: string
+          enum:
+          - ok
+          - failed
+          - not_applicable
+          - unknown
+          title: Retrievable
+          readOnly: true
+        sample_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sample Title
+          readOnly: true
+        sample_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sample Description
+          readOnly: true
+        sample_final_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sample Final Url
+          readOnly: true
+        can_retrieve:
+          type: boolean
+          title: Can Retrieve
+          readOnly: true
+        retrieval_response_time:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Retrieval Response Time
+          readOnly: true
+        retrieval_block_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Retrieval Block Reason
+          readOnly: true
+      type: object
+      required:
+      - assistant
+      - trainable
+      - findable
+      - retrievable
+      - sample_title
+      - sample_description
+      - sample_final_url
+      - can_retrieve
+      - retrieval_response_time
+      - retrieval_block_reason
+      title: AssistantStatus
+    TimeSeriesMetadata:
+      properties:
+        aggregation_granularity:
+          $ref: '#/components/schemas/AggregationGranularity'
+          description: 'The aggregation granularity: daily, weekly, or monthly'
+        period_count:
+          type: integer
+          title: Period Count
+          description: The number of periods in the time series
+        start_date:
+          type: string
+          format: date-time
+          title: Start Date
+          description: The start date of the time series
+        end_date:
+          type: string
+          format: date-time
+          title: End Date
+          description: The end date of the time series
+        top_domains:
+          anyOf:
+          - $ref: '#/components/schemas/TopDomainsMetadata'
+          - type: 'null'
+          description: Top domains metadata (only populated by sources/domains endpoints)
+      type: object
+      required:
+      - aggregation_granularity
+      - period_count
+      - start_date
+      - end_date
+      title: TimeSeriesMetadata
+    TopDomainSummary:
+      properties:
+        domain:
+          type: string
+          title: Domain
+        domain_owner:
+          type: string
+          title: Domain Owner
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - domain
+      - domain_owner
+      - observation_count
+      title: TopDomainSummary
+    PageTestCheckResult:
+      properties:
+        section:
+          type: string
+          enum:
+          - access_controls
+          - content_delivery
+          - content_quality
+          title: Section
+        check_id:
+          type: string
+          enum:
+          - robots_txt_present
+          - robots_txt_critical_allowed
+          - robots_txt_explicit_allow
+          - network_bots_allowed
+          - network_bot_blocking_explicit
+          - page_works_without_js
+          - page_loads_in_under_5s
+          - meaningful_title_and_description
+          - missing_javascript
+          - substantial_image_content
+          - mostly_video_content
+          - page_length_ok
+          - chatgpt_prerendered_content
+          title: Check Id
+        check_outcome:
+          type: string
+          enum:
+          - passed
+          - failed
+          - skipped
+          title: Check Outcome
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+        help_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Help Text
+        check_score:
+          type: integer
+          title: Check Score
+          readOnly: true
+        check_description:
+          type: string
+          title: Check Description
+          readOnly: true
+      type: object
+      required:
+      - section
+      - check_id
+      - check_outcome
+      - check_score
+      - check_description
+      title: PageTestCheckResult
+    QuestionAnswer:
+      properties:
+        question:
+          type: string
+          title: Question
+        answer:
+          type: string
+          title: Answer
+        rationale:
+          type: string
+          title: Rationale
+      type: object
+      required:
+      - question
+      - answer
+      - rationale
+      title: QuestionAnswer
     ScreenshotVsPage:
       properties:
         screenshot_is_representative:
@@ -190,83 +457,6 @@ components:
       required:
       - screenshot_is_representative
       title: ScreenshotVsPage
-    Assistant:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: The name of the assistant, such as ChatGPT or Perplexity.
-        does_training:
-          type: boolean
-          title: Does Training
-          description: Whether the assistant operates its own training data collection. Excludes assistants that use models from other providers or that train on third party corpuses, such as CommonCrawl.
-        does_retrieval:
-          type: boolean
-          title: Does Retrieval
-          description: Whether the assistant can retrieve web content.
-        does_search_indexing:
-          type: boolean
-          title: Does Search Indexing
-          description: Whether the assistant can search the web.
-        can_cite:
-          type: boolean
-          title: Can Cite
-          description: Whether the assistant can cite web content.
-        search_agents:
-          items:
-            $ref: '#/components/schemas/UserAgent'
-          type: array
-          title: Search Agents
-          default: []
-        retrieval_agents:
-          items:
-            $ref: '#/components/schemas/UserAgent'
-          type: array
-          title: Retrieval Agents
-          default: []
-        training_agents:
-          items:
-            $ref: '#/components/schemas/UserAgent'
-          type: array
-          title: Training Agents
-          default: []
-      type: object
-      required:
-      - name
-      - does_training
-      - does_retrieval
-      - does_search_indexing
-      - can_cite
-      title: Assistant
-      description: 'Represents an AI assistant, such as ChatGPT or Perplexity. We care primarily about assistants that can do web searches and return citations.
-
-        In order for a web page to be citable by an assistant, it must be indexable by a search user agent and retrievable by a retrieval user agent.'
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     PageTestResult:
       properties:
         version:
@@ -393,86 +583,6 @@ components:
       - content_delivery_total
       - content_quality_total
       title: PageTestResult
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    PageTestListing:
-      properties:
-        request_id:
-          type: string
-          title: Request Id
-        brand_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Brand Id
-        url:
-          type: string
-          title: Url
-        status:
-          type: string
-          enum:
-          - pending
-          - running
-          - completed
-          - failed
-          title: Status
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-      type: object
-      required:
-      - request_id
-      - url
-      - status
-      - created_at
-      - updated_at
-      title: PageTestListing
-    SegmentTotal:
-      properties:
-        name:
-          type: string
-          title: Name
-        observation_count:
-          type: integer
-          title: Observation Count
-      type: object
-      required:
-      - name
-      - observation_count
-      title: SegmentTotal
-      description: Observation count for a citation segment, computed server-side.
-    PageAuditRecord:
-      properties:
-        url:
-          type: string
-          title: Url
-        page_audit_id:
-          type: string
-          title: Page Audit Id
-      type: object
-      required:
-      - url
-      - page_audit_id
-      title: PageAuditRecord
-      description: A single page audit record.
-    AggregationGranularity:
-      type: string
-      enum:
-      - daily
-      - weekly
-      - monthly
     CollectionResponse_PageTestListing_:
       properties:
         total:
@@ -501,6 +611,15 @@ components:
       - total
       - items
       title: CollectionResponse[PageTestListing]
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     OwnerTimeSeriesPoint:
       properties:
         time_bucket:
@@ -527,28 +646,136 @@ components:
       - other
       title: OwnerTimeSeriesPoint
       description: A single time bucket with observation counts by owner type.
-    IntentVsPage:
+    ValidationError:
       properties:
-        intent_of_page:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Intent Of Page
-          description: The intent of the page based on the provided title, description, and URL.
-        markdown_respresents_intent:
-          type: boolean
-          title: Markdown Respresents Intent
-          description: Whether the intent of the page is represented in the provided Markdown.
-        difference_explanation:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Difference Explanation
-          description: If the intent is not represented in the Markdown, explain why.
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - markdown_respresents_intent
-      title: IntentVsPage
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TopDomainsMetadata:
+      properties:
+        domains:
+          items:
+            $ref: '#/components/schemas/TopDomainSummary'
+          type: array
+          title: Domains
+          description: Top domains by observation count (always domain-level aggregated)
+        grand_total:
+          type: integer
+          title: Grand Total
+          description: Total observation count across all domains (for calculating 'Other')
+        owner_totals:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Owner Totals
+          description: Observation counts by owner type (brand, competitor, other)
+        owner_time_series:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/OwnerTimeSeriesPoint'
+            type: array
+          - type: 'null'
+          title: Owner Time Series
+          description: Time series data by owner type for trend visualization
+        segment_totals:
+          items:
+            $ref: '#/components/schemas/SegmentTotal'
+          type: array
+          title: Segment Totals
+          description: Server-side observation counts per citation segment (covers all domains, not just top-N)
+      type: object
+      required:
+      - domains
+      - grand_total
+      - owner_totals
+      title: TopDomainsMetadata
+      description: Metadata about top domains, used by sources/domains endpoints.
+    SegmentTotal:
+      properties:
+        name:
+          type: string
+          title: Name
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - name
+      - observation_count
+      title: SegmentTotal
+      description: Observation count for a citation segment, computed server-side.
+    Assistant:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: The name of the assistant, such as ChatGPT or Perplexity.
+        does_training:
+          type: boolean
+          title: Does Training
+          description: Whether the assistant operates its own training data collection. Excludes assistants that use models from other providers or that train on third party corpuses, such as CommonCrawl.
+        does_retrieval:
+          type: boolean
+          title: Does Retrieval
+          description: Whether the assistant can retrieve web content.
+        does_search_indexing:
+          type: boolean
+          title: Does Search Indexing
+          description: Whether the assistant can search the web.
+        can_cite:
+          type: boolean
+          title: Can Cite
+          description: Whether the assistant can cite web content.
+        search_agents:
+          items:
+            $ref: '#/components/schemas/UserAgent'
+          type: array
+          title: Search Agents
+          default: []
+        retrieval_agents:
+          items:
+            $ref: '#/components/schemas/UserAgent'
+          type: array
+          title: Retrieval Agents
+          default: []
+        training_agents:
+          items:
+            $ref: '#/components/schemas/UserAgent'
+          type: array
+          title: Training Agents
+          default: []
+      type: object
+      required:
+      - name
+      - does_training
+      - does_retrieval
+      - does_search_indexing
+      - can_cite
+      title: Assistant
+      description: 'Represents an AI assistant, such as ChatGPT or Perplexity. We care primarily about assistants that can do web searches and return citations.
+
+        In order for a web page to be citable by an assistant, it must be indexable by a search user agent and retrievable by a retrieval user agent.'
     PageAuditCreateRequest:
       properties:
         urls:
@@ -563,101 +790,59 @@ components:
       - urls
       title: PageAuditCreateRequest
       description: Request to create one or more page audits.
-    AssistantStatus:
+    PageAuditRecord:
       properties:
-        assistant:
-          $ref: '#/components/schemas/Assistant'
-        trainable:
+        url:
           type: string
-          enum:
-          - ok
-          - failed
-          - not_applicable
-          - unknown
-          title: Trainable
-          readOnly: true
-        findable:
+          title: Url
+        page_audit_id:
           type: string
-          enum:
-          - ok
-          - failed
-          - not_applicable
-          - unknown
-          title: Findable
-          readOnly: true
-        retrievable:
-          type: string
-          enum:
-          - ok
-          - failed
-          - not_applicable
-          - unknown
-          title: Retrievable
-          readOnly: true
-        sample_title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sample Title
-          readOnly: true
-        sample_description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sample Description
-          readOnly: true
-        sample_final_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sample Final Url
-          readOnly: true
-        can_retrieve:
-          type: boolean
-          title: Can Retrieve
-          readOnly: true
-        retrieval_response_time:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Retrieval Response Time
-          readOnly: true
-        retrieval_block_reason:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Retrieval Block Reason
-          readOnly: true
+          title: Page Audit Id
       type: object
       required:
-      - assistant
-      - trainable
-      - findable
-      - retrievable
-      - sample_title
-      - sample_description
-      - sample_final_url
-      - can_retrieve
-      - retrieval_response_time
-      - retrieval_block_reason
-      title: AssistantStatus
-    TopDomainSummary:
+      - url
+      - page_audit_id
+      title: PageAuditRecord
+      description: A single page audit record.
+    PageTestResponse:
       properties:
-        domain:
+        url:
           type: string
-          title: Domain
-        domain_owner:
+          title: Url
+        status:
           type: string
-          title: Domain Owner
-        observation_count:
-          type: integer
-          title: Observation Count
+          enum:
+          - pending
+          - running
+          - completed
+          - failed
+          title: Status
+        result:
+          anyOf:
+          - $ref: '#/components/schemas/PageTestResult'
+          - type: 'null'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
       type: object
       required:
-      - domain
-      - domain_owner
-      - observation_count
-      title: TopDomainSummary
+      - url
+      - status
+      - result
+      - created_at
+      - updated_at
+      title: PageTestResponse
+    AggregationGranularity:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
     UserAgent:
       properties:
         identifier:
@@ -715,7 +900,55 @@ components:
       description: 'Represents a programmatic user agent, such as a search indexer or content retriever.
 
         For example: Googlebot or ChatGPT-User.'
-    PageTestCheckResult:
+    PageTestListing_2:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        brand_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Brand Id
+        url:
+          type: string
+          title: Url
+        status:
+          type: string
+          enum:
+          - pending
+          - running
+          - completed
+          - failed
+          title: Status
+        orchestration_status:
+          anyOf:
+          - type: string
+            enum:
+            - audit
+            - optimizing
+            - deploying
+            - completed
+            - failed
+          - type: 'null'
+          title: Orchestration Status
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - request_id
+      - url
+      - status
+      - created_at
+      - updated_at
+      title: PageTestListing
+    PageTestCheckResult_2:
       properties:
         section:
           type: string
@@ -747,6 +980,7 @@ components:
           - passed
           - failed
           - skipped
+          - warning
           title: Check Outcome
         detail:
           anyOf:
@@ -774,77 +1008,7 @@ components:
       - check_score
       - check_description
       title: PageTestCheckResult
-    TimeSeriesMetadata:
-      properties:
-        aggregation_granularity:
-          $ref: '#/components/schemas/AggregationGranularity'
-          description: 'The aggregation granularity: daily, weekly, or monthly'
-        period_count:
-          type: integer
-          title: Period Count
-          description: The number of periods in the time series
-        start_date:
-          type: string
-          format: date-time
-          title: Start Date
-          description: The start date of the time series
-        end_date:
-          type: string
-          format: date-time
-          title: End Date
-          description: The end date of the time series
-        top_domains:
-          anyOf:
-          - $ref: '#/components/schemas/TopDomainsMetadata'
-          - type: 'null'
-          description: Top domains metadata (only populated by sources/domains endpoints)
-      type: object
-      required:
-      - aggregation_granularity
-      - period_count
-      - start_date
-      - end_date
-      title: TimeSeriesMetadata
-    TopDomainsMetadata:
-      properties:
-        domains:
-          items:
-            $ref: '#/components/schemas/TopDomainSummary'
-          type: array
-          title: Domains
-          description: Top domains by observation count (always domain-level aggregated)
-        grand_total:
-          type: integer
-          title: Grand Total
-          description: Total observation count across all domains (for calculating 'Other')
-        owner_totals:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Owner Totals
-          description: Observation counts by owner type (brand, competitor, other)
-        owner_time_series:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/OwnerTimeSeriesPoint'
-            type: array
-          - type: 'null'
-          title: Owner Time Series
-          description: Time series data by owner type for trend visualization
-        segment_totals:
-          items:
-            $ref: '#/components/schemas/SegmentTotal'
-          type: array
-          title: Segment Totals
-          description: Server-side observation counts per citation segment (covers all domains, not just top-N)
-      type: object
-      required:
-      - domains
-      - grand_total
-      - owner_totals
-      title: TopDomainsMetadata
-      description: Metadata about top domains, used by sources/domains endpoints.
-    PageTestResponse:
+    PageTestResponse_2:
       properties:
         url:
           type: string
@@ -861,6 +1025,27 @@ components:
           anyOf:
           - $ref: '#/components/schemas/PageTestResult'
           - type: 'null'
+        orchestration_status:
+          anyOf:
+          - type: string
+            enum:
+            - audit
+            - optimizing
+            - deploying
+            - completed
+            - failed
+          - type: 'null'
+          title: Orchestration Status
+        optimization_run_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Optimization Run Id
+        axp_version_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Axp Version Id
         created_at:
           type: string
           format: date-time
@@ -869,6 +1054,16 @@ components:
           type: string
           format: date-time
           title: Updated At
+        error_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Code
+        is_robots_txt_accessible:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Robots Txt Accessible
       type: object
       required:
       - url
@@ -877,24 +1072,10 @@ components:
       - created_at
       - updated_at
       title: PageTestResponse
-    QuestionAnswer:
-      properties:
-        question:
-          type: string
-          title: Question
-        answer:
-          type: string
-          title: Answer
-        rationale:
-          type: string
-          title: Rationale
-      type: object
-      required:
-      - question
-      - answer
-      - rationale
-      title: QuestionAnswer
   securitySchemes:
     HTTPBearer:
       type: http
       scheme: bearer
+x-refined-from:
+- scrunch-ai-data-api-openapi.yml
+- scrunch-ai-data-api-runtime-openapi.json

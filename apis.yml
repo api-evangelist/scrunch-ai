@@ -357,12 +357,10 @@ apis:
 - aid: scrunch-ai:scrunch-ai-signals-api
   name: Scrunch AI Signals API
   description: >-
-    The Signals API from Scrunch AI — 6 operation(s) exposing Scrunch's nightly detection
-    sweep as a queryable feed of statistically-tested level changes and trends in AI
-    visibility metrics (presence_rate, position_top_rate, cited_domain_rate), each with a
-    confidence tier, a human-readable narrative, a stable fingerprint that survives nightly
-    re-detection, and team reactions. Split from the live OpenAPI served at
-    https://api.scrunchai.com/v1/openapi.json.
+    The Signals API from Scrunch AI — 6 operation(s) exposing Scrunch's nightly detection sweep as a queryable
+    feed of statistically-tested level changes and trends in AI visibility metrics (presence_rate, position_top_rate,
+    cited_domain_rate), each with a confidence tier, a human-readable narrative, a stable fingerprint
+    that survives nightly re-detection, and team reactions. Split from the live OpenAPI served at https://api.scrunchai.com/v1/openapi.json.
   humanURL: https://developers.scrunch.com/api-reference/signals/overview
   baseURL: https://api.scrunchai.com/v1
   tags:
@@ -384,6 +382,26 @@ apis:
     url: conformance/scrunch-ai-conformance.yml
   - type: AgenticAccess
     url: agentic-access/scrunch-ai-agentic-access.yml
+- aid: scrunch-ai:scrunch-ai-collections-api
+  name: Scrunch AI Collections API
+  description: The Collections API from Scrunch AI — 1 operation(s) for collections.
+  humanURL: https://developers.scrunch.com/api-reference/introduction
+  baseURL: https://api.scrunchai.com/v1
+  tags:
+  - Collections
+  properties:
+  - type: OpenAPI
+    url: openapi/scrunch-ai-collections-api-openapi.yml
+- aid: scrunch-ai:scrunch-ai-scrunch-data-api-api
+  name: Scrunch AI Scrunch Data API
+  description: The Scrunch Data API API from Scrunch AI — 1 operation(s) for scrunch data api.
+  humanURL: https://developers.scrunch.com/api-reference/introduction
+  baseURL: https://api.scrunchai.com/v1
+  tags:
+  - Scrunch Data API
+  properties:
+  - type: OpenAPI
+    url: openapi/scrunch-ai-scrunch-data-api-api-openapi.yml
 common:
 - type: Overlay
   url: overlays/scrunch-ai-data-api-overlay.yaml

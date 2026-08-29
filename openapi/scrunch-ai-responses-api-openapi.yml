@@ -1,9 +1,11 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Scrunch Data agent-traffic Responses API
+  title: Scrunch Ai Responses API
   version: 0.1.0
+  description: 'Operations tagged Responses across 2 of this provider''s published API definitions: scrunch-ai-data-api-openapi.yml, scrunch-ai-data-api-runtime-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.scrunchai.com/v1
+- url: /v1
 tags:
 - name: Responses
 paths:
@@ -213,83 +215,29 @@ paths:
         - query
       tags:
       - Responses
+    servers:
+    - url: https://api.scrunchai.com/v1
 components:
   schemas:
-    AggregationGranularity:
-      type: string
-      enum:
-      - daily
-      - weekly
-      - monthly
-    TopDomainSummary:
+    ShoppingPurchasingOption:
       properties:
-        domain:
-          type: string
-          title: Domain
-        domain_owner:
-          type: string
-          title: Domain Owner
-        observation_count:
-          type: integer
-          title: Observation Count
+        price:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Price
+        currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Currency
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
       type: object
-      required:
-      - domain
-      - domain_owner
-      - observation_count
-      title: TopDomainSummary
-    OwnerTimeSeriesPoint:
-      properties:
-        time_bucket:
-          type: string
-          title: Time Bucket
-          description: Date string for the time bucket (YYYY-MM-DD)
-        brand:
-          type: integer
-          title: Brand
-          description: Observation count for brand-owned domains
-        competitor:
-          type: integer
-          title: Competitor
-          description: Observation count for competitor-owned domains
-        other:
-          type: integer
-          title: Other
-          description: Observation count for third-party domains
-      type: object
-      required:
-      - time_bucket
-      - brand
-      - competitor
-      - other
-      title: OwnerTimeSeriesPoint
-      description: A single time bucket with observation counts by owner type.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: ShoppingPurchasingOption
     ResponseListing:
       properties:
         id:
@@ -532,111 +480,6 @@ components:
       - source_type
       title: ResponseCitation
       description: A citation (source URL) referenced in an AI response, with automatic source classification.
-    ShoppingPurchasingOption:
-      properties:
-        price:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Price
-        currency:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Currency
-        url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Url
-      type: object
-      title: ShoppingPurchasingOption
-    CollectionResponse_ResponseListing_:
-      properties:
-        total:
-          type: integer
-          title: Total
-        offset:
-          type: integer
-          title: Offset
-          default: 0
-        limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Limit
-        items:
-          items:
-            $ref: '#/components/schemas/ResponseListing'
-          type: array
-          title: Items
-        metadata:
-          anyOf:
-          - $ref: '#/components/schemas/TimeSeriesMetadata'
-          - type: 'null'
-      type: object
-      required:
-      - total
-      - items
-      title: CollectionResponse[ResponseListing]
-    TimeSeriesMetadata:
-      properties:
-        aggregation_granularity:
-          $ref: '#/components/schemas/AggregationGranularity'
-          description: 'The aggregation granularity: daily, weekly, or monthly'
-        period_count:
-          type: integer
-          title: Period Count
-          description: The number of periods in the time series
-        start_date:
-          type: string
-          format: date-time
-          title: Start Date
-          description: The start date of the time series
-        end_date:
-          type: string
-          format: date-time
-          title: End Date
-          description: The end date of the time series
-        top_domains:
-          anyOf:
-          - $ref: '#/components/schemas/TopDomainsMetadata'
-          - type: 'null'
-          description: Top domains metadata (only populated by sources/domains endpoints)
-      type: object
-      required:
-      - aggregation_granularity
-      - period_count
-      - start_date
-      - end_date
-      title: TimeSeriesMetadata
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    QueryFanout:
-      properties:
-        queries:
-          items:
-            type: string
-          type: array
-          title: Queries
-        engine_metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Engine Metadata
-      type: object
-      required:
-      - queries
-      title: QueryFanout
-      description: 'Query fan-out data: search queries an AI engine used internally.'
     ShoppingResult:
       properties:
         url:
@@ -725,6 +568,167 @@ components:
       - owner_totals
       title: TopDomainsMetadata
       description: Metadata about top domains, used by sources/domains endpoints.
+    QueryFanout:
+      properties:
+        queries:
+          items:
+            type: string
+          type: array
+          title: Queries
+        engine_metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Engine Metadata
+      type: object
+      required:
+      - queries
+      title: QueryFanout
+      description: 'Query fan-out data: search queries an AI engine used internally.'
+    TimeSeriesMetadata:
+      properties:
+        aggregation_granularity:
+          $ref: '#/components/schemas/AggregationGranularity'
+          description: 'The aggregation granularity: daily, weekly, or monthly'
+        period_count:
+          type: integer
+          title: Period Count
+          description: The number of periods in the time series
+        start_date:
+          type: string
+          format: date-time
+          title: Start Date
+          description: The start date of the time series
+        end_date:
+          type: string
+          format: date-time
+          title: End Date
+          description: The end date of the time series
+        top_domains:
+          anyOf:
+          - $ref: '#/components/schemas/TopDomainsMetadata'
+          - type: 'null'
+          description: Top domains metadata (only populated by sources/domains endpoints)
+      type: object
+      required:
+      - aggregation_granularity
+      - period_count
+      - start_date
+      - end_date
+      title: TimeSeriesMetadata
+    TopDomainSummary:
+      properties:
+        domain:
+          type: string
+          title: Domain
+        domain_owner:
+          type: string
+          title: Domain Owner
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - domain
+      - domain_owner
+      - observation_count
+      title: TopDomainSummary
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    OwnerTimeSeriesPoint:
+      properties:
+        time_bucket:
+          type: string
+          title: Time Bucket
+          description: Date string for the time bucket (YYYY-MM-DD)
+        brand:
+          type: integer
+          title: Brand
+          description: Observation count for brand-owned domains
+        competitor:
+          type: integer
+          title: Competitor
+          description: Observation count for competitor-owned domains
+        other:
+          type: integer
+          title: Other
+          description: Observation count for third-party domains
+      type: object
+      required:
+      - time_bucket
+      - brand
+      - competitor
+      - other
+      title: OwnerTimeSeriesPoint
+      description: A single time bucket with observation counts by owner type.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CollectionResponse_ResponseListing_:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/ResponseListing'
+          type: array
+          title: Items
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/TimeSeriesMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - total
+      - items
+      title: CollectionResponse[ResponseListing]
+    AggregationGranularity:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
     SegmentTotal:
       properties:
         name:
@@ -739,7 +743,181 @@ components:
       - observation_count
       title: SegmentTotal
       description: Observation count for a citation segment, computed server-side.
+    ShoppingPurchasingOption_2:
+      properties:
+        price:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Price
+        currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Currency
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
+        merchant:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Merchant
+      type: object
+      title: ShoppingPurchasingOption
+    ResponseListing_2:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Unique identifier for this response
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Timestamp when the response was collected
+        prompt_id:
+          type: integer
+          title: Prompt Id
+          description: ID of the prompt that generated this response
+        prompt:
+          type: string
+          title: Prompt
+          description: The prompt text that was sent to the AI platform
+        persona_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Persona Id
+          description: ID of the persona used for this response, if any
+        persona_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Persona Name
+          description: Display name of the persona, if any
+        country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country
+          description: Country code for the geographic context of this response
+        stage:
+          type: string
+          title: Stage
+          description: Customer journey stage of the prompt — one of the brand's stages (custom stage names included)
+        branded:
+          type: boolean
+          title: Branded
+          description: Whether the prompt explicitly mentions the brand
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          description: Custom tags associated with the prompt
+          default: []
+        key_topics:
+          items:
+            type: string
+          type: array
+          title: Key Topics
+          description: Topics associated with the prompt
+          default: []
+        platform:
+          type: string
+          title: Platform
+          description: The AI platform that generated this response (e.g., chatgpt, claude, perplexity)
+        brand_present:
+          type: boolean
+          title: Brand Present
+          description: Whether the brand was mentioned in the AI response
+        brand_sentiment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Brand Sentiment
+          description: 'Sentiment of the brand mention:
+
+            - `positive` - Favorable or recommending tone
+
+            - `mixed` - Neutral or balanced tone
+
+            - `negative` - Unfavorable or critical tone
+
+            - `none` - Mentioned without sentiment'
+        brand_position:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Brand Position
+          description: 'Where the brand appeared in the response:
+
+            - `top` - Mentioned in the first third
+
+            - `middle` - Mentioned in the middle third
+
+            - `bottom` - Mentioned in the last third'
+        competitors_present:
+          items:
+            type: string
+          type: array
+          title: Competitors Present
+          description: List of competitor names mentioned in the response
+          default: []
+        response_text:
+          type: string
+          title: Response Text
+          description: The full text of the AI-generated response
+        citations:
+          items:
+            $ref: '#/components/schemas/ResponseCitation'
+          type: array
+          title: Citations
+          description: URLs cited by the AI platform in this response, with source classification
+          default: []
+        competitors:
+          items:
+            $ref: '#/components/schemas/ResponseCompetitorListing'
+          type: array
+          title: Competitors
+          description: Detailed evaluation data for each configured competitor
+          default: []
+        query_fanout:
+          anyOf:
+          - $ref: '#/components/schemas/QueryFanout'
+          - type: 'null'
+          description: Search queries generated by the AI platform during query fan-out turns
+        shopping_results:
+          items:
+            $ref: '#/components/schemas/ShoppingResult'
+          type: array
+          title: Shopping Results
+          description: Shopping product listings surfaced by the AI platform in this response, if any
+          default: []
+      type: object
+      required:
+      - id
+      - created_at
+      - prompt_id
+      - prompt
+      - persona_id
+      - stage
+      - branded
+      - platform
+      - brand_present
+      - response_text
+      title: ResponseListing
+      description: 'A complete AI response (observation) with evaluation data, citations, and competitor analysis.
+
+
+        Represents a single answer from an AI platform to a tracked prompt.'
   securitySchemes:
     HTTPBearer:
       type: http
       scheme: bearer
+x-refined-from:
+- scrunch-ai-data-api-openapi.yml
+- scrunch-ai-data-api-runtime-openapi.json

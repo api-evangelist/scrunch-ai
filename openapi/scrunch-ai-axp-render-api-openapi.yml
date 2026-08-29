@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Scrunch Data agent-traffic axp-render API
+  title: Scrunch Data Axp Render API
   version: 0.1.0
 servers:
 - url: https://api.scrunchai.com/v1
@@ -85,6 +85,15 @@ components:
       required:
       - paths
       title: AXPBulkRenderRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -137,15 +146,6 @@ components:
       - job_id
       - status
       title: AXPBulkRenderItem
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     HTTPBearer:
       type: http

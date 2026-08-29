@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Scrunch Data agent-traffic orchestration API
+  title: Scrunch Data Orchestration API
   version: 0.1.0
 servers:
 - url: https://api.scrunchai.com/v1
@@ -85,6 +85,140 @@ paths:
       - url: https://api.scrunchai.com/v2
 components:
   schemas:
+    URLRequest:
+      properties:
+        url:
+          type: string
+          title: Url
+          description: URL to audit
+        target_prompts:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Target Prompts
+          description: Prompts for optimization (overrides batch-level prompts)
+        target_personas:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PersonaTargetInput'
+            type: array
+          - type: 'null'
+          title: Target Personas
+          description: Personas for optimization (overrides batch-level personas)
+        target_sources:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Target Sources
+          description: Source URLs for optimization (overrides batch-level sources)
+        custom_instructions:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Custom Instructions
+          description: Custom instructions for this optimization. Stored as-is and treated as no custom instructions if empty/None at execute time. Callers wanting brand-default fallback must resolve it at submit time.
+        override_suggestions:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Override Suggestions
+          description: Skip AI suggestions (overrides batch-level setting)
+        retain_schema_types:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Retain Schema Types
+          description: JSON-LD schema types to retain. None = retain all (default); [] = retain none.
+      type: object
+      required:
+      - url
+      title: URLRequest
+      description: A single URL request with optional per-URL optimization params.
+    OrchestrationStatusResponse:
+      properties:
+        token:
+          type: string
+          title: Token
+        url:
+          type: string
+          title: Url
+        status:
+          type: string
+          title: Status
+        orchestration_status:
+          anyOf:
+          - type: string
+            enum:
+            - audit
+            - optimizing
+            - deploying
+            - completed
+            - failed
+          - type: 'null'
+          title: Orchestration Status
+        optimization_run_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Optimization Run Id
+        axp_version_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Axp Version Id
+        result:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Result
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - token
+      - url
+      - status
+      - created_at
+      - updated_at
+      title: OrchestrationStatusResponse
+      description: Response for orchestration status check.
+    OrchestrationCreateResponse:
+      properties:
+        pipeline_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pipeline Id
+          description: Pipeline ID for batched AXP deployment (only set if deploy_axp=true)
+        tokens:
+          items:
+            $ref: '#/components/schemas/OrchestrationRecord'
+          type: array
+          title: Tokens
+          description: Individual audit tokens
+        status:
+          type: string
+          title: Status
+          description: Pipeline status
+          default: pending
+      type: object
+      required:
+      - tokens
+      title: OrchestrationCreateResponse
+      description: Response when creating an orchestration pipeline.
     PersonaTargetInput:
       properties:
         name:
@@ -100,32 +234,6 @@ components:
       - name
       title: PersonaTargetInput
       description: Persona target for optimization.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     OrchestrationCreateRequest:
       properties:
         urls:
@@ -206,6 +314,15 @@ components:
       type: object
       title: OrchestrationCreateRequest
       description: Request to create an orchestrated site audit pipeline.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     OrchestrationRecord:
       properties:
         token:
@@ -235,149 +352,32 @@ components:
       - status
       title: OrchestrationRecord
       description: A single orchestration record.
-    OrchestrationStatusResponse:
+    ValidationError:
       properties:
-        token:
-          type: string
-          title: Token
-        url:
-          type: string
-          title: Url
-        status:
-          type: string
-          title: Status
-        orchestration_status:
-          anyOf:
-          - type: string
-            enum:
-            - audit
-            - optimizing
-            - deploying
-            - completed
-            - failed
-          - type: 'null'
-          title: Orchestration Status
-        optimization_run_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Optimization Run Id
-        axp_version_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Axp Version Id
-        result:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Result
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-      type: object
-      required:
-      - token
-      - url
-      - status
-      - created_at
-      - updated_at
-      title: OrchestrationStatusResponse
-      description: Response for orchestration status check.
-    HTTPValidationError:
-      properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    URLRequest:
-      properties:
-        url:
+          title: Location
+        msg:
           type: string
-          title: Url
-          description: URL to audit
-        target_prompts:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Target Prompts
-          description: Prompts for optimization (overrides batch-level prompts)
-        target_personas:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/PersonaTargetInput'
-            type: array
-          - type: 'null'
-          title: Target Personas
-          description: Personas for optimization (overrides batch-level personas)
-        target_sources:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Target Sources
-          description: Source URLs for optimization (overrides batch-level sources)
-        custom_instructions:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Custom Instructions
-          description: Custom instructions for this optimization. Stored as-is and treated as no custom instructions if empty/None at execute time. Callers wanting brand-default fallback must resolve it at submit time.
-        override_suggestions:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Override Suggestions
-          description: Skip AI suggestions (overrides batch-level setting)
-        retain_schema_types:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Retain Schema Types
-          description: JSON-LD schema types to retain. None = retain all (default); [] = retain none.
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - url
-      title: URLRequest
-      description: A single URL request with optional per-URL optimization params.
-    OrchestrationCreateResponse:
-      properties:
-        pipeline_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Pipeline Id
-          description: Pipeline ID for batched AXP deployment (only set if deploy_axp=true)
-        tokens:
-          items:
-            $ref: '#/components/schemas/OrchestrationRecord'
-          type: array
-          title: Tokens
-          description: Individual audit tokens
-        status:
-          type: string
-          title: Status
-          description: Pipeline status
-          default: pending
-      type: object
-      required:
-      - tokens
-      title: OrchestrationCreateResponse
-      description: Response when creating an orchestration pipeline.
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     HTTPBearer:
       type: http

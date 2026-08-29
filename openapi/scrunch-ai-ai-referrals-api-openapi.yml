@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Scrunch Data agent-traffic ai-referrals API
+  title: Scrunch Data AI Referrals API
   version: 0.1.0
 servers:
 - url: https://api.scrunchai.com/v1
@@ -195,24 +195,6 @@ paths:
         - configure
 components:
   schemas:
-    AiReferralsSaveResult:
-      type: object
-      description: Outcome of a push batch submission.
-      required:
-      - accepted
-      - rejected
-      properties:
-        accepted:
-          type: integer
-          description: Number of events accepted into the unified referrals store.
-        rejected:
-          type: integer
-          description: Number of events dropped (e.g. referrer not on the AI platform allow-list).
-        errors:
-          type: array
-          items:
-            type: string
-          description: Per-row diagnostic messages, truncated.
     AiReferralsConnection:
       type: object
       description: A registered AI Referrals push connection.
@@ -253,25 +235,6 @@ components:
       - provider
       - status
       - created_at
-    AiReferralsConnectionCreate:
-      type: object
-      description: Payload to register a new AI Referrals connection.
-      required:
-      - website
-      - provider
-      properties:
-        website:
-          type: string
-          minLength: 1
-          maxLength: 2048
-          description: Hostname or URL of the website whose referrals will be pushed.
-          example: example.com
-        provider:
-          type: string
-          minLength: 1
-          maxLength: 64
-          description: 'Source analytics provider. MVP allow-list: ''adobe_analytics''.'
-          example: adobe_analytics
     AiReferralsEvent:
       type: object
       description: One pre-aggregated daily referral row.
@@ -323,6 +286,52 @@ components:
           - 'null'
           maxLength: 128
           description: Optional client-supplied batch identifier for traceability.
+    AiReferralsSaveResult:
+      type: object
+      description: Outcome of a push batch submission.
+      required:
+      - accepted
+      - rejected
+      properties:
+        accepted:
+          type: integer
+          description: Number of events accepted into the unified referrals store.
+        rejected:
+          type: integer
+          description: Number of events dropped (e.g. referrer not on the AI platform allow-list).
+        errors:
+          type: array
+          items:
+            type: string
+          description: Per-row diagnostic messages, truncated.
+    AiReferralsConnectionCreate:
+      type: object
+      description: Payload to register a new AI Referrals connection.
+      required:
+      - website
+      - provider
+      properties:
+        website:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: Hostname or URL of the website whose referrals will be pushed.
+          example: example.com
+        provider:
+          type: string
+          minLength: 1
+          maxLength: 64
+          description: 'Source analytics provider. MVP allow-list: ''adobe_analytics''.'
+          example: adobe_analytics
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -349,15 +358,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     HTTPBearer:
       type: http
