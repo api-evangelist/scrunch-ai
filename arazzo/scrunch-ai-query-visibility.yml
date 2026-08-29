@@ -4,8 +4,11 @@ info:
   version: 1.0.0
   summary: List brands, pick one, and pull aggregated AI visibility metrics for it.
 sourceDescriptions:
-- name: scrunch
-  url: ../openapi/scrunch-ai-data-api-openapi.yml
+- name: brandsApi
+  url: ../openapi/scrunch-ai-brands-api-openapi.yml
+  type: openapi
+- name: queryApi
+  url: ../openapi/scrunch-ai-query-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: resolveBrandAndQuery

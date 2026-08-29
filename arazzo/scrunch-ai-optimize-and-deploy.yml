@@ -4,8 +4,8 @@ info:
   version: 1.0.0
   summary: Submit pages to the Optimize-and-Deploy pipeline and poll for completion.
 sourceDescriptions:
-- name: scrunch
-  url: ../openapi/scrunch-ai-data-api-openapi.yml
+- name: orchestrationApi
+  url: ../openapi/scrunch-ai-orchestration-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: optimizeAndDeploy

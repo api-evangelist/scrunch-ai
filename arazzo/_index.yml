@@ -1,6 +1,6 @@
-generated: '2026-07-21'
-method: derived
-source: openapi/scrunch-ai-data-api-openapi.yml
+x-generated: '2026-07-21'
+x-method: derived
+x-source: openapi/scrunch-ai-data-api-openapi.yml
 workflows:
 - file: scrunch-ai-onboard-and-track.yml
   workflowId: onboardBrandAndTrack

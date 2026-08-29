@@ -4,8 +4,11 @@ info:
   version: 1.0.0
   summary: Create a brand, add a competitor and persona, seed a tracking prompt, and verify the prompt library.
 sourceDescriptions:
-- name: scrunch
-  url: ../openapi/scrunch-ai-data-api-openapi.yml
+- name: brandsApi
+  url: ../openapi/scrunch-ai-brands-api-openapi.yml
+  type: openapi
+- name: promptsApi
+  url: ../openapi/scrunch-ai-prompts-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: onboardBrandAndTrack
