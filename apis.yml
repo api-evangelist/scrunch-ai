@@ -47,16 +47,20 @@ deliveryModel:
   generated: '2026-08-28'
   method: derived
 accessModel:
-  pricing: unknown
-  onboarding: self-serve
+  pricing: paid
+  onboarding: unknown
   trial: false
   try_now: false
   public: false
-  label: Self-serve signup
-  confidence: medium
+  label: Paid
+  confidence: high
   source:
+  - plans
   - authentication
-  generated: '2026-07-22'
+  - scopes
+  - rate-limits
+  - security
+  generated: '2026-09-03'
   method: derived
 specificationVersion: '0.23'
 created: '2026-07-17'
