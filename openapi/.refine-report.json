@@ -99,18 +99,21 @@
     "tag 'Query' spans 2 source specs (scrunch-ai-data-api-openapi.yml, scrunch-ai-data-api-runtime-openapi.json): per-path servers applied",
     "tag 'Responses' spans 2 source specs (scrunch-ai-data-api-openapi.yml, scrunch-ai-data-api-runtime-openapi.json): per-path servers applied",
     "tag 'agent-traffic' spans 2 source specs (scrunch-ai-data-api-openapi.yml, scrunch-ai-data-api-runtime-openapi.json): per-path servers applied",
-    "tag 'sitemap' spans 2 source specs (scrunch-ai-data-api-openapi.yml, scrunch-ai-data-api-runtime-openapi.json): per-path servers applied"
+    "tag 'sitemap' spans 2 source specs (scrunch-ai-data-api-openapi.yml, scrunch-ai-data-api-runtime-openapi.json): per-path servers applied",
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "scrunch-ai-agent-traffic-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "scrunch-ai-ai-referrals-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "scrunch-ai-axp-render-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "scrunch-ai-brands-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "scrunch-ai-collections-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "scrunch-ai-orchestration-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "scrunch-ai-page-audits-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "scrunch-ai-prompts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "scrunch-ai-query-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "scrunch-ai-responses-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "scrunch-ai-scrunch-data-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "scrunch-ai-signals-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "scrunch-ai-sitemap-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]

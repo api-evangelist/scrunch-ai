@@ -16,7 +16,7 @@ actions:
   update:
   - url: https://api.scrunchai.com/v1
     description: Scrunch Data API production (base URL confirmed from developer docs).
-notes: >
+x-notes: >
   This overlay records API Evangelist enrichment metadata for the Scrunch Data API. The
   underlying spec in openapi/ was assembled verbatim from the provider's per-operation
   OpenAPI fragments published at developers.scrunch.com; this overlay never mutates it.

@@ -570,246 +570,49 @@ paths:
     - url: https://api.scrunchai.com/v1
 components:
   schemas:
-    APIPersonaCreateInput:
+    APICompetitorUpdateInput:
       properties:
         name:
           type: string
+          minLength: 1
           title: Name
-          description: Display name of the persona.
-        description:
-          type: string
-          title: Description
-          description: Description of the persona.
-      type: object
-      required:
-      - name
-      - description
-      title: APIPersonaCreateInput
-      description: Input model for creating a persona.
-    APIBrandListing:
-      properties:
-        id:
-          type: integer
-          title: Id
-        name:
-          type: string
-          title: Name
-        description:
-          type: string
-          title: Description
-        website:
-          type: string
-          title: Website
-        status:
-          type: string
-          title: Status
+          description: Display name of the competitor.
         alternative_names:
           items:
             type: string
           type: array
           title: Alternative Names
-          description: Alternative names or aliases for the brand.
+          description: Alternative names or aliases for the competitor.
           default: []
-        alternative_websites:
+        websites:
           items:
             type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
           type: array
-          title: Alternative Websites
-          default: []
-        competitors:
-          items:
-            $ref: '#/components/schemas/APICompetitorListing'
-          type: array
-          title: Competitors
-          default: []
-        personas:
-          items:
-            $ref: '#/components/schemas/APIPersonaListing'
-          type: array
-          title: Personas
-          default: []
-        key_topics:
-          items:
-            type: string
-          type: array
-          title: Key Topics
+          title: Websites
+          description: Website URLs associated with the competitor.
           default: []
         case_sensitive:
           type: boolean
           title: Case Sensitive
           default: false
-      type: object
-      required:
-      - id
-      - name
-      - description
-      - website
-      - status
-      title: APIBrandListing
-    CollectionResponse_BrandListing_:
-      properties:
-        total:
-          type: integer
-          title: Total
-        offset:
-          type: integer
-          title: Offset
-          default: 0
-        limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Limit
-        items:
-          items:
-            $ref: '#/components/schemas/BrandListing'
-          type: array
-          title: Items
-        metadata:
-          anyOf:
-          - $ref: '#/components/schemas/TimeSeriesMetadata'
-          - type: 'null'
-      type: object
-      required:
-      - total
-      - items
-      title: CollectionResponse[BrandListing]
-    TimeSeriesMetadata:
-      properties:
-        aggregation_granularity:
-          $ref: '#/components/schemas/AggregationGranularity'
-          description: 'The aggregation granularity: daily, weekly, or monthly'
-        period_count:
-          type: integer
-          title: Period Count
-          description: The number of periods in the time series
-        start_date:
-          type: string
-          format: date-time
-          title: Start Date
-          description: The start date of the time series
-        end_date:
-          type: string
-          format: date-time
-          title: End Date
-          description: The end date of the time series
-        top_domains:
-          anyOf:
-          - $ref: '#/components/schemas/TopDomainsMetadata'
-          - type: 'null'
-          description: Top domains metadata (only populated by sources/domains endpoints)
-      type: object
-      required:
-      - aggregation_granularity
-      - period_count
-      - start_date
-      - end_date
-      title: TimeSeriesMetadata
-    TopDomainSummary:
-      properties:
-        domain:
-          type: string
-          title: Domain
-        domain_owner:
-          type: string
-          title: Domain Owner
-        observation_count:
-          type: integer
-          title: Observation Count
-      type: object
-      required:
-      - domain
-      - domain_owner
-      - observation_count
-      title: TopDomainSummary
-    CollectionResponse_APICompetitorListing_:
-      properties:
-        total:
-          type: integer
-          title: Total
-        offset:
-          type: integer
-          title: Offset
-          default: 0
-        limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Limit
-        items:
-          items:
-            $ref: '#/components/schemas/APICompetitorListing'
-          type: array
-          title: Items
-        metadata:
-          anyOf:
-          - $ref: '#/components/schemas/TimeSeriesMetadata'
-          - type: 'null'
-      type: object
-      required:
-      - total
-      - items
-      title: CollectionResponse[APICompetitorListing]
-    APICreateBrandInput:
-      properties:
-        name:
-          type: string
-          title: Name
-        alternative_names:
-          items:
-            type: string
-          type: array
-          title: Alternative Names
-          default: []
-        website:
-          type: string
-          title: Website
-        alternative_websites:
-          items:
-            type: string
-          type: array
-          title: Alternative Websites
-          default: []
-        description:
-          type: string
-          title: Description
-        competitors:
-          items:
-            $ref: '#/components/schemas/APICompetitorInput'
-          type: array
-          title: Competitors
-          default: []
-        personas:
-          items:
-            $ref: '#/components/schemas/APIPersonaInput'
-          type: array
-          title: Personas
-          default: []
-        key_topics:
-          items:
-            type: string
-          type: array
-          title: Key Topics
-          default: []
-        status:
-          type: string
-          enum:
-          - lead
-          - prospect
-          - customer
-          title: Status
-          default: customer
-        case_sensitive:
-          type: boolean
-          title: Case Sensitive
-          default: false
-          description: When true, the brand name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
+          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
       type: object
       required:
       - name
-      - website
-      - description
-      title: APICreateBrandInput
+      title: APICompetitorUpdateInput
+      description: Input model for updating a competitor (full replace).
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     APIBrandPatchInput:
       properties:
         name:
@@ -901,56 +704,6 @@ components:
 
 
         When you submit a persona without an `id` and its `name` matches a previously archived persona on the same brand, the archived persona is reactivated (its `status` returns to `active` and its `description` is updated) rather than creating a duplicate.'
-    APICompetitorUpdateInput:
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Name
-          description: Display name of the competitor.
-        alternative_names:
-          items:
-            type: string
-          type: array
-          title: Alternative Names
-          description: Alternative names or aliases for the competitor.
-          default: []
-        websites:
-          items:
-            type: string
-            maxLength: 2083
-            minLength: 1
-            format: uri
-          type: array
-          title: Websites
-          description: Website URLs associated with the competitor.
-          default: []
-        case_sensitive:
-          type: boolean
-          title: Case Sensitive
-          default: false
-          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
-      type: object
-      required:
-      - name
-      title: APICompetitorUpdateInput
-      description: Input model for updating a competitor (full replace).
-    APIPersonaUpdateInput:
-      properties:
-        name:
-          type: string
-          title: Name
-          description: Display name of the persona.
-        description:
-          type: string
-          title: Description
-          description: Description of the persona.
-      type: object
-      required:
-      - name
-      - description
-      title: APIPersonaUpdateInput
-      description: Input model for updating a persona (full replace).
     APIPersonaListing:
       properties:
         id:
@@ -968,144 +721,8 @@ components:
       - name
       - description
       title: APIPersonaListing
-    APICompetitorInput:
+    APIPersonaUpdateInput:
       properties:
-        name:
-          type: string
-          minLength: 1
-          title: Name
-        alternative_names:
-          items:
-            type: string
-          type: array
-          title: Alternative Names
-          default: []
-        websites:
-          items:
-            type: string
-            maxLength: 2083
-            minLength: 1
-            format: uri
-          type: array
-          title: Websites
-          default: []
-        case_sensitive:
-          type: boolean
-          title: Case Sensitive
-          default: false
-          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
-      type: object
-      required:
-      - name
-      title: APICompetitorInput
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    OwnerTimeSeriesPoint:
-      properties:
-        time_bucket:
-          type: string
-          title: Time Bucket
-          description: Date string for the time bucket (YYYY-MM-DD)
-        brand:
-          type: integer
-          title: Brand
-          description: Observation count for brand-owned domains
-        competitor:
-          type: integer
-          title: Competitor
-          description: Observation count for competitor-owned domains
-        other:
-          type: integer
-          title: Other
-          description: Observation count for third-party domains
-      type: object
-      required:
-      - time_bucket
-      - brand
-      - competitor
-      - other
-      title: OwnerTimeSeriesPoint
-      description: A single time bucket with observation counts by owner type.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    TopDomainsMetadata:
-      properties:
-        domains:
-          items:
-            $ref: '#/components/schemas/TopDomainSummary'
-          type: array
-          title: Domains
-          description: Top domains by observation count (always domain-level aggregated)
-        grand_total:
-          type: integer
-          title: Grand Total
-          description: Total observation count across all domains (for calculating 'Other')
-        owner_totals:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Owner Totals
-          description: Observation counts by owner type (brand, competitor, other)
-        owner_time_series:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/OwnerTimeSeriesPoint'
-            type: array
-          - type: 'null'
-          title: Owner Time Series
-          description: Time series data by owner type for trend visualization
-        segment_totals:
-          items:
-            $ref: '#/components/schemas/SegmentTotal'
-          type: array
-          title: Segment Totals
-          description: Server-side observation counts per citation segment (covers all domains, not just top-N)
-      type: object
-      required:
-      - domains
-      - grand_total
-      - owner_totals
-      title: TopDomainsMetadata
-      description: Metadata about top domains, used by sources/domains endpoints.
-    APIPersonaPatchInput:
-      properties:
-        id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Id
-          description: ID of an existing persona to update. Omit to create a new persona.
         name:
           type: string
           title: Name
@@ -1118,143 +735,8 @@ components:
       required:
       - name
       - description
-      title: APIPersonaPatchInput
-      description: A persona to create or update within a brand patch request.
-    BrandListing:
-      properties:
-        id:
-          type: integer
-          title: Id
-        name:
-          type: string
-          title: Name
-        website:
-          type: string
-          title: Website
-      type: object
-      required:
-      - id
-      - name
-      - website
-      title: BrandListing
-    APIPersonaInput:
-      properties:
-        name:
-          type: string
-          title: Name
-        description:
-          type: string
-          title: Description
-      type: object
-      required:
-      - name
-      - description
-      title: APIPersonaInput
-    SegmentTotal:
-      properties:
-        name:
-          type: string
-          title: Name
-        observation_count:
-          type: integer
-          title: Observation Count
-      type: object
-      required:
-      - name
-      - observation_count
-      title: SegmentTotal
-      description: Observation count for a citation segment, computed server-side.
-    APICompetitorCreateInput:
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Name
-          description: Display name of the competitor.
-        alternative_names:
-          items:
-            type: string
-          type: array
-          title: Alternative Names
-          description: Alternative names or aliases for the competitor.
-          default: []
-        websites:
-          items:
-            type: string
-            maxLength: 2083
-            minLength: 1
-            format: uri
-          type: array
-          title: Websites
-          description: Website URLs associated with the competitor.
-          default: []
-        case_sensitive:
-          type: boolean
-          title: Case Sensitive
-          default: false
-          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
-      type: object
-      required:
-      - name
-      title: APICompetitorCreateInput
-      description: Input model for creating a competitor.
-    CollectionResponse_APIPersonaListing_:
-      properties:
-        total:
-          type: integer
-          title: Total
-        offset:
-          type: integer
-          title: Offset
-          default: 0
-        limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Limit
-        items:
-          items:
-            $ref: '#/components/schemas/APIPersonaListing'
-          type: array
-          title: Items
-        metadata:
-          anyOf:
-          - $ref: '#/components/schemas/TimeSeriesMetadata'
-          - type: 'null'
-      type: object
-      required:
-      - total
-      - items
-      title: CollectionResponse[APIPersonaListing]
-    APICompetitorListing:
-      properties:
-        id:
-          type: integer
-          title: Id
-        name:
-          type: string
-          title: Name
-        alternative_names:
-          items:
-            type: string
-          type: array
-          title: Alternative Names
-          default: []
-        websites:
-          items:
-            type: string
-          type: array
-          title: Websites
-          default: []
-        case_sensitive:
-          type: boolean
-          title: Case Sensitive
-          default: false
-      type: object
-      required:
-      - id
-      - name
-      title: APICompetitorListing
+      title: APIPersonaUpdateInput
+      description: Input model for updating a persona (full replace).
     APICompetitorPatchInput:
       properties:
         id:
@@ -1295,12 +777,71 @@ components:
       - name
       title: APICompetitorPatchInput
       description: A competitor to create or update within a brand patch request.
-    AggregationGranularity:
-      type: string
-      enum:
-      - daily
-      - weekly
-      - monthly
+    APICompetitorCreateInput:
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Name
+          description: Display name of the competitor.
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          description: Alternative names or aliases for the competitor.
+          default: []
+        websites:
+          items:
+            type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          type: array
+          title: Websites
+          description: Website URLs associated with the competitor.
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          default: false
+          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
+      type: object
+      required:
+      - name
+      title: APICompetitorCreateInput
+      description: Input model for creating a competitor.
+    SegmentTotal:
+      properties:
+        name:
+          type: string
+          title: Name
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - name
+      - observation_count
+      title: SegmentTotal
+      description: Observation count for a citation segment, computed server-side.
+    TopDomainSummary:
+      properties:
+        domain:
+          type: string
+          title: Domain
+        domain_owner:
+          type: string
+          title: Domain Owner
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - domain
+      - domain_owner
+      - observation_count
+      title: TopDomainSummary
     APICreateBrandResponse:
       properties:
         id:
@@ -1310,7 +851,89 @@ components:
       required:
       - id
       title: APICreateBrandResponse
-    APIBrandListing_2:
+    APICompetitorInput:
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Name
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          default: []
+        websites:
+          items:
+            type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          type: array
+          title: Websites
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          default: false
+          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
+      type: object
+      required:
+      - name
+      title: APICompetitorInput
+    APIPersonaInput:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+      - name
+      - description
+      title: APIPersonaInput
+    TopDomainsMetadata:
+      properties:
+        domains:
+          items:
+            $ref: '#/components/schemas/TopDomainSummary'
+          type: array
+          title: Domains
+          description: Top domains by observation count (always domain-level aggregated)
+        grand_total:
+          type: integer
+          title: Grand Total
+          description: Total observation count across all domains (for calculating 'Other')
+        owner_totals:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Owner Totals
+          description: Observation counts by owner type (brand, competitor, other)
+        owner_time_series:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/OwnerTimeSeriesPoint'
+            type: array
+          - type: 'null'
+          title: Owner Time Series
+          description: Time series data by owner type for trend visualization
+        segment_totals:
+          items:
+            $ref: '#/components/schemas/SegmentTotal'
+          type: array
+          title: Segment Totals
+          description: Server-side observation counts per citation segment (covers all domains, not just top-N)
+      type: object
+      required:
+      - domains
+      - grand_total
+      - owner_totals
+      title: TopDomainsMetadata
+      description: Metadata about top domains, used by sources/domains endpoints.
+    APICompetitorListing:
       properties:
         id:
           type: integer
@@ -1318,64 +941,56 @@ components:
         name:
           type: string
           title: Name
-        description:
-          type: string
-          title: Description
-        website:
-          type: string
-          title: Website
-        status:
-          type: string
-          title: Status
         alternative_names:
           items:
             type: string
           type: array
           title: Alternative Names
           default: []
-        excluded_names:
+        websites:
           items:
             type: string
           type: array
-          title: Excluded Names
-          default: []
-        alternative_websites:
-          items:
-            type: string
-          type: array
-          title: Alternative Websites
+          title: Websites
           default: []
         case_sensitive:
           type: boolean
           title: Case Sensitive
           default: false
-        competitors:
-          items:
-            $ref: '#/components/schemas/APICompetitorListing_2'
-          type: array
-          title: Competitors
-          default: []
-        personas:
-          items:
-            $ref: '#/components/schemas/APIPersonaListing'
-          type: array
-          title: Personas
-          default: []
-        key_topics:
-          items:
-            type: string
-          type: array
-          title: Key Topics
-          default: []
       type: object
       required:
       - id
       - name
-      - description
-      - website
-      - status
-      title: APIBrandListing
-    APICreateBrandInput_2:
+      title: APICompetitorListing
+    CollectionResponse_BrandListing_:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/BrandListing'
+          type: array
+          title: Items
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/TimeSeriesMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - total
+      - items
+      title: CollectionResponse[BrandListing]
+    APICreateBrandInput:
       properties:
         name:
           type: string
@@ -1385,12 +1000,7 @@ components:
             type: string
           type: array
           title: Alternative Names
-        excluded_names:
-          items:
-            type: string
-          type: array
-          title: Excluded Names
-          description: Phrases that must never count as a mention of this brand, e.g. a brand 'Caliber' excluding 'Caliber Auto Wash'.
+          default: []
         website:
           type: string
           title: Website
@@ -1405,7 +1015,7 @@ components:
           title: Description
         competitors:
           items:
-            $ref: '#/components/schemas/APICompetitorInput_2'
+            $ref: '#/components/schemas/APICompetitorInput'
           type: array
           title: Competitors
           default: []
@@ -1432,14 +1042,313 @@ components:
         case_sensitive:
           type: boolean
           title: Case Sensitive
-          description: When true, the brand name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
           default: false
+          description: When true, the brand name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
       type: object
       required:
       - name
       - website
       - description
       title: APICreateBrandInput
+    APIPersonaPatchInput:
+      properties:
+        id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Id
+          description: ID of an existing persona to update. Omit to create a new persona.
+        name:
+          type: string
+          title: Name
+          description: Display name of the persona.
+        description:
+          type: string
+          title: Description
+          description: Description of the persona.
+      type: object
+      required:
+      - name
+      - description
+      title: APIPersonaPatchInput
+      description: A persona to create or update within a brand patch request.
+    APIPersonaCreateInput:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Display name of the persona.
+        description:
+          type: string
+          title: Description
+          description: Description of the persona.
+      type: object
+      required:
+      - name
+      - description
+      title: APIPersonaCreateInput
+      description: Input model for creating a persona.
+    BrandListing:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        website:
+          type: string
+          title: Website
+      type: object
+      required:
+      - id
+      - name
+      - website
+      title: BrandListing
+    AggregationGranularity:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
+    APIBrandListing:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        website:
+          type: string
+          title: Website
+        status:
+          type: string
+          title: Status
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          description: Alternative names or aliases for the brand.
+          default: []
+        alternative_websites:
+          items:
+            type: string
+          type: array
+          title: Alternative Websites
+          default: []
+        competitors:
+          items:
+            $ref: '#/components/schemas/APICompetitorListing'
+          type: array
+          title: Competitors
+          default: []
+        personas:
+          items:
+            $ref: '#/components/schemas/APIPersonaListing'
+          type: array
+          title: Personas
+          default: []
+        key_topics:
+          items:
+            type: string
+          type: array
+          title: Key Topics
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          default: false
+      type: object
+      required:
+      - id
+      - name
+      - description
+      - website
+      - status
+      title: APIBrandListing
+    OwnerTimeSeriesPoint:
+      properties:
+        time_bucket:
+          type: string
+          title: Time Bucket
+          description: Date string for the time bucket (YYYY-MM-DD)
+        brand:
+          type: integer
+          title: Brand
+          description: Observation count for brand-owned domains
+        competitor:
+          type: integer
+          title: Competitor
+          description: Observation count for competitor-owned domains
+        other:
+          type: integer
+          title: Other
+          description: Observation count for third-party domains
+      type: object
+      required:
+      - time_bucket
+      - brand
+      - competitor
+      - other
+      title: OwnerTimeSeriesPoint
+      description: A single time bucket with observation counts by owner type.
+    TimeSeriesMetadata:
+      properties:
+        aggregation_granularity:
+          $ref: '#/components/schemas/AggregationGranularity'
+          description: 'The aggregation granularity: daily, weekly, or monthly'
+        period_count:
+          type: integer
+          title: Period Count
+          description: The number of periods in the time series
+        start_date:
+          type: string
+          format: date-time
+          title: Start Date
+          description: The start date of the time series
+        end_date:
+          type: string
+          format: date-time
+          title: End Date
+          description: The end date of the time series
+        top_domains:
+          anyOf:
+          - $ref: '#/components/schemas/TopDomainsMetadata'
+          - type: 'null'
+          description: Top domains metadata (only populated by sources/domains endpoints)
+      type: object
+      required:
+      - aggregation_granularity
+      - period_count
+      - start_date
+      - end_date
+      title: TimeSeriesMetadata
+    CollectionResponse_APIPersonaListing_:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/APIPersonaListing'
+          type: array
+          title: Items
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/TimeSeriesMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - total
+      - items
+      title: CollectionResponse[APIPersonaListing]
+    CollectionResponse_APICompetitorListing_:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/APICompetitorListing'
+          type: array
+          title: Items
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/TimeSeriesMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - total
+      - items
+      title: CollectionResponse[APICompetitorListing]
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    APICompetitorUpdateInput_2:
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Name
+          description: Display name of the competitor.
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          description: Alternative names or aliases for the competitor.
+        excluded_names:
+          items:
+            type: string
+          type: array
+          title: Excluded Names
+          description: Phrases that must never count as a mention of this competitor, e.g. a competitor 'Caliber' excluding 'Caliber Auto Wash'.
+        websites:
+          items:
+            type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          type: array
+          title: Websites
+          description: Website URLs associated with the competitor.
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
+          default: false
+      type: object
+      required:
+      - name
+      title: APICompetitorUpdateInput
+      description: Input model for updating a competitor (full replace).
     APIBrandPatchInput_2:
       properties:
         name:
@@ -1535,154 +1444,6 @@ components:
         For competitors and personas, the provided list replaces the current state:
 
         existing records not included in the list are archived.'
-    APICompetitorUpdateInput_2:
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Name
-          description: Display name of the competitor.
-        alternative_names:
-          items:
-            type: string
-          type: array
-          title: Alternative Names
-          description: Alternative names or aliases for the competitor.
-        excluded_names:
-          items:
-            type: string
-          type: array
-          title: Excluded Names
-          description: Phrases that must never count as a mention of this competitor, e.g. a competitor 'Caliber' excluding 'Caliber Auto Wash'.
-        websites:
-          items:
-            type: string
-            maxLength: 2083
-            minLength: 1
-            format: uri
-          type: array
-          title: Websites
-          description: Website URLs associated with the competitor.
-          default: []
-        case_sensitive:
-          type: boolean
-          title: Case Sensitive
-          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
-          default: false
-      type: object
-      required:
-      - name
-      title: APICompetitorUpdateInput
-      description: Input model for updating a competitor (full replace).
-    APICompetitorInput_2:
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Name
-        alternative_names:
-          items:
-            type: string
-          type: array
-          title: Alternative Names
-        excluded_names:
-          items:
-            type: string
-          type: array
-          title: Excluded Names
-          description: Phrases that must never count as a mention of this competitor, e.g. a competitor 'Caliber' excluding 'Caliber Auto Wash'.
-        websites:
-          items:
-            type: string
-            maxLength: 2083
-            minLength: 1
-            format: uri
-          type: array
-          title: Websites
-          default: []
-        case_sensitive:
-          type: boolean
-          title: Case Sensitive
-          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
-          default: false
-      type: object
-      required:
-      - name
-      title: APICompetitorInput
-    APICompetitorCreateInput_2:
-      properties:
-        name:
-          type: string
-          minLength: 1
-          title: Name
-          description: Display name of the competitor.
-        alternative_names:
-          items:
-            type: string
-          type: array
-          title: Alternative Names
-          description: Alternative names or aliases for the competitor.
-        excluded_names:
-          items:
-            type: string
-          type: array
-          title: Excluded Names
-          description: Phrases that must never count as a mention of this competitor, e.g. a competitor 'Caliber' excluding 'Caliber Auto Wash'.
-        websites:
-          items:
-            type: string
-            maxLength: 2083
-            minLength: 1
-            format: uri
-          type: array
-          title: Websites
-          description: Website URLs associated with the competitor.
-          default: []
-        case_sensitive:
-          type: boolean
-          title: Case Sensitive
-          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
-          default: false
-      type: object
-      required:
-      - name
-      title: APICompetitorCreateInput
-      description: Input model for creating a competitor.
-    APICompetitorListing_2:
-      properties:
-        id:
-          type: integer
-          title: Id
-        name:
-          type: string
-          title: Name
-        alternative_names:
-          items:
-            type: string
-          type: array
-          title: Alternative Names
-          default: []
-        excluded_names:
-          items:
-            type: string
-          type: array
-          title: Excluded Names
-          default: []
-        websites:
-          items:
-            type: string
-          type: array
-          title: Websites
-          default: []
-        case_sensitive:
-          type: boolean
-          title: Case Sensitive
-          default: false
-      type: object
-      required:
-      - id
-      - name
-      title: APICompetitorListing
     APICompetitorPatchInput_2:
       properties:
         id:
@@ -1728,6 +1489,245 @@ components:
       - name
       title: APICompetitorPatchInput
       description: A competitor to create or update within a brand patch request.
+    APICompetitorCreateInput_2:
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Name
+          description: Display name of the competitor.
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          description: Alternative names or aliases for the competitor.
+        excluded_names:
+          items:
+            type: string
+          type: array
+          title: Excluded Names
+          description: Phrases that must never count as a mention of this competitor, e.g. a competitor 'Caliber' excluding 'Caliber Auto Wash'.
+        websites:
+          items:
+            type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          type: array
+          title: Websites
+          description: Website URLs associated with the competitor.
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
+          default: false
+      type: object
+      required:
+      - name
+      title: APICompetitorCreateInput
+      description: Input model for creating a competitor.
+    APICompetitorInput_2:
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Name
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+        excluded_names:
+          items:
+            type: string
+          type: array
+          title: Excluded Names
+          description: Phrases that must never count as a mention of this competitor, e.g. a competitor 'Caliber' excluding 'Caliber Auto Wash'.
+        websites:
+          items:
+            type: string
+            maxLength: 2083
+            minLength: 1
+            format: uri
+          type: array
+          title: Websites
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          description: When true, name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
+          default: false
+      type: object
+      required:
+      - name
+      title: APICompetitorInput
+    APICompetitorListing_2:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          default: []
+        excluded_names:
+          items:
+            type: string
+          type: array
+          title: Excluded Names
+          default: []
+        websites:
+          items:
+            type: string
+          type: array
+          title: Websites
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          default: false
+      type: object
+      required:
+      - id
+      - name
+      title: APICompetitorListing
+    APICreateBrandInput_2:
+      properties:
+        name:
+          type: string
+          title: Name
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+        excluded_names:
+          items:
+            type: string
+          type: array
+          title: Excluded Names
+          description: Phrases that must never count as a mention of this brand, e.g. a brand 'Caliber' excluding 'Caliber Auto Wash'.
+        website:
+          type: string
+          title: Website
+        alternative_websites:
+          items:
+            type: string
+          type: array
+          title: Alternative Websites
+          default: []
+        description:
+          type: string
+          title: Description
+        competitors:
+          items:
+            $ref: '#/components/schemas/APICompetitorInput_2'
+          type: array
+          title: Competitors
+          default: []
+        personas:
+          items:
+            $ref: '#/components/schemas/APIPersonaInput'
+          type: array
+          title: Personas
+          default: []
+        key_topics:
+          items:
+            type: string
+          type: array
+          title: Key Topics
+          default: []
+        status:
+          type: string
+          enum:
+          - lead
+          - prospect
+          - customer
+          title: Status
+          default: customer
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          description: When true, the brand name and alternative_names are matched against AI responses with exact case. Defaults to case-insensitive matching.
+          default: false
+      type: object
+      required:
+      - name
+      - website
+      - description
+      title: APICreateBrandInput
+    APIBrandListing_2:
+      properties:
+        id:
+          type: integer
+          title: Id
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        website:
+          type: string
+          title: Website
+        status:
+          type: string
+          title: Status
+        alternative_names:
+          items:
+            type: string
+          type: array
+          title: Alternative Names
+          default: []
+        excluded_names:
+          items:
+            type: string
+          type: array
+          title: Excluded Names
+          default: []
+        alternative_websites:
+          items:
+            type: string
+          type: array
+          title: Alternative Websites
+          default: []
+        case_sensitive:
+          type: boolean
+          title: Case Sensitive
+          default: false
+        competitors:
+          items:
+            $ref: '#/components/schemas/APICompetitorListing_2'
+          type: array
+          title: Competitors
+          default: []
+        personas:
+          items:
+            $ref: '#/components/schemas/APIPersonaListing'
+          type: array
+          title: Personas
+          default: []
+        key_topics:
+          items:
+            type: string
+          type: array
+          title: Key Topics
+          default: []
+      type: object
+      required:
+      - id
+      - name
+      - description
+      - website
+      - status
+      title: APIBrandListing
   securitySchemes:
     HTTPBearer:
       type: http

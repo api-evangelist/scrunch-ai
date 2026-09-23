@@ -1,0 +1,33 @@
+# Front Door AI Index — scrunch-ai — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: scrunch-ai
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: scrunch.com
+  final_host: scrunch.com
+  ownership: own
+  owner: scrunch-ai
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 157
+  host_score: 157
+  density: 32.47
+  words: 4835
+  tiers:
+    agentic: 32
+    core: 101
+    model: 24
+  ambiguous: 139
+  top_terms:
+    agent: 123
+    AI: 101
+    autonomous agent: 20
+    intelligence: 16
+    Claude: 8
+    GPT: 8
+    Gemini: 8
+    prompts: 7
+    AI agent: 5

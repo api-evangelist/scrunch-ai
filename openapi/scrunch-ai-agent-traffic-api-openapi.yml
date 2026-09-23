@@ -160,41 +160,32 @@ paths:
     - url: https://api.scrunchai.com/v1
 components:
   schemas:
-    ValidationError:
+    AgentTrafficMeta:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        start_date:
           type: string
-          title: Message
-        type:
+          format: date
+          title: Start Date
+          description: Start date of the query range.
+        end_date:
           type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          format: date
+          title: End Date
+          description: End date of the query range.
+        time_bucket:
+          type: string
+          enum:
+          - day
+          - week
+          title: Time Bucket
+          description: Time aggregation bucket used for grouping results.
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      - start_date
+      - end_date
+      - time_bucket
+      title: AgentTrafficMeta
+      description: Metadata about the agent traffic query results.
     AgentTrafficRow:
       properties:
         requests:
@@ -240,32 +231,15 @@ components:
 
 
         Fields present depend on the dimensions requested in the query.'
-    AgentTrafficMeta:
+    HTTPValidationError:
       properties:
-        start_date:
-          type: string
-          format: date
-          title: Start Date
-          description: Start date of the query range.
-        end_date:
-          type: string
-          format: date
-          title: End Date
-          description: End date of the query range.
-        time_bucket:
-          type: string
-          enum:
-          - day
-          - week
-          title: Time Bucket
-          description: Time aggregation bucket used for grouping results.
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - start_date
-      - end_date
-      - time_bucket
-      title: AgentTrafficMeta
-      description: Metadata about the agent traffic query results.
+      title: HTTPValidationError
     AgentTrafficResponse:
       properties:
         meta:
@@ -283,6 +257,32 @@ components:
       - data
       title: AgentTrafficResponse
       description: Response containing agent traffic data with metadata and aggregated traffic records.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     HTTPBearer:
       type: http

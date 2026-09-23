@@ -1,0 +1,1 @@
+{"resource":"https://app.scrunchai.com","authorization_servers":["https://clerk.scrunchai.com"],"scopes_supported":["offline_access","openid","email","profile"],"bearer_methods_supported":["header"]}

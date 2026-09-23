@@ -195,6 +195,34 @@ paths:
         - configure
 components:
   schemas:
+    AiReferralsConnectionCreate:
+      type: object
+      description: Payload to register a new AI Referrals connection.
+      required:
+      - website
+      - provider
+      properties:
+        website:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: Hostname or URL of the website whose referrals will be pushed.
+          example: example.com
+        provider:
+          type: string
+          minLength: 1
+          maxLength: 64
+          description: 'Source analytics provider. MVP allow-list: ''adobe_analytics''.'
+          example: adobe_analytics
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     AiReferralsConnection:
       type: object
       description: A registered AI Referrals push connection.
@@ -304,34 +332,6 @@ components:
           items:
             type: string
           description: Per-row diagnostic messages, truncated.
-    AiReferralsConnectionCreate:
-      type: object
-      description: Payload to register a new AI Referrals connection.
-      required:
-      - website
-      - provider
-      properties:
-        website:
-          type: string
-          minLength: 1
-          maxLength: 2048
-          description: Hostname or URL of the website whose referrals will be pushed.
-          example: example.com
-        provider:
-          type: string
-          minLength: 1
-          maxLength: 64
-          description: 'Source analytics provider. MVP allow-list: ''adobe_analytics''.'
-          example: adobe_analytics
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:

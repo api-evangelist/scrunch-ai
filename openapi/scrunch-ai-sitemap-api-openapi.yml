@@ -7,12 +7,12 @@ servers:
 - url: https://api.scrunchai.com/v1
 - url: /v1
 tags:
-- name: sitemap
+- name: Sitemap
 paths:
   /{brand_id}/sitemap/export:
     get:
       tags:
-      - sitemap
+      - Sitemap
       summary: Export Sitemap Pages
       description: 'Download every page matching the supplied filters as CSV or XLSX. Uses the same filters as the list endpoint but skips pagination.
 
@@ -183,7 +183,7 @@ paths:
   /{brand_id}/sitemap/pages/{page_id}/metrics:
     get:
       tags:
-      - sitemap
+      - Sitemap
       summary: Get Sitemap Page Metrics
       description: 'Return time-series performance metrics for a single page: citations, AI referrals, and AI agent traffic. Each metric is reported as a list of buckets keyed by date, with counts broken down by AI platform.
 
@@ -254,7 +254,7 @@ paths:
   /{brand_id}/sitemap/pages/{page_id}:
     get:
       tags:
-      - sitemap
+      - Sitemap
       summary: Get Sitemap Page
       description: Get detailed information about a single page in the brand's sitemap, including title, description, depth, audit score, canonical URL, last-indexed timestamp, priority flag, and optimized-content flag.
       operationId: getSitemapPage
@@ -298,7 +298,7 @@ paths:
   /{brand_id}/sitemap/pages:
     get:
       tags:
-      - sitemap
+      - Sitemap
       summary: List Sitemap Pages
       description: 'List pages discovered in the brand''s sitemap with their title, description, depth, audit score, priority flag, and optimized-content flag.
 
@@ -421,81 +421,6 @@ paths:
     - url: https://api.scrunchai.com/v1
 components:
   schemas:
-    SitemapMetricRow:
-      properties:
-        date:
-          type: string
-          title: Date
-          description: Date in ISO 8601 format (YYYY-MM-DD).
-        count_by_platform:
-          type: object
-          title: Count By Platform
-          additionalProperties:
-            type: integer
-          description: Counts keyed by AI platform name (for example `OpenAI`, `Perplexity`, `Gemini`).
-      type: object
-      required:
-      - date
-      - count_by_platform
-      title: SitemapMetricRow
-    SitemapPageListing:
-      properties:
-        id:
-          type: integer
-          title: Id
-          description: Unique page identifier.
-        url:
-          type: string
-          title: Url
-          description: Full URL of the page.
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-          description: HTML title of the page.
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Meta description of the page.
-        depth:
-          type: integer
-          title: Depth
-          description: URL path depth (`0` = root).
-        audit_score:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Audit Score
-          description: AI search readiness score (0-100).
-        canonical_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Canonical Url
-          description: Canonical URL if different from the page's URL.
-        is_priority:
-          type: boolean
-          title: Is Priority
-          description: Whether this page matches a priority page or priority path override for the brand.
-        has_optimized_content:
-          type: boolean
-          title: Has Optimized Content
-          description: Whether this page has active AXP optimized content deployed.
-      type: object
-      required:
-      - id
-      - url
-      - title
-      - description
-      - depth
-      - audit_score
-      - canonical_url
-      - is_priority
-      - has_optimized_content
-      title: SitemapPageListing
     SitemapUrlMetrics:
       properties:
         citations:
@@ -522,15 +447,6 @@ components:
       - ai_referrals
       - agent_traffic
       title: SitemapUrlMetrics
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -557,6 +473,52 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SitemapPagesResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/SitemapPageListing'
+          type: array
+          title: Items
+        domain:
+          type: string
+          title: Domain
+          description: The domain these pages belong to.
+        last_crawl_completed:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Crawl Completed
+          description: When the most recent completed crawl finished.
+      type: object
+      required:
+      - total
+      - items
+      - domain
+      - last_crawl_completed
+      title: SitemapPagesResponse
     SitemapPageDetail:
       properties:
         id:
@@ -638,134 +600,52 @@ components:
       - granularity
       - metrics
       title: SitemapPageMetricsResponse
-    SitemapPagesResponse:
-      properties:
-        total:
-          type: integer
-          title: Total
-        offset:
-          type: integer
-          title: Offset
-          default: 0
-        limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Limit
-        items:
-          items:
-            $ref: '#/components/schemas/SitemapPageListing'
-          type: array
-          title: Items
-        domain:
-          type: string
-          title: Domain
-          description: The domain these pages belong to.
-        last_crawl_completed:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Crawl Completed
-          description: When the most recent completed crawl finished.
-      type: object
-      required:
-      - total
-      - items
-      - domain
-      - last_crawl_completed
-      title: SitemapPagesResponse
-    SitemapPageMetricsResponse_2:
-      properties:
-        granularity:
-          type: string
-          title: Granularity
-          description: 'Time-series granularity: daily or weekly'
-        metrics:
-          $ref: '#/components/schemas/UrlMetricsModel'
-      type: object
-      required:
-      - granularity
-      - metrics
-      title: SitemapPageMetricsResponse
-      description: Time-series metrics for a single page.
-    TimeSeriesMetadata:
-      properties:
-        aggregation_granularity:
-          $ref: '#/components/schemas/AggregationGranularity'
-          description: 'The aggregation granularity: daily, weekly, or monthly'
-        period_count:
-          type: integer
-          title: Period Count
-          description: The number of periods in the time series
-        start_date:
-          type: string
-          format: date-time
-          title: Start Date
-          description: The start date of the time series
-        end_date:
-          type: string
-          format: date-time
-          title: End Date
-          description: The end date of the time series
-        top_domains:
-          anyOf:
-          - $ref: '#/components/schemas/TopDomainsMetadata'
-          - type: 'null'
-          description: Top domains metadata (only populated by sources/domains endpoints)
-      type: object
-      required:
-      - aggregation_granularity
-      - period_count
-      - start_date
-      - end_date
-      title: TimeSeriesMetadata
-    SitemapPageListing_2:
+    SitemapPageListing:
       properties:
         id:
           type: integer
           title: Id
-          description: Unique page identifier
+          description: Unique page identifier.
         url:
           type: string
           title: Url
-          description: Full URL of the page
+          description: Full URL of the page.
         title:
           anyOf:
           - type: string
           - type: 'null'
           title: Title
-          description: HTML title of the page
+          description: HTML title of the page.
         description:
           anyOf:
           - type: string
           - type: 'null'
           title: Description
-          description: Meta description of the page
+          description: Meta description of the page.
         depth:
           type: integer
           title: Depth
-          description: URL path depth (0 = root)
+          description: URL path depth (`0` = root).
         audit_score:
           anyOf:
           - type: integer
           - type: 'null'
           title: Audit Score
-          description: AI search readiness score (0-100)
+          description: AI search readiness score (0-100).
         canonical_url:
           anyOf:
           - type: string
           - type: 'null'
           title: Canonical Url
-          description: The canonical URL if different from this page's URL
+          description: Canonical URL if different from the page's URL.
         is_priority:
           type: boolean
           title: Is Priority
-          description: Whether this page matches a priority_page/priority_path override for the brand
+          description: Whether this page matches a priority page or priority path override for the brand.
         has_optimized_content:
           type: boolean
           title: Has Optimized Content
-          description: Whether this page has active AXP optimized content deployed
+          description: Whether this page has active AXP optimized content deployed.
       type: object
       required:
       - id
@@ -778,7 +658,23 @@ components:
       - is_priority
       - has_optimized_content
       title: SitemapPageListing
-      description: A page discovered in the brand's sitemap.
+    SitemapMetricRow:
+      properties:
+        date:
+          type: string
+          title: Date
+          description: Date in ISO 8601 format (YYYY-MM-DD).
+        count_by_platform:
+          type: object
+          title: Count By Platform
+          additionalProperties:
+            type: integer
+          description: Counts keyed by AI platform name (for example `OpenAI`, `Perplexity`, `Gemini`).
+      type: object
+      required:
+      - date
+      - count_by_platform
+      title: SitemapMetricRow
     TopDomainSummary:
       properties:
         domain:
@@ -796,6 +692,45 @@ components:
       - domain_owner
       - observation_count
       title: TopDomainSummary
+    TopDomainsMetadata:
+      properties:
+        domains:
+          items:
+            $ref: '#/components/schemas/TopDomainSummary'
+          type: array
+          title: Domains
+          description: Top domains by observation count (always domain-level aggregated)
+        grand_total:
+          type: integer
+          title: Grand Total
+          description: Total observation count across all domains (for calculating 'Other')
+        owner_totals:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Owner Totals
+          description: Observation counts by owner type (brand, competitor, other)
+        owner_time_series:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/OwnerTimeSeriesPoint'
+            type: array
+          - type: 'null'
+          title: Owner Time Series
+          description: Time series data by owner type for trend visualization
+        segment_totals:
+          items:
+            $ref: '#/components/schemas/SegmentTotal'
+          type: array
+          title: Segment Totals
+          description: Server-side observation counts per citation segment (covers all domains, not just top-N)
+      type: object
+      required:
+      - domains
+      - grand_total
+      - owner_totals
+      title: TopDomainsMetadata
+      description: Metadata about top domains, used by sources/domains endpoints.
     MetricRowModel:
       properties:
         date:
@@ -814,6 +749,48 @@ components:
       - count_by_platform
       title: MetricRowModel
       description: A single time-series data point with counts broken down by AI platform.
+    SitemapPagesResponse_2:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/SitemapPageListing_2'
+          type: array
+          title: Items
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/TimeSeriesMetadata'
+          - type: 'null'
+        domain:
+          type: string
+          title: Domain
+          description: The domain these pages belong to
+        last_crawl_completed:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Crawl Completed
+          description: When the most recent completed crawl finished
+      type: object
+      required:
+      - total
+      - items
+      - domain
+      - last_crawl_completed
+      title: SitemapPagesResponse
+      description: Paginated list of sitemap pages with crawl metadata.
     SitemapPageDetail_2:
       properties:
         id:
@@ -889,6 +866,110 @@ components:
       - content_updated_at
       title: SitemapPageDetail
       description: Extended page details including indexing metadata.
+    TimeSeriesMetadata:
+      properties:
+        aggregation_granularity:
+          $ref: '#/components/schemas/AggregationGranularity'
+          description: 'The aggregation granularity: daily, weekly, or monthly'
+        period_count:
+          type: integer
+          title: Period Count
+          description: The number of periods in the time series
+        start_date:
+          type: string
+          format: date-time
+          title: Start Date
+          description: The start date of the time series
+        end_date:
+          type: string
+          format: date-time
+          title: End Date
+          description: The end date of the time series
+        top_domains:
+          anyOf:
+          - $ref: '#/components/schemas/TopDomainsMetadata'
+          - type: 'null'
+          description: Top domains metadata (only populated by sources/domains endpoints)
+      type: object
+      required:
+      - aggregation_granularity
+      - period_count
+      - start_date
+      - end_date
+      title: TimeSeriesMetadata
+    SitemapPageMetricsResponse_2:
+      properties:
+        granularity:
+          type: string
+          title: Granularity
+          description: 'Time-series granularity: daily or weekly'
+        metrics:
+          $ref: '#/components/schemas/UrlMetricsModel'
+      type: object
+      required:
+      - granularity
+      - metrics
+      title: SitemapPageMetricsResponse
+      description: Time-series metrics for a single page.
+    SitemapPageListing_2:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Unique page identifier
+        url:
+          type: string
+          title: Url
+          description: Full URL of the page
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+          description: HTML title of the page
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Meta description of the page
+        depth:
+          type: integer
+          title: Depth
+          description: URL path depth (0 = root)
+        audit_score:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Audit Score
+          description: AI search readiness score (0-100)
+        canonical_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Canonical Url
+          description: The canonical URL if different from this page's URL
+        is_priority:
+          type: boolean
+          title: Is Priority
+          description: Whether this page matches a priority_page/priority_path override for the brand
+        has_optimized_content:
+          type: boolean
+          title: Has Optimized Content
+          description: Whether this page has active AXP optimized content deployed
+      type: object
+      required:
+      - id
+      - url
+      - title
+      - description
+      - depth
+      - audit_score
+      - canonical_url
+      - is_priority
+      - has_optimized_content
+      title: SitemapPageListing
+      description: A page discovered in the brand's sitemap.
     UrlMetricsModel:
       properties:
         citations:
@@ -916,6 +997,26 @@ components:
       - agent_traffic
       title: UrlMetricsModel
       description: Performance metrics for a single URL.
+    AggregationGranularity:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
+    SegmentTotal:
+      properties:
+        name:
+          type: string
+          title: Name
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - name
+      - observation_count
+      title: SegmentTotal
+      description: Observation count for a citation segment, computed server-side.
     OwnerTimeSeriesPoint:
       properties:
         time_bucket:
@@ -942,107 +1043,6 @@ components:
       - other
       title: OwnerTimeSeriesPoint
       description: A single time bucket with observation counts by owner type.
-    TopDomainsMetadata:
-      properties:
-        domains:
-          items:
-            $ref: '#/components/schemas/TopDomainSummary'
-          type: array
-          title: Domains
-          description: Top domains by observation count (always domain-level aggregated)
-        grand_total:
-          type: integer
-          title: Grand Total
-          description: Total observation count across all domains (for calculating 'Other')
-        owner_totals:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Owner Totals
-          description: Observation counts by owner type (brand, competitor, other)
-        owner_time_series:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/OwnerTimeSeriesPoint'
-            type: array
-          - type: 'null'
-          title: Owner Time Series
-          description: Time series data by owner type for trend visualization
-        segment_totals:
-          items:
-            $ref: '#/components/schemas/SegmentTotal'
-          type: array
-          title: Segment Totals
-          description: Server-side observation counts per citation segment (covers all domains, not just top-N)
-      type: object
-      required:
-      - domains
-      - grand_total
-      - owner_totals
-      title: TopDomainsMetadata
-      description: Metadata about top domains, used by sources/domains endpoints.
-    AggregationGranularity:
-      type: string
-      enum:
-      - daily
-      - weekly
-      - monthly
-    SegmentTotal:
-      properties:
-        name:
-          type: string
-          title: Name
-        observation_count:
-          type: integer
-          title: Observation Count
-      type: object
-      required:
-      - name
-      - observation_count
-      title: SegmentTotal
-      description: Observation count for a citation segment, computed server-side.
-    SitemapPagesResponse_2:
-      properties:
-        total:
-          type: integer
-          title: Total
-        offset:
-          type: integer
-          title: Offset
-          default: 0
-        limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Limit
-        items:
-          items:
-            $ref: '#/components/schemas/SitemapPageListing_2'
-          type: array
-          title: Items
-        metadata:
-          anyOf:
-          - $ref: '#/components/schemas/TimeSeriesMetadata'
-          - type: 'null'
-        domain:
-          type: string
-          title: Domain
-          description: The domain these pages belong to
-        last_crawl_completed:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Crawl Completed
-          description: When the most recent completed crawl finished
-      type: object
-      required:
-      - total
-      - items
-      - domain
-      - last_crawl_completed
-      title: SitemapPagesResponse
-      description: Paginated list of sitemap pages with crawl metadata.
   securitySchemes:
     HTTPBearer:
       type: http

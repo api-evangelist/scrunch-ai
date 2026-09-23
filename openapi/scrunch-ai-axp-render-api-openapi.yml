@@ -69,31 +69,6 @@ paths:
       - url: https://api.scrunchai.com/v2
 components:
   schemas:
-    AXPBulkRenderRequest:
-      properties:
-        paths:
-          type: array
-          items:
-            type: string
-            minLength: 1
-            maxLength: 2048
-          minItems: 1
-          maxItems: 100
-          title: Paths
-          description: Paths on the site to render. Each entry is trimmed and given a leading slash if missing. Duplicates are removed; in-flight jobs for the same path are reused.
-      type: object
-      required:
-      - paths
-      title: AXPBulkRenderRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -120,6 +95,31 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AXPBulkRenderRequest:
+      properties:
+        paths:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          minItems: 1
+          maxItems: 100
+          title: Paths
+          description: Paths on the site to render. Each entry is trimmed and given a leading slash if missing. Duplicates are removed; in-flight jobs for the same path are reused.
+      type: object
+      required:
+      - paths
+      title: AXPBulkRenderRequest
     AXPBulkRenderItem:
       properties:
         path:

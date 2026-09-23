@@ -98,15 +98,6 @@ components:
       - platforms
       title: CollectionRequest
       description: Request to trigger on-demand collection for a prompt across specified platforms.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     CollectionCreateResponse:
       properties:
         prompt_id:
@@ -125,6 +116,31 @@ components:
       - events
       title: CollectionCreateResponse
       description: Response from triggering on-demand collection.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CollectionEventResult:
+      properties:
+        platform:
+          type: string
+          title: Platform
+          description: The platform collection was triggered for
+        inngest_event_id:
+          type: string
+          title: Inngest Event Id
+          description: The Inngest event ID for tracking
+      type: object
+      required:
+      - platform
+      - inngest_event_id
+      title: CollectionEventResult
+      description: Result of a triggered collection event.
     ValidationError:
       properties:
         loc:
@@ -151,22 +167,6 @@ components:
       - msg
       - type
       title: ValidationError
-    CollectionEventResult:
-      properties:
-        platform:
-          type: string
-          title: Platform
-          description: The platform collection was triggered for
-        inngest_event_id:
-          type: string
-          title: Inngest Event Id
-          description: The Inngest event ID for tracking
-      type: object
-      required:
-      - platform
-      - inngest_event_id
-      title: CollectionEventResult
-      description: Result of a triggered collection event.
   securitySchemes:
     HTTPBearer:
       type: http
