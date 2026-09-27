@@ -441,46 +441,29 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    TopDomainSummary:
+    APISignalReactionUpsert:
       properties:
-        domain:
+        reaction:
           type: string
-          title: Domain
-        domain_owner:
-          type: string
-          title: Domain Owner
-        observation_count:
-          type: integer
-          title: Observation Count
-      type: object
-      required:
-      - domain
-      - domain_owner
-      - observation_count
-      title: TopDomainSummary
-    APISignalSlice:
-      properties:
-        platforms:
-          items:
-            type: string
-          type: array
-          title: Platforms
-          description: AI platforms the slice covers. Empty means all platforms.
-        topic_labels:
-          items:
-            type: string
-          type: array
-          title: Topic Labels
-          description: Topic labels the slice covers. Empty means all topics.
-        geo_country:
+          enum:
+          - useful
+          - not_useful
+          - dismissed
+          - actioned
+          title: Reaction
+          description: 'Reaction to set: `useful`, `not_useful`, `dismissed`, or `actioned`.'
+        reason:
           anyOf:
           - type: string
+            maxLength: 2000
           - type: 'null'
-          title: Geo Country
-          description: Country the slice is restricted to, when geo-scoped.
+          title: Reason
+          description: Optional free-text reason accompanying the reaction.
       type: object
-      title: APISignalSlice
-      description: The data slice a signal was detected on.
+      required:
+      - reaction
+      title: APISignalReactionUpsert
+      description: Request body for `setSignalReaction`.
     ValidationError:
       properties:
         loc:
@@ -507,6 +490,37 @@ components:
       - msg
       - type
       title: ValidationError
+    TimeSeriesMetadata:
+      properties:
+        aggregation_granularity:
+          $ref: '#/components/schemas/AggregationGranularity'
+          description: 'The aggregation granularity: daily, weekly, or monthly'
+        period_count:
+          type: integer
+          title: Period Count
+          description: The number of periods in the time series
+        start_date:
+          type: string
+          format: date-time
+          title: Start Date
+          description: The start date of the time series
+        end_date:
+          type: string
+          format: date-time
+          title: End Date
+          description: The end date of the time series
+        top_domains:
+          anyOf:
+          - $ref: '#/components/schemas/TopDomainsMetadata'
+          - type: 'null'
+          description: Top domains metadata (only populated by sources/domains endpoints)
+      type: object
+      required:
+      - aggregation_granularity
+      - period_count
+      - start_date
+      - end_date
+      title: TimeSeriesMetadata
     TopDomainsMetadata:
       properties:
         domains:
@@ -546,117 +560,94 @@ components:
       - owner_totals
       title: TopDomainsMetadata
       description: Metadata about top domains, used by sources/domains endpoints.
-    TimeSeriesMetadata:
+    APISignalSlice:
       properties:
-        aggregation_granularity:
-          $ref: '#/components/schemas/AggregationGranularity'
-          description: 'The aggregation granularity: daily, weekly, or monthly'
-        period_count:
-          type: integer
-          title: Period Count
-          description: The number of periods in the time series
-        start_date:
-          type: string
-          format: date-time
-          title: Start Date
-          description: The start date of the time series
-        end_date:
-          type: string
-          format: date-time
-          title: End Date
-          description: The end date of the time series
-        top_domains:
-          anyOf:
-          - $ref: '#/components/schemas/TopDomainsMetadata'
-          - type: 'null'
-          description: Top domains metadata (only populated by sources/domains endpoints)
-      type: object
-      required:
-      - aggregation_granularity
-      - period_count
-      - start_date
-      - end_date
-      title: TimeSeriesMetadata
-    APISignalUrlMover:
-      properties:
-        normalized_url:
-          type: string
-          title: Normalized Url
-          description: Normalized cited URL (scheme and tracking params stripped).
-        owner:
-          type: string
-          enum:
-          - brand
-          - competitor
-          title: Owner
-          description: 'Whose domain the URL belongs to: `brand` or `competitor`.'
-        competitor_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Competitor Id
-          description: Competitor ID for `competitor`-owned URLs.
-        competitor_name:
+        platforms:
+          items:
+            type: string
+          type: array
+          title: Platforms
+          description: AI platforms the slice covers. Empty means all platforms.
+        topic_labels:
+          items:
+            type: string
+          type: array
+          title: Topic Labels
+          description: Topic labels the slice covers. Empty means all topics.
+        geo_country:
           anyOf:
           - type: string
           - type: 'null'
-          title: Competitor Name
-          description: Competitor name for `competitor`-owned URLs.
-        current_responses:
-          type: integer
-          title: Current Responses
-          description: Distinct responses citing the URL in the current window.
-        baseline_responses:
-          type: integer
-          title: Baseline Responses
-          description: Distinct responses citing the URL in the baseline window.
-        current_prompts:
-          type: integer
-          title: Current Prompts
-          description: Distinct prompts whose responses cite the URL in the current window.
-        baseline_prompts:
-          type: integer
-          title: Baseline Prompts
-          description: Distinct prompts whose responses cite the URL in the baseline window.
-        contribution:
+          title: Geo Country
+          description: Country the slice is restricted to, when geo-scoped.
+      type: object
+      title: APISignalSlice
+      description: The data slice a signal was detected on.
+    APISignalNarrative:
+      properties:
+        what_happened:
           anyOf:
-          - type: number
+          - type: string
           - type: 'null'
-          title: Contribution
-          description: Exact share of the signal's metric delta attributed to this URL. Brand-owned URLs only; null on competitor entries and older signals.
+          title: What Happened
+          description: Plain-language description of the detected change.
+        why_it_matters:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Why It Matters
+          description: Why the change is significant for the brand.
+        what_to_do:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: What To Do
+          description: Suggested next step or investigation.
       type: object
-      required:
-      - normalized_url
-      - owner
-      - current_responses
-      - baseline_responses
-      - current_prompts
-      - baseline_prompts
-      title: APISignalUrlMover
-      description: A per-URL citation mover backing a `cited_domain_rate` signal.
-    HTTPValidationError:
+      title: APISignalNarrative
+      description: Engine-generated narrative for a signal.
+    APISignalAnchors:
       properties:
-        detail:
+        dates:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            type: string
+            format: date
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    SegmentTotal:
-      properties:
-        name:
-          type: string
-          title: Name
-        observation_count:
-          type: integer
-          title: Observation Count
+          title: Dates
+          description: Distinct `detected_for_date` days with user-facing signals, newest first. Same population as `listSignals` with default filters.
       type: object
       required:
-      - name
-      - observation_count
-      title: SegmentTotal
-      description: Observation count for a citation segment, computed server-side.
+      - dates
+      title: APISignalAnchors
+      description: Recent distinct detection dates that produced signals.
+    CollectionResponse_APISignalReaction_:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/APISignalReaction'
+          type: array
+          title: Items
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/TimeSeriesMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - total
+      - items
+      title: CollectionResponse[APISignalReaction]
     APISignal:
       properties:
         id:
@@ -804,6 +795,49 @@ components:
       - created_at
       title: APISignal
       description: A detected, statistically-tested movement in an AI-visibility metric.
+    TopDomainSummary:
+      properties:
+        domain:
+          type: string
+          title: Domain
+        domain_owner:
+          type: string
+          title: Domain Owner
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - domain
+      - domain_owner
+      - observation_count
+      title: TopDomainSummary
+    OwnerTimeSeriesPoint:
+      properties:
+        time_bucket:
+          type: string
+          title: Time Bucket
+          description: Date string for the time bucket (YYYY-MM-DD)
+        brand:
+          type: integer
+          title: Brand
+          description: Observation count for brand-owned domains
+        competitor:
+          type: integer
+          title: Competitor
+          description: Observation count for competitor-owned domains
+        other:
+          type: integer
+          title: Other
+          description: Observation count for third-party domains
+      type: object
+      required:
+      - time_bucket
+      - brand
+      - competitor
+      - other
+      title: OwnerTimeSeriesPoint
+      description: A single time bucket with observation counts by owner type.
     APISignalReaction:
       properties:
         user_id:
@@ -863,6 +897,77 @@ components:
       - updated_at
       title: APISignalReaction
       description: A user's reaction to a signal's stable identity.
+    SegmentTotal:
+      properties:
+        name:
+          type: string
+          title: Name
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - name
+      - observation_count
+      title: SegmentTotal
+      description: Observation count for a citation segment, computed server-side.
+    APISignalUrlMover:
+      properties:
+        normalized_url:
+          type: string
+          title: Normalized Url
+          description: Normalized cited URL (scheme and tracking params stripped).
+        owner:
+          type: string
+          enum:
+          - brand
+          - competitor
+          title: Owner
+          description: 'Whose domain the URL belongs to: `brand` or `competitor`.'
+        competitor_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Competitor Id
+          description: Competitor ID for `competitor`-owned URLs.
+        competitor_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Competitor Name
+          description: Competitor name for `competitor`-owned URLs.
+        current_responses:
+          type: integer
+          title: Current Responses
+          description: Distinct responses citing the URL in the current window.
+        baseline_responses:
+          type: integer
+          title: Baseline Responses
+          description: Distinct responses citing the URL in the baseline window.
+        current_prompts:
+          type: integer
+          title: Current Prompts
+          description: Distinct prompts whose responses cite the URL in the current window.
+        baseline_prompts:
+          type: integer
+          title: Baseline Prompts
+          description: Distinct prompts whose responses cite the URL in the baseline window.
+        contribution:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Contribution
+          description: Exact share of the signal's metric delta attributed to this URL. Brand-owned URLs only; null on competitor entries and older signals.
+      type: object
+      required:
+      - normalized_url
+      - owner
+      - current_responses
+      - baseline_responses
+      - current_prompts
+      - baseline_prompts
+      title: APISignalUrlMover
+      description: A per-URL citation mover backing a `cited_domain_rate` signal.
     CollectionResponse_APISignal_:
       properties:
         total:
@@ -891,126 +996,21 @@ components:
       - total
       - items
       title: CollectionResponse[APISignal]
-    APISignalAnchors:
-      properties:
-        dates:
-          items:
-            type: string
-            format: date
-          type: array
-          title: Dates
-          description: Distinct `detected_for_date` days with user-facing signals, newest first. Same population as `listSignals` with default filters.
-      type: object
-      required:
-      - dates
-      title: APISignalAnchors
-      description: Recent distinct detection dates that produced signals.
-    APISignalNarrative:
-      properties:
-        what_happened:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: What Happened
-          description: Plain-language description of the detected change.
-        why_it_matters:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Why It Matters
-          description: Why the change is significant for the brand.
-        what_to_do:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: What To Do
-          description: Suggested next step or investigation.
-      type: object
-      title: APISignalNarrative
-      description: Engine-generated narrative for a signal.
     AggregationGranularity:
       type: string
       enum:
       - daily
       - weekly
       - monthly
-    CollectionResponse_APISignalReaction_:
+    HTTPValidationError:
       properties:
-        total:
-          type: integer
-          title: Total
-        offset:
-          type: integer
-          title: Offset
-          default: 0
-        limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Limit
-        items:
+        detail:
           items:
-            $ref: '#/components/schemas/APISignalReaction'
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Items
-        metadata:
-          anyOf:
-          - $ref: '#/components/schemas/TimeSeriesMetadata'
-          - type: 'null'
+          title: Detail
       type: object
-      required:
-      - total
-      - items
-      title: CollectionResponse[APISignalReaction]
-    OwnerTimeSeriesPoint:
-      properties:
-        time_bucket:
-          type: string
-          title: Time Bucket
-          description: Date string for the time bucket (YYYY-MM-DD)
-        brand:
-          type: integer
-          title: Brand
-          description: Observation count for brand-owned domains
-        competitor:
-          type: integer
-          title: Competitor
-          description: Observation count for competitor-owned domains
-        other:
-          type: integer
-          title: Other
-          description: Observation count for third-party domains
-      type: object
-      required:
-      - time_bucket
-      - brand
-      - competitor
-      - other
-      title: OwnerTimeSeriesPoint
-      description: A single time bucket with observation counts by owner type.
-    APISignalReactionUpsert:
-      properties:
-        reaction:
-          type: string
-          enum:
-          - useful
-          - not_useful
-          - dismissed
-          - actioned
-          title: Reaction
-          description: 'Reaction to set: `useful`, `not_useful`, `dismissed`, or `actioned`.'
-        reason:
-          anyOf:
-          - type: string
-            maxLength: 2000
-          - type: 'null'
-          title: Reason
-          description: Optional free-text reason accompanying the reaction.
-      type: object
-      required:
-      - reaction
-      title: APISignalReactionUpsert
-      description: Request body for `setSignalReaction`.
+      title: HTTPValidationError
   securitySchemes:
     HTTPBearer:
       type: http

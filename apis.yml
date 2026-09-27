@@ -95,7 +95,7 @@ maintainers:
   email: info@apis.io
 apis:
 - aid: scrunch-ai:scrunch-ai-agent-traffic-api
-  name: Scrunch AI agent-traffic API
+  name: Scrunch AI Agent Traffic API
   description: The agent-traffic API from Scrunch AI — 1 operation(s) for agent-traffic.
   humanURL: https://developers.scrunch.com/api-reference/introduction
   baseURL: https://api.scrunchai.com/v1
@@ -121,7 +121,7 @@ apis:
   - type: AgenticAccess
     url: agentic-access/scrunch-ai-agentic-access.yml
 - aid: scrunch-ai:scrunch-ai-ai-referrals-api
-  name: Scrunch AI ai-referrals API
+  name: Scrunch AI AI Referrals API
   description: The ai-referrals API from Scrunch AI — 3 operation(s) for ai-referrals.
   humanURL: https://developers.scrunch.com/api-reference/introduction
   baseURL: https://api.scrunchai.com/v1
@@ -147,7 +147,7 @@ apis:
   - type: AgenticAccess
     url: agentic-access/scrunch-ai-agentic-access.yml
 - aid: scrunch-ai:scrunch-ai-axp-render-api
-  name: Scrunch AI axp-render API
+  name: Scrunch AI Axp Render API
   description: The axp-render API from Scrunch AI — 1 operation(s) for axp-render.
   humanURL: https://developers.scrunch.com/api-reference/introduction
   baseURL: https://api.scrunchai.com/v1
@@ -199,7 +199,7 @@ apis:
   - type: AgenticAccess
     url: agentic-access/scrunch-ai-agentic-access.yml
 - aid: scrunch-ai:scrunch-ai-orchestration-api
-  name: Scrunch AI orchestration API
+  name: Scrunch AI Orchestration API
   description: The orchestration API from Scrunch AI — 2 operation(s) for orchestration.
   humanURL: https://developers.scrunch.com/api-reference/introduction
   baseURL: https://api.scrunchai.com/v1
@@ -331,7 +331,7 @@ apis:
   - type: AgenticAccess
     url: agentic-access/scrunch-ai-agentic-access.yml
 - aid: scrunch-ai:scrunch-ai-sitemap-api
-  name: Scrunch AI sitemap API
+  name: Scrunch AI Sitemap API
   description: The sitemap API from Scrunch AI — 4 operation(s) for sitemap.
   humanURL: https://developers.scrunch.com/api-reference/introduction
   baseURL: https://api.scrunchai.com/v1

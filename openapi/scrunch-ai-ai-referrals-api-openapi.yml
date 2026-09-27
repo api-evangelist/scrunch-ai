@@ -195,34 +195,32 @@ paths:
         - configure
 components:
   schemas:
-    AiReferralsConnectionCreate:
-      type: object
-      description: Payload to register a new AI Referrals connection.
-      required:
-      - website
-      - provider
+    ValidationError:
       properties:
-        website:
-          type: string
-          minLength: 1
-          maxLength: 2048
-          description: Hostname or URL of the website whose referrals will be pushed.
-          example: example.com
-        provider:
-          type: string
-          minLength: 1
-          maxLength: 64
-          description: 'Source analytics provider. MVP allow-list: ''adobe_analytics''.'
-          example: adobe_analytics
-    HTTPValidationError:
-      properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
-      title: HTTPValidationError
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     AiReferralsConnection:
       type: object
       description: A registered AI Referrals push connection.
@@ -263,6 +261,24 @@ components:
       - provider
       - status
       - created_at
+    AiReferralsSaveResult:
+      type: object
+      description: Outcome of a push batch submission.
+      required:
+      - accepted
+      - rejected
+      properties:
+        accepted:
+          type: integer
+          description: Number of events accepted into the unified referrals store.
+        rejected:
+          type: integer
+          description: Number of events dropped (e.g. referrer not on the AI platform allow-list).
+        errors:
+          type: array
+          items:
+            type: string
+          description: Per-row diagnostic messages, truncated.
     AiReferralsEvent:
       type: object
       description: One pre-aggregated daily referral row.
@@ -314,50 +330,34 @@ components:
           - 'null'
           maxLength: 128
           description: Optional client-supplied batch identifier for traceability.
-    AiReferralsSaveResult:
-      type: object
-      description: Outcome of a push batch submission.
-      required:
-      - accepted
-      - rejected
+    HTTPValidationError:
       properties:
-        accepted:
-          type: integer
-          description: Number of events accepted into the unified referrals store.
-        rejected:
-          type: integer
-          description: Number of events dropped (e.g. referrer not on the AI platform allow-list).
-        errors:
-          type: array
+        detail:
           items:
-            type: string
-          description: Per-row diagnostic messages, truncated.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Detail
       type: object
+      title: HTTPValidationError
+    AiReferralsConnectionCreate:
+      type: object
+      description: Payload to register a new AI Referrals connection.
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - website
+      - provider
+      properties:
+        website:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: Hostname or URL of the website whose referrals will be pushed.
+          example: example.com
+        provider:
+          type: string
+          minLength: 1
+          maxLength: 64
+          description: 'Source analytics provider. MVP allow-list: ''adobe_analytics''.'
+          example: adobe_analytics
   securitySchemes:
     HTTPBearer:
       type: http
