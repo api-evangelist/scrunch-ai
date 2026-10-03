@@ -50,50 +50,15 @@ paths:
       - Collections
 components:
   schemas:
-    CollectionCreateResponse:
+    HTTPValidationError:
       properties:
-        prompt_id:
-          type: integer
-          title: Prompt Id
-          description: The prompt ID that collection was triggered for
-        events:
+        detail:
           items:
-            $ref: '#/components/schemas/CollectionEventResult'
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Events
-          description: List of triggered collection events, one per platform
+          title: Detail
       type: object
-      required:
-      - prompt_id
-      - events
-      title: CollectionCreateResponse
-      description: Response from triggering on-demand collection.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: HTTPValidationError
     CollectionRequest:
       properties:
         prompt_id:
@@ -142,6 +107,24 @@ components:
       - platforms
       title: CollectionRequest
       description: Request to trigger on-demand collection for a prompt across specified platforms.
+    CollectionCreateResponse:
+      properties:
+        prompt_id:
+          type: integer
+          title: Prompt Id
+          description: The prompt ID that collection was triggered for
+        events:
+          items:
+            $ref: '#/components/schemas/CollectionEventResult'
+          type: array
+          title: Events
+          description: List of triggered collection events, one per platform
+      type: object
+      required:
+      - prompt_id
+      - events
+      title: CollectionCreateResponse
+      description: Response from triggering on-demand collection.
     CollectionEventResult:
       properties:
         platform:
@@ -158,15 +141,32 @@ components:
       - inngest_event_id
       title: CollectionEventResult
       description: Result of a triggered collection event.
-    HTTPValidationError:
+    ValidationError:
       properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
-      title: HTTPValidationError
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     HTTPBearer:
       type: http

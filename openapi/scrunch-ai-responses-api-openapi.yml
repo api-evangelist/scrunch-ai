@@ -219,6 +219,30 @@ paths:
     - url: https://api.scrunchai.com/v1
 components:
   schemas:
+    AggregationGranularity:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
+    QueryFanout:
+      properties:
+        queries:
+          items:
+            type: string
+          type: array
+          title: Queries
+        engine_metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Engine Metadata
+      type: object
+      required:
+      - queries
+      title: QueryFanout
+      description: 'Query fan-out data: search queries an AI engine used internally.'
     ShoppingPurchasingOption:
       properties:
         price:
@@ -238,45 +262,78 @@ components:
           title: Url
       type: object
       title: ShoppingPurchasingOption
-    ResponseCitation:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SegmentTotal:
+      properties:
+        name:
+          type: string
+          title: Name
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - name
+      - observation_count
+      title: SegmentTotal
+      description: Observation count for a citation segment, computed server-side.
+    ShoppingResult:
       properties:
         url:
           type: string
-          title: Url
-          description: The full URL of the cited source
-        domain:
-          type: string
-          title: Domain
-          description: The extracted registered domain from the URL
-        source_type:
-          type: string
-          title: Source Type
-          description: 'Classification of the citation source based on domain ownership:
-
-            - `brand` - URL belongs to the tracked brand
-
-            - `competitor` - URL belongs to a configured competitor
-
-            - `other` - URL belongs to neither brand nor competitor'
+          title: URL
+          description: The URL of the shopping result
         title:
-          anyOf:
-          - type: string
-          - type: 'null'
+          type: string
           title: Title
-          description: The page title from the citation, when available
-        snippet:
+          description: The title of the shopping result
+        image:
           anyOf:
           - type: string
           - type: 'null'
-          title: Snippet
-          description: A text snippet or description from the citation, when available
+          title: Image
+        all_images:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: All Images
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        rating:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Rating
+        reviews:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Reviews
+        purchasing_options:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ShoppingPurchasingOption'
+            type: array
+          - type: 'null'
+          title: Purchasing Options
       type: object
       required:
       - url
-      - domain
-      - source_type
-      title: ResponseCitation
-      description: A citation (source URL) referenced in an AI response, with automatic source classification.
+      - title
+      title: ShoppingResult
     ValidationError:
       properties:
         loc:
@@ -373,23 +430,6 @@ components:
       - owner_totals
       title: TopDomainsMetadata
       description: Metadata about top domains, used by sources/domains endpoints.
-    TopDomainSummary:
-      properties:
-        domain:
-          type: string
-          title: Domain
-        domain_owner:
-          type: string
-          title: Domain Owner
-        observation_count:
-          type: integer
-          title: Observation Count
-      type: object
-      required:
-      - domain
-      - domain_owner
-      - observation_count
-      title: TopDomainSummary
     ResponseListing:
       properties:
         id:
@@ -537,6 +577,90 @@ components:
 
 
         Represents a single answer from an AI platform to a tracked prompt.'
+    CollectionResponse_ResponseListing_:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/ResponseListing'
+          type: array
+          title: Items
+        metadata:
+          anyOf:
+          - $ref: '#/components/schemas/TimeSeriesMetadata'
+          - type: 'null'
+      type: object
+      required:
+      - total
+      - items
+      title: CollectionResponse[ResponseListing]
+    TopDomainSummary:
+      properties:
+        domain:
+          type: string
+          title: Domain
+        domain_owner:
+          type: string
+          title: Domain Owner
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - domain
+      - domain_owner
+      - observation_count
+      title: TopDomainSummary
+    ResponseCitation:
+      properties:
+        url:
+          type: string
+          title: Url
+          description: The full URL of the cited source
+        domain:
+          type: string
+          title: Domain
+          description: The extracted registered domain from the URL
+        source_type:
+          type: string
+          title: Source Type
+          description: 'Classification of the citation source based on domain ownership:
+
+            - `brand` - URL belongs to the tracked brand
+
+            - `competitor` - URL belongs to a configured competitor
+
+            - `other` - URL belongs to neither brand nor competitor'
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+          description: The page title from the citation, when available
+        snippet:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Snippet
+          description: A text snippet or description from the citation, when available
+      type: object
+      required:
+      - url
+      - domain
+      - source_type
+      title: ResponseCitation
+      description: A citation (source URL) referenced in an AI response, with automatic source classification.
     OwnerTimeSeriesPoint:
       properties:
         time_bucket:
@@ -563,102 +687,6 @@ components:
       - other
       title: OwnerTimeSeriesPoint
       description: A single time bucket with observation counts by owner type.
-    QueryFanout:
-      properties:
-        queries:
-          items:
-            type: string
-          type: array
-          title: Queries
-        engine_metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Engine Metadata
-      type: object
-      required:
-      - queries
-      title: QueryFanout
-      description: 'Query fan-out data: search queries an AI engine used internally.'
-    SegmentTotal:
-      properties:
-        name:
-          type: string
-          title: Name
-        observation_count:
-          type: integer
-          title: Observation Count
-      type: object
-      required:
-      - name
-      - observation_count
-      title: SegmentTotal
-      description: Observation count for a citation segment, computed server-side.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    AggregationGranularity:
-      type: string
-      enum:
-      - daily
-      - weekly
-      - monthly
-    ShoppingResult:
-      properties:
-        url:
-          type: string
-          title: URL
-          description: The URL of the shopping result
-        title:
-          type: string
-          title: Title
-          description: The title of the shopping result
-        image:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Image
-        all_images:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: All Images
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        rating:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Rating
-        reviews:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Reviews
-        purchasing_options:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/ShoppingPurchasingOption'
-            type: array
-          - type: 'null'
-          title: Purchasing Options
-      type: object
-      required:
-      - url
-      - title
-      title: ShoppingResult
     ResponseCompetitorListing:
       properties:
         id:
@@ -715,34 +743,6 @@ components:
       - present
       title: ResponseCompetitorListing
       description: Evaluation data for a competitor mentioned in an AI response.
-    CollectionResponse_ResponseListing_:
-      properties:
-        total:
-          type: integer
-          title: Total
-        offset:
-          type: integer
-          title: Offset
-          default: 0
-        limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Limit
-        items:
-          items:
-            $ref: '#/components/schemas/ResponseListing'
-          type: array
-          title: Items
-        metadata:
-          anyOf:
-          - $ref: '#/components/schemas/TimeSeriesMetadata'
-          - type: 'null'
-      type: object
-      required:
-      - total
-      - items
-      title: CollectionResponse[ResponseListing]
     ShoppingPurchasingOption_2:
       properties:
         price:

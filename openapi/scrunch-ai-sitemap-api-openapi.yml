@@ -421,111 +421,64 @@ paths:
     - url: https://api.scrunchai.com/v1
 components:
   schemas:
-    ValidationError:
+    SitemapPageListing:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    SitemapPageMetricsResponse:
-      properties:
-        granularity:
-          type: string
-          enum:
-          - daily
-          - weekly
-          title: Granularity
-          description: 'Time-series granularity: `daily` or `weekly`.'
-        metrics:
-          $ref: '#/components/schemas/SitemapUrlMetrics'
-      type: object
-      required:
-      - granularity
-      - metrics
-      title: SitemapPageMetricsResponse
-    SitemapPagesResponse:
-      properties:
-        total:
+        id:
           type: integer
-          title: Total
-        offset:
+          title: Id
+          description: Unique page identifier.
+        url:
+          type: string
+          title: Url
+          description: Full URL of the page.
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+          description: HTML title of the page.
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Meta description of the page.
+        depth:
           type: integer
-          title: Offset
-          default: 0
-        limit:
+          title: Depth
+          description: URL path depth (`0` = root).
+        audit_score:
           anyOf:
           - type: integer
           - type: 'null'
-          title: Limit
-        items:
-          items:
-            $ref: '#/components/schemas/SitemapPageListing'
-          type: array
-          title: Items
-        domain:
-          type: string
-          title: Domain
-          description: The domain these pages belong to.
-        last_crawl_completed:
+          title: Audit Score
+          description: AI search readiness score (0-100).
+        canonical_url:
           anyOf:
           - type: string
-            format: date-time
           - type: 'null'
-          title: Last Crawl Completed
-          description: When the most recent completed crawl finished.
+          title: Canonical Url
+          description: Canonical URL if different from the page's URL.
+        is_priority:
+          type: boolean
+          title: Is Priority
+          description: Whether this page matches a priority page or priority path override for the brand.
+        has_optimized_content:
+          type: boolean
+          title: Has Optimized Content
+          description: Whether this page has active AXP optimized content deployed.
       type: object
       required:
-      - total
-      - items
-      - domain
-      - last_crawl_completed
-      title: SitemapPagesResponse
-    SitemapUrlMetrics:
-      properties:
-        citations:
-          type: array
-          items:
-            $ref: '#/components/schemas/SitemapMetricRow'
-          title: Citations
-          description: Citation counts over time by AI platform.
-        ai_referrals:
-          type: array
-          items:
-            $ref: '#/components/schemas/SitemapMetricRow'
-          title: AI Referrals
-          description: AI referral counts over time by AI platform.
-        agent_traffic:
-          type: array
-          items:
-            $ref: '#/components/schemas/SitemapMetricRow'
-          title: Agent Traffic
-          description: AI agent traffic counts over time by AI platform.
-      type: object
-      required:
-      - citations
-      - ai_referrals
-      - agent_traffic
-      title: SitemapUrlMetrics
+      - id
+      - url
+      - title
+      - description
+      - depth
+      - audit_score
+      - canonical_url
+      - is_priority
+      - has_optimized_content
+      title: SitemapPageListing
     HTTPValidationError:
       properties:
         detail:
@@ -600,6 +553,111 @@ components:
       - last_indexed
       - content_updated_at
       title: SitemapPageDetail
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SitemapUrlMetrics:
+      properties:
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitemapMetricRow'
+          title: Citations
+          description: Citation counts over time by AI platform.
+        ai_referrals:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitemapMetricRow'
+          title: AI Referrals
+          description: AI referral counts over time by AI platform.
+        agent_traffic:
+          type: array
+          items:
+            $ref: '#/components/schemas/SitemapMetricRow'
+          title: Agent Traffic
+          description: AI agent traffic counts over time by AI platform.
+      type: object
+      required:
+      - citations
+      - ai_referrals
+      - agent_traffic
+      title: SitemapUrlMetrics
+    SitemapPageMetricsResponse:
+      properties:
+        granularity:
+          type: string
+          enum:
+          - daily
+          - weekly
+          title: Granularity
+          description: 'Time-series granularity: `daily` or `weekly`.'
+        metrics:
+          $ref: '#/components/schemas/SitemapUrlMetrics'
+      type: object
+      required:
+      - granularity
+      - metrics
+      title: SitemapPageMetricsResponse
+    SitemapPagesResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        offset:
+          type: integer
+          title: Offset
+          default: 0
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit
+        items:
+          items:
+            $ref: '#/components/schemas/SitemapPageListing'
+          type: array
+          title: Items
+        domain:
+          type: string
+          title: Domain
+          description: The domain these pages belong to.
+        last_crawl_completed:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Crawl Completed
+          description: When the most recent completed crawl finished.
+      type: object
+      required:
+      - total
+      - items
+      - domain
+      - last_crawl_completed
+      title: SitemapPagesResponse
     SitemapMetricRow:
       properties:
         date:
@@ -617,52 +675,58 @@ components:
       - date
       - count_by_platform
       title: SitemapMetricRow
-    SitemapPageListing:
+    AggregationGranularity:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
+    SitemapPageListing_2:
       properties:
         id:
           type: integer
           title: Id
-          description: Unique page identifier.
+          description: Unique page identifier
         url:
           type: string
           title: Url
-          description: Full URL of the page.
+          description: Full URL of the page
         title:
           anyOf:
           - type: string
           - type: 'null'
           title: Title
-          description: HTML title of the page.
+          description: HTML title of the page
         description:
           anyOf:
           - type: string
           - type: 'null'
           title: Description
-          description: Meta description of the page.
+          description: Meta description of the page
         depth:
           type: integer
           title: Depth
-          description: URL path depth (`0` = root).
+          description: URL path depth (0 = root)
         audit_score:
           anyOf:
           - type: integer
           - type: 'null'
           title: Audit Score
-          description: AI search readiness score (0-100).
+          description: AI search readiness score (0-100)
         canonical_url:
           anyOf:
           - type: string
           - type: 'null'
           title: Canonical Url
-          description: Canonical URL if different from the page's URL.
+          description: The canonical URL if different from this page's URL
         is_priority:
           type: boolean
           title: Is Priority
-          description: Whether this page matches a priority page or priority path override for the brand.
+          description: Whether this page matches a priority_page/priority_path override for the brand
         has_optimized_content:
           type: boolean
           title: Has Optimized Content
-          description: Whether this page has active AXP optimized content deployed.
+          description: Whether this page has active AXP optimized content deployed
       type: object
       required:
       - id
@@ -675,6 +739,96 @@ components:
       - is_priority
       - has_optimized_content
       title: SitemapPageListing
+      description: A page discovered in the brand's sitemap.
+    SegmentTotal:
+      properties:
+        name:
+          type: string
+          title: Name
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - name
+      - observation_count
+      title: SegmentTotal
+      description: Observation count for a citation segment, computed server-side.
+    SitemapPageDetail_2:
+      properties:
+        id:
+          type: integer
+          title: Id
+          description: Unique page identifier
+        url:
+          type: string
+          title: Url
+          description: Full URL of the page
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+          description: HTML title of the page
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Meta description of the page
+        depth:
+          type: integer
+          title: Depth
+          description: URL path depth (0 = root)
+        audit_score:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Audit Score
+          description: AI search readiness score (0-100)
+        canonical_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Canonical Url
+          description: The canonical URL if different from this page's URL
+        is_priority:
+          type: boolean
+          title: Is Priority
+          description: Whether this page matches a priority_page/priority_path override for the brand
+        has_optimized_content:
+          type: boolean
+          title: Has Optimized Content
+          description: Whether this page has active AXP optimized content deployed
+        last_indexed:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Indexed
+          description: When the page content was last indexed
+        content_updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Content Updated At
+          description: When the cached page content was last updated
+      type: object
+      required:
+      - id
+      - url
+      - title
+      - description
+      - depth
+      - audit_score
+      - canonical_url
+      - is_priority
+      - has_optimized_content
+      - last_indexed
+      - content_updated_at
+      title: SitemapPageDetail
+      description: Extended page details including indexing metadata.
     TimeSeriesMetadata:
       properties:
         aggregation_granularity:
@@ -759,23 +913,6 @@ components:
       - metrics
       title: SitemapPageMetricsResponse
       description: Time-series metrics for a single page.
-    TopDomainSummary:
-      properties:
-        domain:
-          type: string
-          title: Domain
-        domain_owner:
-          type: string
-          title: Domain Owner
-        observation_count:
-          type: integer
-          title: Observation Count
-      type: object
-      required:
-      - domain
-      - domain_owner
-      - observation_count
-      title: TopDomainSummary
     UrlMetricsModel:
       properties:
         citations:
@@ -845,6 +982,41 @@ components:
       - last_crawl_completed
       title: SitemapPagesResponse
       description: Paginated list of sitemap pages with crawl metadata.
+    MetricRowModel:
+      properties:
+        date:
+          type: string
+          title: Date
+          description: Date in ISO 8601 format (YYYY-MM-DD)
+        count_by_platform:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Count By Platform
+          description: Counts keyed by AI platform name (e.g. OpenAI, Perplexity, Gemini)
+      type: object
+      required:
+      - date
+      - count_by_platform
+      title: MetricRowModel
+      description: A single time-series data point with counts broken down by AI platform.
+    TopDomainSummary:
+      properties:
+        domain:
+          type: string
+          title: Domain
+        domain_owner:
+          type: string
+          title: Domain Owner
+        observation_count:
+          type: integer
+          title: Observation Count
+      type: object
+      required:
+      - domain
+      - domain_owner
+      - observation_count
+      title: TopDomainSummary
     OwnerTimeSeriesPoint:
       properties:
         time_bucket:
@@ -871,178 +1043,6 @@ components:
       - other
       title: OwnerTimeSeriesPoint
       description: A single time bucket with observation counts by owner type.
-    MetricRowModel:
-      properties:
-        date:
-          type: string
-          title: Date
-          description: Date in ISO 8601 format (YYYY-MM-DD)
-        count_by_platform:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Count By Platform
-          description: Counts keyed by AI platform name (e.g. OpenAI, Perplexity, Gemini)
-      type: object
-      required:
-      - date
-      - count_by_platform
-      title: MetricRowModel
-      description: A single time-series data point with counts broken down by AI platform.
-    SegmentTotal:
-      properties:
-        name:
-          type: string
-          title: Name
-        observation_count:
-          type: integer
-          title: Observation Count
-      type: object
-      required:
-      - name
-      - observation_count
-      title: SegmentTotal
-      description: Observation count for a citation segment, computed server-side.
-    AggregationGranularity:
-      type: string
-      enum:
-      - daily
-      - weekly
-      - monthly
-    SitemapPageDetail_2:
-      properties:
-        id:
-          type: integer
-          title: Id
-          description: Unique page identifier
-        url:
-          type: string
-          title: Url
-          description: Full URL of the page
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-          description: HTML title of the page
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Meta description of the page
-        depth:
-          type: integer
-          title: Depth
-          description: URL path depth (0 = root)
-        audit_score:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Audit Score
-          description: AI search readiness score (0-100)
-        canonical_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Canonical Url
-          description: The canonical URL if different from this page's URL
-        is_priority:
-          type: boolean
-          title: Is Priority
-          description: Whether this page matches a priority_page/priority_path override for the brand
-        has_optimized_content:
-          type: boolean
-          title: Has Optimized Content
-          description: Whether this page has active AXP optimized content deployed
-        last_indexed:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Indexed
-          description: When the page content was last indexed
-        content_updated_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Content Updated At
-          description: When the cached page content was last updated
-      type: object
-      required:
-      - id
-      - url
-      - title
-      - description
-      - depth
-      - audit_score
-      - canonical_url
-      - is_priority
-      - has_optimized_content
-      - last_indexed
-      - content_updated_at
-      title: SitemapPageDetail
-      description: Extended page details including indexing metadata.
-    SitemapPageListing_2:
-      properties:
-        id:
-          type: integer
-          title: Id
-          description: Unique page identifier
-        url:
-          type: string
-          title: Url
-          description: Full URL of the page
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-          description: HTML title of the page
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Meta description of the page
-        depth:
-          type: integer
-          title: Depth
-          description: URL path depth (0 = root)
-        audit_score:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Audit Score
-          description: AI search readiness score (0-100)
-        canonical_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Canonical Url
-          description: The canonical URL if different from this page's URL
-        is_priority:
-          type: boolean
-          title: Is Priority
-          description: Whether this page matches a priority_page/priority_path override for the brand
-        has_optimized_content:
-          type: boolean
-          title: Has Optimized Content
-          description: Whether this page has active AXP optimized content deployed
-      type: object
-      required:
-      - id
-      - url
-      - title
-      - description
-      - depth
-      - audit_score
-      - canonical_url
-      - is_priority
-      - has_optimized_content
-      title: SitemapPageListing
-      description: A page discovered in the brand's sitemap.
   securitySchemes:
     HTTPBearer:
       type: http

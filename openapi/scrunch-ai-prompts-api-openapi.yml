@@ -223,63 +223,124 @@ paths:
     - url: https://api.scrunchai.com/v1
 components:
   schemas:
-    ValidationError:
+    AggregationGranularity:
+      type: string
+      enum:
+      - daily
+      - weekly
+      - monthly
+    HTTPValidationError:
       properties:
-        loc:
+        detail:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Detail
       type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    TimeSeriesMetadata:
+      title: HTTPValidationError
+    SegmentTotal:
       properties:
-        aggregation_granularity:
-          $ref: '#/components/schemas/AggregationGranularity'
-          description: 'The aggregation granularity: daily, weekly, or monthly'
-        period_count:
+        name:
+          type: string
+          title: Name
+        observation_count:
           type: integer
-          title: Period Count
-          description: The number of periods in the time series
-        start_date:
-          type: string
-          format: date-time
-          title: Start Date
-          description: The start date of the time series
-        end_date:
-          type: string
-          format: date-time
-          title: End Date
-          description: The end date of the time series
-        top_domains:
-          anyOf:
-          - $ref: '#/components/schemas/TopDomainsMetadata'
-          - type: 'null'
-          description: Top domains metadata (only populated by sources/domains endpoints)
+          title: Observation Count
       type: object
       required:
-      - aggregation_granularity
-      - period_count
-      - start_date
-      - end_date
-      title: TimeSeriesMetadata
+      - name
+      - observation_count
+      title: SegmentTotal
+      description: Observation count for a citation segment, computed server-side.
+    APIPromptInputModel:
+      properties:
+        text:
+          type: string
+          title: Text
+          description: The prompt text to track across AI platforms
+        persona_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Persona Id
+          description: Optional persona ID to associate with this prompt for segmented analysis
+        stage:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stage
+          description: 'The customer journey stage this prompt represents. Must match one of your brand''s active stages (case-sensitive display name); custom stage names are accepted. Omit to auto-classify against the brand''s stage definitions.
+
+
+            **Default stage sets:**
+
+            - **Intent (v1)** — `Advice`, `Awareness`, `Evaluation`, `Comparison`, `Other`
+
+            - **Funnel (v2)** — `Awareness`, `Consideration`, `Conversion`, `Loyalty`, `Other`
+
+
+            Unknown stage names return `400 Bad Request`. An explicit stage is treated as a manual selection and won''t be reclassified later.'
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          description: Custom tags for categorizing and filtering prompts
+          default: []
+        key_topics:
+          items:
+            type: string
+          type: array
+          title: Key Topics
+          description: Key topics to associate with this prompt from the brand's topic list
+          default: []
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+          description: Lowercase ISO 639-1 code of the language the prompt text is written in (e.g. `pt`, `ja`, `es`). Case-insensitive; uppercase input is normalized. Invalid codes return `422 Unprocessable Entity`. If omitted, the language is auto-detected from the prompt text, falling back to the brand's default language.
+        platforms:
+          items:
+            type: string
+            enum:
+            - chatgpt
+            - claude
+            - google_ai_overviews
+            - perplexity
+            - meta
+            - google_ai_mode
+            - google_gemini
+            - copilot
+            - grok
+          type: array
+          title: Platforms
+          description: 'AI platforms to track this prompt on. If empty, defaults to all supported platforms.
+
+
+            **Supported platforms:**
+
+            - `chatgpt` - OpenAI ChatGPT
+
+            - `claude` - Anthropic Claude
+
+            - `google_ai_overviews` - Google AI Overviews (Search)
+
+            - `perplexity` - Perplexity AI
+
+            - `meta` - Meta AI
+
+            - `google_ai_mode` - Google AI Mode
+
+            - `google_gemini` - Google Gemini
+
+            - `copilot` - Microsoft Copilot'
+          default: []
+      type: object
+      required:
+      - text
+      title: APIPromptInputModel
+      description: Input model for creating a new prompt to track AI visibility.
     PromptListing:
       properties:
         id:
@@ -345,6 +406,63 @@ components:
       - created_at
       title: PromptListing
       description: Represents a prompt being tracked for AI visibility, including its configuration and metadata.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TimeSeriesMetadata:
+      properties:
+        aggregation_granularity:
+          $ref: '#/components/schemas/AggregationGranularity'
+          description: 'The aggregation granularity: daily, weekly, or monthly'
+        period_count:
+          type: integer
+          title: Period Count
+          description: The number of periods in the time series
+        start_date:
+          type: string
+          format: date-time
+          title: Start Date
+          description: The start date of the time series
+        end_date:
+          type: string
+          format: date-time
+          title: End Date
+          description: The end date of the time series
+        top_domains:
+          anyOf:
+          - $ref: '#/components/schemas/TopDomainsMetadata'
+          - type: 'null'
+          description: Top domains metadata (only populated by sources/domains endpoints)
+      type: object
+      required:
+      - aggregation_granularity
+      - period_count
+      - start_date
+      - end_date
+      title: TimeSeriesMetadata
     TopDomainsMetadata:
       properties:
         domains:
@@ -401,6 +519,32 @@ components:
       - domain_owner
       - observation_count
       title: TopDomainSummary
+    OwnerTimeSeriesPoint:
+      properties:
+        time_bucket:
+          type: string
+          title: Time Bucket
+          description: Date string for the time bucket (YYYY-MM-DD)
+        brand:
+          type: integer
+          title: Brand
+          description: Observation count for brand-owned domains
+        competitor:
+          type: integer
+          title: Competitor
+          description: Observation count for competitor-owned domains
+        other:
+          type: integer
+          title: Other
+          description: Observation count for third-party domains
+      type: object
+      required:
+      - time_bucket
+      - brand
+      - competitor
+      - other
+      title: OwnerTimeSeriesPoint
+      description: A single time bucket with observation counts by owner type.
     CollectionResponse_PromptListing_:
       properties:
         total:
@@ -429,62 +573,7 @@ components:
       - total
       - items
       title: CollectionResponse[PromptListing]
-    OwnerTimeSeriesPoint:
-      properties:
-        time_bucket:
-          type: string
-          title: Time Bucket
-          description: Date string for the time bucket (YYYY-MM-DD)
-        brand:
-          type: integer
-          title: Brand
-          description: Observation count for brand-owned domains
-        competitor:
-          type: integer
-          title: Competitor
-          description: Observation count for competitor-owned domains
-        other:
-          type: integer
-          title: Other
-          description: Observation count for third-party domains
-      type: object
-      required:
-      - time_bucket
-      - brand
-      - competitor
-      - other
-      title: OwnerTimeSeriesPoint
-      description: A single time bucket with observation counts by owner type.
-    SegmentTotal:
-      properties:
-        name:
-          type: string
-          title: Name
-        observation_count:
-          type: integer
-          title: Observation Count
-      type: object
-      required:
-      - name
-      - observation_count
-      title: SegmentTotal
-      description: Observation count for a citation segment, computed server-side.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    AggregationGranularity:
-      type: string
-      enum:
-      - daily
-      - weekly
-      - monthly
-    APIPromptInputModel:
+    APIPromptInputModel_2:
       properties:
         text:
           type: string
@@ -501,17 +590,17 @@ components:
           - type: string
           - type: 'null'
           title: Stage
-          description: 'The customer journey stage this prompt represents. Must match one of your brand''s active stages (case-sensitive display name); custom stage names are accepted. Omit to auto-classify against the brand''s stage definitions.
+          description: 'The customer journey stage this prompt represents. Must be the name of one of the brand''s active stages (custom stage names included); omit to auto-categorize with an LLM against the brand''s stage definitions. Default sets:
 
+            - `Advice` - Seeking recommendations or guidance
 
-            **Default stage sets:**
+            - `Awareness` - Exploring a topic or problem space
 
-            - **Intent (v1)** — `Advice`, `Awareness`, `Evaluation`, `Comparison`, `Other`
+            - `Evaluation` - Assessing specific options
 
-            - **Funnel (v2)** — `Awareness`, `Consideration`, `Conversion`, `Loyalty`, `Other`
+            - `Comparison` - Comparing multiple options
 
-
-            Unknown stage names return `400 Bad Request`. An explicit stage is treated as a manual selection and won''t be reclassified later.'
+            - `Other` - Doesn''t fit other categories'
         tags:
           items:
             type: string
@@ -531,7 +620,7 @@ components:
           - type: string
           - type: 'null'
           title: Language
-          description: Lowercase ISO 639-1 code of the language the prompt text is written in (e.g. `pt`, `ja`, `es`). Case-insensitive; uppercase input is normalized. Invalid codes return `422 Unprocessable Entity`. If omitted, the language is auto-detected from the prompt text, falling back to the brand's default language.
+          description: Lowercase ISO 639-1 code of the language the prompt text is written in (e.g. `pt`). If omitted, the language is detected from the text, falling back to the brand's default language.
         platforms:
           items:
             type: string
@@ -656,95 +745,6 @@ components:
       - created_at
       title: PromptListing
       description: Represents a prompt being tracked for AI visibility, including its configuration and metadata.
-    APIPromptInputModel_2:
-      properties:
-        text:
-          type: string
-          title: Text
-          description: The prompt text to track across AI platforms
-        persona_id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Persona Id
-          description: Optional persona ID to associate with this prompt for segmented analysis
-        stage:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Stage
-          description: 'The customer journey stage this prompt represents. Must be the name of one of the brand''s active stages (custom stage names included); omit to auto-categorize with an LLM against the brand''s stage definitions. Default sets:
-
-            - `Advice` - Seeking recommendations or guidance
-
-            - `Awareness` - Exploring a topic or problem space
-
-            - `Evaluation` - Assessing specific options
-
-            - `Comparison` - Comparing multiple options
-
-            - `Other` - Doesn''t fit other categories'
-        tags:
-          items:
-            type: string
-          type: array
-          title: Tags
-          description: Custom tags for categorizing and filtering prompts
-          default: []
-        key_topics:
-          items:
-            type: string
-          type: array
-          title: Key Topics
-          description: Key topics to associate with this prompt from the brand's topic list
-          default: []
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-          description: Lowercase ISO 639-1 code of the language the prompt text is written in (e.g. `pt`). If omitted, the language is detected from the text, falling back to the brand's default language.
-        platforms:
-          items:
-            type: string
-            enum:
-            - chatgpt
-            - claude
-            - google_ai_overviews
-            - perplexity
-            - meta
-            - google_ai_mode
-            - google_gemini
-            - copilot
-            - grok
-          type: array
-          title: Platforms
-          description: 'AI platforms to track this prompt on. If empty, defaults to all supported platforms.
-
-
-            **Supported platforms:**
-
-            - `chatgpt` - OpenAI ChatGPT
-
-            - `claude` - Anthropic Claude
-
-            - `google_ai_overviews` - Google AI Overviews (Search)
-
-            - `perplexity` - Perplexity AI
-
-            - `meta` - Meta AI
-
-            - `google_ai_mode` - Google AI Mode
-
-            - `google_gemini` - Google Gemini
-
-            - `copilot` - Microsoft Copilot'
-          default: []
-      type: object
-      required:
-      - text
-      title: APIPromptInputModel
-      description: Input model for creating a new prompt to track AI visibility.
   securitySchemes:
     HTTPBearer:
       type: http
