@@ -169,6 +169,23 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    AgentTrafficResponse:
+      properties:
+        meta:
+          $ref: '#/components/schemas/AgentTrafficMeta'
+          description: Query metadata including fields and date range.
+        data:
+          items:
+            $ref: '#/components/schemas/AgentTrafficRow'
+          type: array
+          title: Data
+          description: Array of agent traffic records matching the query criteria.
+      type: object
+      required:
+      - meta
+      - data
+      title: AgentTrafficResponse
+      description: Response containing agent traffic data with metadata and aggregated traffic records.
     AgentTrafficRow:
       properties:
         requests:
@@ -214,32 +231,6 @@ components:
 
 
         Fields present depend on the dimensions requested in the query.'
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     AgentTrafficMeta:
       properties:
         start_date:
@@ -266,23 +257,32 @@ components:
       - time_bucket
       title: AgentTrafficMeta
       description: Metadata about the agent traffic query results.
-    AgentTrafficResponse:
+    ValidationError:
       properties:
-        meta:
-          $ref: '#/components/schemas/AgentTrafficMeta'
-          description: Query metadata including fields and date range.
-        data:
+        loc:
           items:
-            $ref: '#/components/schemas/AgentTrafficRow'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Data
-          description: Array of agent traffic records matching the query criteria.
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - meta
-      - data
-      title: AgentTrafficResponse
-      description: Response containing agent traffic data with metadata and aggregated traffic records.
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     HTTPBearer:
       type: http

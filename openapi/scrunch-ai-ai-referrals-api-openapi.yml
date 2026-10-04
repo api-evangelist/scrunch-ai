@@ -195,15 +195,6 @@ paths:
         - configure
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     AiReferralsConnectionCreate:
       type: object
       description: Payload to register a new AI Referrals connection.
@@ -223,6 +214,55 @@ components:
           maxLength: 64
           description: 'Source analytics provider. MVP allow-list: ''adobe_analytics''.'
           example: adobe_analytics
+    AiReferralsConnection:
+      type: object
+      description: A registered AI Referrals push connection.
+      properties:
+        id:
+          type: string
+          description: ULID identifier for the connection.
+        brand_id:
+          type: integer
+        website:
+          type: string
+          description: Hostname or URL of the website whose referrals are pushed against this connection.
+        provider:
+          type: string
+          description: 'Source analytics provider. MVP allow-list: ''adobe_analytics''.'
+          example: adobe_analytics
+        status:
+          type: string
+          enum:
+          - active
+          - disabled
+        created_at:
+          type: string
+          format: date-time
+        last_pushed_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        last_push_error:
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - brand_id
+      - website
+      - provider
+      - status
+      - created_at
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     AiReferralsSaveResult:
       type: object
       description: Outcome of a push batch submission.
@@ -241,32 +281,6 @@ components:
           items:
             type: string
           description: Per-row diagnostic messages, truncated.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     AiReferralsEvent:
       type: object
       description: One pre-aggregated daily referral row.
@@ -318,46 +332,32 @@ components:
           - 'null'
           maxLength: 128
           description: Optional client-supplied batch identifier for traceability.
-    AiReferralsConnection:
-      type: object
-      description: A registered AI Referrals push connection.
+    ValidationError:
       properties:
-        id:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          description: ULID identifier for the connection.
-        brand_id:
-          type: integer
-        website:
+          title: Message
+        type:
           type: string
-          description: Hostname or URL of the website whose referrals are pushed against this connection.
-        provider:
-          type: string
-          description: 'Source analytics provider. MVP allow-list: ''adobe_analytics''.'
-          example: adobe_analytics
-        status:
-          type: string
-          enum:
-          - active
-          - disabled
-        created_at:
-          type: string
-          format: date-time
-        last_pushed_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        last_push_error:
-          type:
-          - string
-          - 'null'
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
       required:
-      - id
-      - brand_id
-      - website
-      - provider
-      - status
-      - created_at
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     HTTPBearer:
       type: http

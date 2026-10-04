@@ -50,6 +50,22 @@ paths:
       - Collections
 components:
   schemas:
+    CollectionEventResult:
+      properties:
+        platform:
+          type: string
+          title: Platform
+          description: The platform collection was triggered for
+        inngest_event_id:
+          type: string
+          title: Inngest Event Id
+          description: The Inngest event ID for tracking
+      type: object
+      required:
+      - platform
+      - inngest_event_id
+      title: CollectionEventResult
+      description: Result of a triggered collection event.
     HTTPValidationError:
       properties:
         detail:
@@ -125,22 +141,6 @@ components:
       - events
       title: CollectionCreateResponse
       description: Response from triggering on-demand collection.
-    CollectionEventResult:
-      properties:
-        platform:
-          type: string
-          title: Platform
-          description: The platform collection was triggered for
-        inngest_event_id:
-          type: string
-          title: Inngest Event Id
-          description: The Inngest event ID for tracking
-      type: object
-      required:
-      - platform
-      - inngest_event_id
-      title: CollectionEventResult
-      description: Result of a triggered collection event.
     ValidationError:
       properties:
         loc:
