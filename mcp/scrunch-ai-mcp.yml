@@ -163,3 +163,21 @@ x-evidence:
   status: 401
   method: POST tools/list
   fetched: '2026-08-13'
+rfc9728:
+  endpoint: https://app.scrunchai.com/api/mcp
+  metadata_url: https://observatory-api-343398079438.us-central1.run.app/.well-known/oauth-protected-resource
+  discovered_via: WWW-Authenticate resource_metadata on an anonymous POST initialize
+  fetched: '2026-09-25'
+  http_status: 200
+  content_type: application/json
+  document:
+    resource: https://app.scrunchai.com
+    authorization_servers:
+    - https://clerk.scrunchai.com
+    scopes_supported:
+    - offline_access
+    - openid
+    - email
+    - profile
+    bearer_methods_supported:
+    - header
